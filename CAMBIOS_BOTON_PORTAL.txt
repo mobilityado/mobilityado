@@ -1,0 +1,22 @@
+CAMBIOS APLICADOS
+=================
+
+Se agregó un botón flotante "Volver al portal" a los index.html principales de:
+- AVA/index.html
+- CONCIL-IA/index.html
+- CONCILIACIONES/index.html
+- CapturasPorcentrodePago/index.html
+- ChatBoot/index.html
+- FIK/index.html
+- HappyMoments/index.html
+- INGRESOS/index.html
+- JD_ERPCO/index.html
+- RCV/index.html
+
+El botón usa href="../" para regresar a la raíz del portal sin depender de un dominio fijo.
+
+Además:
+- CNAME actualizado a portal.automatepowerpages.xyz (el respaldo traía recaudacionvht.automatepowerpages.xyz).
+- Caché PWA raíz actualizado de mobilityado-portal-v1 a mobilityado-portal-v2 para facilitar la actualización en instalaciones existentes.
+
+No se alteró la lógica interna de las aplicaciones.
