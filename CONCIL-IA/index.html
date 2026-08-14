@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CONCIL.IA OS</title>
+<style>
+:root{
+  --bg:#f7f8fc;
+  --text:#111a42;
+  --muted:#667085;
+  --purple:#7b1fa2;
+  --red:#ef233c;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.app{min-height:100vh;display:flex}
+.sidebar{
+  width:220px;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 85%, rgba(201,37,255,.45), transparent 28%),
+    linear-gradient(180deg,#090516 0%,#19072f 52%,#06030d 100%);
+  color:white;
+  padding:24px 14px;
+  position:fixed;
+  left:0;top:0;bottom:0;
+  overflow:hidden;
+}
+.sidebar:after{
+  content:"";
+  position:absolute;
+  width:280px;height:90px;
+  left:-20px;bottom:80px;
+  border-top:2px solid #be4bff;
+  transform:rotate(-17deg);
+  filter:drop-shadow(0 0 10px #be4bff);
+  opacity:.75;
+}
+.logo-wrap{padding:45px 0px 26px;position:relative;z-index:2}
+.logo-wrap img{width:220px;max-height:135px;object-fit:contain;object-position:left}
+.nav{display:flex;flex-direction:column;gap:10px;position:relative;z-index:2}
+.nav a{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:12px;
+  color:#eee;text-decoration:none;font-size:15px;
+}
+.nav a.active{background:linear-gradient(90deg,#6b19a8,#9b17b8)}
+.nav a:hover{background:#ffffff12}
+.userbox{position:absolute;left:14px;right:14px;bottom:70px;z-index:2}
+.user{display:flex;align-items:center;gap:10px}
+.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#9b3fd4,#4d1a88);font-size:20px}
+.user small{color:#d4a8ff}
+.logout{position:absolute;left:18px;bottom:24px;color:#ddd;font-size:14px;z-index:2}
+
+.main{
+  margin-left:220px;
+  width:calc(100% - 220px);
+  padding:32px 38px 24px;
+}
+.topbar{
+  display:flex;justify-content:space-between;gap:24px;align-items:flex-start;
+}
+.brand-title{
+  margin:0;
+  font-size:clamp(44px,6vw,82px);
+  font-weight:900;
+  letter-spacing:-3px;
+  line-height:.95;
+  background:linear-gradient(90deg,#7b2cbf 0%,#b5179e 50%,#f22613 100%);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.question{
+  margin:14px 0 8px;
+  font-size:clamp(34px,4.5vw,66px);
+  letter-spacing:-2px;
+}
+.underline{
+  width:135px;height:5px;border-radius:999px;
+  background:linear-gradient(90deg,#7b2cbf,#ff1744);
+  margin:18px 0 18px;
+}
+.intro{color:#4a5573;font-size:17px;line-height:1.5;max-width:740px}
+.stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.stat{
+  background:white;border:1px solid #e9eaf0;border-radius:16px;
+  padding:16px 18px;min-width:170px;
+  box-shadow:0 10px 26px #18213d10;
+  display:flex;align-items:center;gap:12px;
+}
+.stat .dot{width:14px;height:14px;border-radius:50%;background:#1db36b;box-shadow:0 0 0 7px #1db36b15}
+.stat b{display:block;font-size:14px}
+.stat span{font-size:12px;color:#798199}
+
+.grid{
+  margin-top:28px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:22px;
+}
+.card{
+  min-height:230px;
+  border-radius:18px;
+  padding:28px;
+  color:white;
+  text-decoration:none;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 14px 30px #16223824;
+  transition:.25s ease;
+}
+.card:hover{transform:translateY(-5px) scale(1.01)}
+.card:before{
+  content:"";position:absolute;width:260px;height:260px;border-radius:50%;
+  right:-70px;top:-90px;background:#ffffff10;
+}
+.card .art{
+  position:absolute;right:28px;top:30px;
+  width:115px;height:115px;border-radius:50%;
+  display:grid;place-items:center;font-size:56px;
+  border:2px solid #ffffff55;
+  box-shadow:0 0 30px #0003,inset 0 0 25px #ffffff12;
+}
+.card h2{font-size:32px;margin:18px 0 8px;max-width:62%}
+.card p{max-width:62%;color:#f2f4f8;line-height:1.5}
+.tag{
+  display:inline-block;margin-top:18px;padding:8px 14px;border-radius:999px;
+  font-size:12px;font-weight:700;background:#ffffff18;border:1px solid #ffffff30;
+}
+.arrow{
+  position:absolute;right:22px;bottom:20px;
+  width:46px;height:46px;border-radius:50%;
+  display:grid;place-items:center;background:white;
+  font-size:25px;font-weight:bold;
+}
+.cia{background:linear-gradient(135deg,#06194c,#0845a9 64%,#0b65df)}
+.cia .arrow{color:#0845a9}
+.jd{background:linear-gradient(135deg,#35105f,#7a0ba8 60%,#b5179e)}
+.jd .arrow{color:#8210aa}
+.ing{background:linear-gradient(135deg,#075c4f,#008b73 58%,#11b37f)}
+.ing .arrow{color:#087d64}
+.otras{background:linear-gradient(135deg,#7a3500,#c65d00 55%,#ef8b00)}
+.otras .arrow{color:#bf5b00}
+
+.features{
+  margin-top:26px;
+  background:white;border:1px solid #e9eaf0;border-radius:18px;
+  box-shadow:0 10px 24px #18213d0d;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  padding:18px;
+}
+.feature{padding:4px 18px;border-right:1px solid #eceef2}
+.feature:last-child{border-right:none}
+.feature b{display:block;margin-bottom:5px;font-size:14px}
+.feature span{font-size:12px;color:#7c8498}
+.footer{margin-top:18px;text-align:center;color:#798199;font-size:12px}
+
+@media(max-width:1050px){
+  .sidebar{width:82px}
+  .logo-wrap img{width:58px}
+  .nav a span,.userbox div:nth-child(2),.logout span{display:none}
+  .nav a{justify-content:center;padding:14px 10px;font-size:21px}
+  .main{margin-left:82px;width:calc(100% - 82px);padding:24px}
+  .topbar{flex-direction:column}
+  .stats{justify-content:flex-start}
+}
+@media(max-width:760px){
+  .sidebar{position:static;width:100%;min-height:auto;height:auto;padding:10px}
+  .sidebar:after,.userbox,.logout{display:none}
+  .logo-wrap{display:none}
+  .nav{flex-direction:row;overflow:auto}
+  .nav a{min-width:52px}
+  .app{display:block}
+  .main{margin-left:0;width:100%;padding:20px 14px}
+  .grid{grid-template-columns:1fr}
+  .card h2,.card p{max-width:70%}
+  .features{grid-template-columns:1fr 1fr}
+  .feature{border-right:none;border-bottom:1px solid #eceef2;padding:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="logo-wrap">
+      <img src="mobility-ado-logo.png" alt="Mobility ADO">
+    </div>
+
+    <nav class="nav">
+      <a href="#" class="active">⌂ <span>Inicio</span></a>
+      <a href="https://mobilityado.github.io/CONCILIACIONES/" target="_blank" rel="noopener noreferrer">⚖ <span>CIA - ERPCO</span></a>
+      <a href="https://mobilityado.github.io/JD_ERPCO/" target="_blank" rel="noopener noreferrer">⟳ <span>JD - ERPCO</span></a>
+      <a href="https://mobilityado.github.io/INGRESOS/" target="_blank" rel="noopener noreferrer">▥ <span>Ingresos</span></a>
+      <a href="https://m365.cloud.microsoft/chat" target="_blank" rel="noopener noreferrer">✦ <span>Otras conciliaciones</span></a>
+    </nav>
+
+    <div class="userbox">
+      <div class="user">
+        <div class="avatar">🧑🏻​​</div>
+        <div><b>Hola, </b><br><small>Bienvenido</small></div>
+      </div>
+    </div>
+    <div class="logout">🤖​ <span>Como te puedo ayudar</span></div>
+  </aside>
+
+  <main class="main">
+    <section class="topbar">
+      <div>
+        <h1 class="brand-title">CONCIL.IA</h1>
+        <h2 class="question">¿Qué deseas conciliar hoy?</h2>
+        <div class="underline"></div>
+        <p class="intro">
+          Selecciona el módulo de conciliación con el que deseas trabajar.
+          Estamos listos para ayudarte a tener información precisa y confiable.
+        </p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><span class="dot"></span><div><b>Sistema disponible</b><span>Todos los servicios activos</span></div></div>
+        <div class="stat"><div style="font-size:22px">▣</div><div><b>4 módulos activos</b><span>Ecosistema CONCIL.IA</span></div></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <a class="card cia" href="https://mobilityado.github.io/CONCILIACIONES/" target="_blank" rel="noopener noreferrer">
+        <div class="art">⇄</div>
+        <h2>CIA – ERPCO</h2>
+        <p>Conciliación y validación de información entre CIA y ERPCO.</p>
+        <span class="tag">CONCILIACIÓN OPERATIVA</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card jd" href="https://mobilityado.github.io/JD_ERPCO/" target="_blank" rel="noopener noreferrer">
+        <div class="art">◎</div>
+        <h2>JD – ERPCO</h2>
+        <p>Acceso al módulo especializado de conciliación JD contra ERPCO.</p>
+        <span class="tag">CRUCE Y VALIDACIÓN</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card ing" href="https://mobilityado.github.io/INGRESOS/" target="_blank" rel="noopener noreferrer">
+        <div class="art">$</div>
+        <h2>INGRESOS</h2>
+        <p>Consulta y procesamiento del módulo de conciliación de ingresos.</p>
+        <span class="tag">CONTROL DE INGRESOS</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card otras" href="https://m365.cloud.microsoft/chat" target="_blank" rel="noopener noreferrer">
+        <div class="art">AI</div>
+        <h2>OTRAS CONCILIACIONES</h2>
+        <p>Acceso al asistente para apoyar otros procesos de conciliación.</p>
+        <span class="tag">ASISTENTE INTELIGENTE</span>
+        <span class="arrow">→</span>
+      </a>
+    </section>
+
+    <section class="features">
+      <div class="feature"><b>🛡 Información segura</b><span>Procesos confiables y centralizados.</span></div>
+      <div class="feature"><b>🎯 Precisión garantizada</b><span>Menos errores en las conciliaciones.</span></div>
+      <div class="feature"><b>⚡ Ahorra tiempo</b><span>Procesos más rápidos y simples.</span></div>
+      <div class="feature"><b>👥 Trabajo inteligente</b><span>Tecnología aplicada a la operación.</span></div>
+    </section>
+
+    <div class="footer">CONCIL.IA OS · Centro Inteligente de Conciliaciones · Mobility ADO</div>
+  </main>
+
+</div>
+</body>
+</html>
