@@ -1,0 +1,26 @@
+{
+  "name": "CIO AVA Enterprise 3.0",
+  "short_name": "CIO AVA 3.0",
+  "description": "Plataforma de inteligencia operativa con Executive Score, Copilot contextual, predicción y alertas.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090d18",
+  "theme_color": "#6d28d9",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "assets/pwa/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

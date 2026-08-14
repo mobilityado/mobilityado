@@ -1,0 +1,172 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CIO AVA | Centro de Inteligencia Operativa AVA</title><link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><meta name="theme-color" content="#5b21b6"><meta name="application-name" content="CIO AVA"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/pwa/apple-touch-icon.png"><link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/enterprise3.css"><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script></head>
+<body class="light auth-locked"><div id="loginScreen" class="login-screen" aria-hidden="false">
+  <div class="login-shell">
+    <section class="login-brand-panel">
+      <img src="assets/cio-ava-logo.svg" alt="CIO AVA" class="login-logo">
+      <span class="login-kicker">Mobility ADO</span>
+      <h1>CIO AVA</h1>
+      <h2>Centro de Inteligencia Operativa AVA</h2>
+      <p>Acceso seguro a indicadores, incidencias, tendencias y recuperación operativa.</p>
+      <div class="login-feature"><i>✓</i><span>Vista diferenciada por tipo de cuenta</span></div>
+      <div class="login-feature"><i>✓</i><span>Información de cajeros protegida</span></div>
+      <div class="login-feature"><i>✓</i><span>Sesión temporal validada por Google Apps Script</span></div>
+    </section>
+    <section class="login-form-panel">
+      <div class="login-card-head">
+        <span class="login-lock">▣</span>
+        <div><strong>Iniciar sesión</strong><small>Selecciona tu usuario e ingresa tu contraseña</small></div>
+      </div>
+      <form id="loginForm" class="login-form">
+        <label>Usuario
+          <select id="loginUser" required><option value="">Cargando usuarios…</option></select>
+        </label>
+        <label>Contraseña
+          <div class="password-wrap"><input id="loginPassword" type="password" inputmode="numeric" autocomplete="current-password" required placeholder="Ingresa tu contraseña"><button id="togglePassword" type="button" aria-label="Mostrar u ocultar contraseña">◉</button></div>
+        </label>
+        <button id="loginSubmit" class="login-submit" type="submit">Entrar a CIO AVA</button>
+        <p id="loginMessage" class="login-message" role="alert"></p>
+      </form>
+      <footer>Gerencia Regional de Recaudación VHT · Mobility ADO</footer>
+    </section>
+  </div>
+</div><div id="splash" class="splash"><div class="splash-content"><div class="splash-logo-wrap"><img class="splash-logo" src="assets/cio-ava-logo.svg" alt="Logotipo CIO AVA"></div><h1>CIO AVA</h1><h2>Centro de Inteligencia Operativa AVA</h2><p>Preparando indicadores, recuperación y tendencias</p><span class="loader"></span></div></div><script>
+(function(){
+  function forceCloseSplash(){
+    var splash=document.getElementById('splash');
+    if(!splash)return;
+    splash.classList.add('hide');
+    setTimeout(function(){ if(splash && splash.parentNode) splash.parentNode.removeChild(splash); },550);
+  }
+  window.forceCloseAvaSplash=forceCloseSplash;
+  setTimeout(forceCloseSplash,2200);
+  window.addEventListener('load',function(){setTimeout(forceCloseSplash,500);});
+})();
+</script>
+<aside class="sidebar"><div class="brand"><img class="brand-logo" src="assets/cio-ava-logo.svg" alt="CIO AVA"><div><b>CIO AVA</b><small>Centro de Inteligencia<br>Operativa AVA</small></div></div><nav>
+<div class="nav-group"><span class="nav-group-title">Inicio</span>
+<button class="nav active" data-view="dashboard"><img class="nav-icon" src="assets/icons/dashboard.svg" alt=""> Resumen Ejecutivo</button></div>
+<div class="nav-group"><span class="nav-group-title">Inteligencia operativa</span>
+<button class="nav" data-view="rubros"><img class="nav-icon" src="assets/icons/rubros.svg" alt=""> Rubros</button>
+<button class="nav" data-view="honestidad"><img class="nav-icon" src="assets/icons/honestidad.svg" alt=""> Honestidad</button>
+<button class="nav" data-view="tendencias"><img class="nav-icon" src="assets/icons/tendencias.svg" alt=""> Tendencias</button>
+<button class="nav" data-view="insights"><img class="nav-icon" src="assets/icons/insights.svg" alt=""> Resumen Inteligente</button>
+<button class="nav" data-view="decision"><img class="nav-icon" src="assets/icons/insights.svg" alt=""> Decision Intelligence</button>
+<button class="nav" data-view="assistant"><img class="nav-icon" src="assets/icons/insights.svg" alt=""> CIO Copilot 3.0</button></div>
+<div class="nav-group"><span class="nav-group-title">Recuperación</span>
+<button class="nav" data-view="conductores"><img class="nav-icon" src="assets/icons/conductores.svg" alt=""> Conductores</button>
+<button class="nav" data-view="cajeros" data-admin-only><img class="nav-icon" src="assets/icons/cajeros.svg" alt=""> Cajeros</button></div>
+<div class="nav-group"><span class="nav-group-title">Operación</span>
+<button class="nav" data-view="rutas"><img class="nav-icon" src="assets/icons/rutas.svg" alt=""> Rutas</button>
+<button class="nav" data-view="reportes"><img class="nav-icon" src="assets/icons/reportes.svg" alt=""> Reportes</button></div>
+<div class="nav-group" data-admin-only><span class="nav-group-title">Administración</span>
+<button class="nav" data-view="usuarios" data-admin-only><img class="nav-icon" src="assets/icons/conductores.svg" alt=""> Usuarios</button>
+<button class="nav" data-view="auditoria" data-admin-only><img class="nav-icon" src="assets/icons/reportes.svg" alt=""> Auditoría</button></div>
+<div class="nav-group"><span class="nav-group-title">Sistema</span>
+<button class="nav" data-view="config"><img class="nav-icon" src="assets/icons/config.svg" alt=""> Configuración</button>
+<button class="nav" data-view="acerca"><img class="nav-icon" src="assets/icons/install.svg" alt=""> Acerca de</button></div>
+</nav><div class="sync"><span></span><small id="syncText">Esperando datos</small></div></aside>
+<main class="app" id="captureArea"><header class="topbar"><div><h1 id="pageTitle">Centro de Inteligencia Operativa AVA</h1><p>Análisis ejecutivo de recuperación, incidencias y tendencias operativas.</p></div><div class="actions"><div id="sessionBadge" class="session-badge" hidden><span id="sessionInitial">U</span><div><b id="sessionName">Usuario</b><small id="sessionRole">USUARIO</small><em id="sessionLastAccess">Último acceso: —</em></div></div><button id="logoutBtn" class="btn ghost logout-btn" hidden>Cerrar sesión</button><button id="installBtn" class="btn ghost install-btn" hidden><img src="assets/icons/install.svg" alt=""> Instalar app</button><div class="alert-center-wrap"><button id="alertBellBtn" class="btn ghost alert-bell" aria-label="Centro de alertas">🔔<span id="alertBellCount">0</span></button><div id="alertBellPanel" class="alert-bell-panel"><header><b>Centro de alertas</b><button id="alertBellClose">×</button></header><div id="alertBellList"></div></div></div><button id="themeBtn" class="btn ghost">☀️/🌙 Tema</button><button id="refreshBtn" class="btn">Actualizar</button><button id="pdfBtn" class="btn primary">PDF</button></div></header>
+<section id="welcomePanel" class="welcome-panel"><div><span>Bienvenido</span><strong id="welcomeName">Usuario</strong></div><p id="welcomeMeta">Rol: Usuario · Último acceso: —</p></section>
+<section class="filters card"><label>Empresa<select id="fEmpresa"><option value="TODAS">Todas</option><option>TRT</option><option>SUR</option></select></label><label>Rubro<select id="fRubro"><option value="TODOS">Todos</option></select></label><label>Estatus<select id="fEstatus"><option value="TODOS">Todos</option></select></label><label>Desde<input id="fDesde" type="date"></label><label>Hasta<input id="fHasta" type="date"></label><label>Búsqueda<input id="fSearch" placeholder="Conductor, autobús, folio, anomalía o ruta"></label><button id="clearBtn" class="btn ghost">Limpiar</button></section>
+<section id="dashboard" class="view active"><div class="kpis six"><div class="kpi green"><span>Total cobrado</span><b id="kCobrado">$0</b><small id="kCobradoTrend">Cajeros + otras áreas</small></div><div class="kpi purple"><span>Generado en honestidad</span><b id="kHonestidad">$0</b><small>Incidencias clasificadas como Honestidad</small></div><div class="kpi blue"><span>Otros rubros</span><b id="kOtros">0</b><small>Incidencias distintas a Honestidad</small></div><div class="kpi red"><span>Pendiente por cobrar</span><b id="kAdeudo">$0</b><small>Generado en Honestidad menos total cobrado</small></div><div class="kpi amber"><span>Incidencias generales</span><b id="kIncidencias">0</b><small>Registros AVATRT / AVASUR</small></div><div class="kpi cyan"><span>% recuperación general</span><b id="kRec">0%</b><small>Total cobrado / generado en Honestidad</small></div></div>
+<div class="grid three"><div class="card compact"><h2>Recuperación general</h2><div class="chart sm"><canvas id="gaugeChart"></canvas><div id="gaugeValue" class="center-label">0%</div></div></div><div class="card compact"><h2>Generado por rubro</h2><div class="chart sm"><canvas id="rubrosDonut"></canvas></div></div><div class="card compact"><h2>Pronóstico de recuperación</h2><div id="forecastBox" class="forecast"></div><div class="forecast-progress"><i id="forecastProgress"></i></div></div></div>
+<div class="grid two"><div class="card"><h2>Tendencia por rubro</h2><div class="chart md"><canvas id="trendRubrosChart"></canvas></div></div><div class="card"><h2>Top incidencias generales</h2><div class="chart md"><canvas id="incidenciasChart"></canvas></div></div></div>
+<div class="grid two admin-split"><div class="card" data-admin-only><h2>Top 10 cajeros por recuperación</h2><div id="topCajeros" class="rank"></div></div><div class="card"><h2>Top 10 conductores por incidencias</h2><div id="topConductores" class="rank"></div></div></div></section>
+<section id="rubros" class="view"><div class="grid two"><div class="card"><h2>Distribución de incidencias por rubro</h2><div class="chart lg narrow"><canvas id="rubrosChart"></canvas></div></div><div class="card"><h2>Incidencias por rubro</h2><div class="chart lg"><canvas id="rubrosCountChart"></canvas></div></div></div><div class="card"><h2>Detalle individual por rubro</h2><div id="rubrosList" class="entity-list"></div></div></section>
+<section id="honestidad" class="view"><div class="grid two"><div class="card"><h2>Top incidencias de Honestidad</h2><div class="chart lg"><canvas id="honestyIncChart"></canvas></div></div><div class="card"><h2>Lugares con mayor incidencia de Honestidad</h2><div class="chart lg"><canvas id="honestyPlacesChart"></canvas></div></div></div><div class="grid two"><div class="card"><h2>Top conductores en Honestidad</h2><div id="honestyDrivers" class="rank"></div></div><div class="card"><h2>Tendencia mensual de Honestidad</h2><div class="chart lg"><canvas id="honestyTrendChart"></canvas></div></div></div></section>
+<section id="conductores" class="view"><div class="grid two"><div class="card"><h2>Top conductores por número de incidencias</h2><div id="driversRank" class="rank"></div></div><div class="card"><h2>Top conductores por importe generado</h2><div id="driversAmountRank" class="rank"></div></div></div><div class="card"><h2>Conductores</h2><div id="driversList" class="entity-list"></div></div></section>
+<section id="cajeros" class="view" data-admin-only><div class="grid two"><div class="card"><h2>Recuperación por cajero</h2><div class="chart lg"><canvas id="cashiersChart"></canvas></div></div><div class="card"><h2>Top cajeros</h2><div id="cashiersList" class="rank"></div></div></div></section>
+<section id="rutas" class="view"><div class="grid two"><div class="card"><h2>Origen–destino con más incidencias</h2><div class="chart lg"><canvas id="routesCountChart"></canvas></div></div><div class="card"><h2>Origen–destino con mayor importe</h2><div class="chart lg"><canvas id="routesAmountChart"></canvas></div></div></div></section>
+<section id="tendencias" class="view"><div class="grid two"><div class="card"><h2>Comparativo mensual de recuperación general</h2><div class="chart lg"><canvas id="monthlyRubrosChart"></canvas></div></div><div class="card"><h2>Comparativo anual de recuperación general</h2><div class="chart lg"><canvas id="annualRubrosChart"></canvas></div></div></div><div class="card"><h2>Estatus de incidencias</h2><div class="chart lg narrow"><canvas id="statusChart"></canvas></div></div></section>
+<section id="insights" class="view"><div class="card"><h2>Resumen inteligente</h2><div id="insightsBox" class="insights"></div></div></section>
+<section id="reportes" class="view"><div class="card"><h2>Reportes corporativos</h2><p>Exporta los datos filtrados y el tablero.</p><button id="excelBtn" class="btn primary">Excel</button><button id="csvBtn" class="btn">CSV</button><button id="pdfBtn2" class="btn">PDF</button><div class="table-wrap"><table id="dataTable"><thead></thead><tbody></tbody></table></div></div></section>
+<section id="usuarios" class="view" data-admin-only>
+  <div class="admin-users-head card">
+    <div><span class="section-kicker">Administración</span><h2>Usuarios y accesos</h2><p>Crea cuentas, administra permisos y consulta la actividad de acceso.</p></div>
+    <button id="adminRefreshUsers" class="btn">Actualizar usuarios</button>
+  </div>
+  <div class="admin-user-kpis">
+    <div class="kpi green"><span>Usuarios totales</span><b id="adminUsersTotal">0</b><small>Cuentas registradas</small></div>
+    <div class="kpi cyan"><span>Usuarios activos</span><b id="adminUsersActive">0</b><small>Con acceso permitido</small></div>
+    <div class="kpi purple"><span>Administradores</span><b id="adminUsersAdmins">0</b><small>Acceso completo</small></div>
+    <div class="kpi amber"><span>Accesos acumulados</span><b id="adminUsersLogins">0</b><small>Inicios de sesión registrados</small></div>
+  </div>
+  <div class="grid admin-users-layout">
+    <div class="card admin-create-card">
+      <h2>Crear usuario</h2>
+      <form id="adminCreateUserForm" class="admin-user-form">
+        <label>Nombre completo<input id="adminNewName" required maxlength="120" placeholder="Nombre de la persona"></label>
+        <label>Usuario<input id="adminNewUser" required maxlength="80" placeholder="Identificador de acceso"></label>
+        <label>Contraseña<input id="adminNewPassword" required minlength="4" autocomplete="new-password" placeholder="Contraseña temporal"></label>
+        <label>Tipo de cuenta<select id="adminNewRole"><option value="USUARIO">Usuario</option><option value="ADMINISTRADOR">Administrador</option></select></label>
+        <button class="btn primary" type="submit">Crear usuario</button>
+        <p id="adminCreateMessage" class="admin-form-message"></p>
+      </form>
+    </div>
+    <div class="card admin-users-table-card">
+      <div class="admin-table-toolbar"><div><h2>Usuarios registrados</h2><small>El equipo y navegador son datos informativos enviados por el dispositivo.</small></div><input id="adminUsersSearch" placeholder="Buscar usuario, nombre o equipo"></div>
+      <div class="table-wrap"><table class="admin-users-table"><thead><tr><th>Persona</th><th>Rol</th><th>Estado</th><th>Último acceso</th><th>Accesos</th><th>Equipo / navegador</th><th>Acciones</th></tr></thead><tbody id="adminUsersBody"><tr><td colspan="7">Cargando usuarios…</td></tr></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section id="decision" class="view">
+  <div class="decision-hero card">
+    <div><span class="section-kicker">Decision Intelligence Platform</span><h2>CIO AVA Enterprise 3.0</h2><p>Unifica salud operativa, predicción, alertas, reconocimientos y recomendaciones accionables.</p></div>
+    <div class="decision-live"><span></span> Análisis local en tiempo real</div>
+  </div>
+  <div class="grid three decision-top">
+    <div class="card score-card"><span class="section-kicker">Executive Score</span><h2>Salud operativa</h2><div id="executiveScoreGauge" class="score-gauge"><div><b id="executiveScoreValue">0</b><span>/ 100</span></div></div><strong id="executiveScoreLabel">Calculando…</strong><small id="executiveScoreDetail">Basado en recuperación, tendencia y concentración de riesgo.</small></div>
+    <div class="card"><span class="section-kicker">Recomendaciones</span><h2>Acciones sugeridas</h2><div id="decisionRecommendations" class="decision-list"></div></div>
+    <div class="card"><span class="section-kicker">Centro de predicción</span><h2>Escenarios de recuperación</h2><div id="predictionScenarios" class="scenario-list"></div></div>
+  </div>
+  <div class="grid two">
+    <div class="card"><div class="card-title-row"><div><span class="section-kicker">Riesgo por ruta</span><h2>Mapa operativo origen–destino</h2></div><small>Haz clic para consultar el detalle</small></div><div id="routeRiskMap" class="route-risk-map"></div></div>
+    <div class="card"><span class="section-kicker">Evolución operativa</span><h2>Línea del tiempo</h2><div id="operationalTimeline" class="operational-timeline"></div></div>
+  </div>
+  <div class="grid two">
+    <div class="card" data-admin-only><div class="card-title-row"><div><span class="section-kicker">Reconocimiento mensual</span><h2>Cajeros destacados</h2></div><button id="generateRecognitionBtn" class="btn primary">Generar diploma</button></div><div id="recognitionPodium" class="recognition-podium"></div></div>
+    <div class="card"><span class="section-kicker">Copilot con contexto</span><h2>Conversación analítica</h2><div id="contextConversation" class="context-conversation"></div><form id="contextCopilotForm" class="context-form"><input id="contextCopilotInput" placeholder="Ejemplo: Compárame este mes con el anterior"><button class="btn primary">Preguntar</button></form><div class="context-chips"><button data-cio-question="Compárame este mes con el anterior">Comparar meses</button><button data-cio-question="¿Y solo Honestidad?">Solo Honestidad</button><button data-cio-question="¿Quiénes son los principales responsables?">Principales responsables</button></div></div>
+  </div>
+</section>
+<section id="assistant" class="view">
+<div class="copilot-hero card"><img src="assets/cio-ava-logo.svg" alt="CIO AVA"><div><span class="section-kicker">Inteligencia analítica local</span><h2>CIO Copilot 3.0</h2><p>Interpreta los datos cargados, detecta variaciones, genera pronósticos y prepara un resumen ejecutivo sin enviar información a servicios externos.</p></div><div class="copilot-status"><span></span> Motor analítico listo</div></div>
+<div class="grid two copilot-grid">
+  <div class="card"><div class="card-title-row"><div><span class="section-kicker">Diagnóstico automático</span><h2>Resumen ejecutivo inteligente</h2></div><button id="copilotAnalyzeBtn" class="btn primary">Analizar ahora</button></div><div id="copilotExecutiveSummary" class="copilot-summary"><p>Carga los datos para generar el análisis.</p></div></div>
+  <div class="card"><span class="section-kicker">Predicción estadística</span><h2>Pronóstico al cierre del mes</h2><div class="copilot-forecast"><b id="copilotForecastAmount">$0</b><span id="copilotForecastLabel">Sin datos suficientes</span><div class="forecast-progress"><i id="copilotForecastBar"></i></div><small id="copilotForecastConfidence">Confianza estimada: —</small></div><div class="chart md"><canvas id="copilotForecastChart"></canvas></div></div>
+</div>
+<div class="grid two copilot-grid">
+  <div class="card"><span class="section-kicker">Vigilancia operativa</span><h2>Alertas inteligentes</h2><div id="copilotAlerts" class="smart-alerts"></div><div class="copilot-actions"><button id="copilotNotifyBtn" class="btn ghost">Activar notificaciones</button></div></div>
+  <div class="card"><span class="section-kicker">Consulta guiada</span><h2>Pregunta a CIO Copilot</h2><form id="copilotQuestionForm" class="copilot-question"><textarea id="copilotQuestion" rows="4" placeholder="Ejemplo: ¿Qué conductor concentra más incidencias de Honestidad?"></textarea><button class="btn primary" type="submit">Analizar pregunta</button></form><div id="copilotAnswer" class="copilot-answer">La respuesta se generará con los datos y filtros actuales.</div></div>
+</div>
+<div class="card copilot-report-card"><div><span class="section-kicker">Comunicación ejecutiva</span><h2>Compartir resumen</h2><p>Genera el PDF corporativo o envía por correo el diagnóstico actual. El envío está disponible solo para administradores.</p></div><div class="copilot-share"><button id="copilotPdfBtn" class="btn">Generar PDF</button><input id="copilotEmail" type="email" placeholder="correo@empresa.com" data-admin-only><button id="copilotEmailBtn" class="btn primary" data-admin-only>Enviar resumen</button></div><p id="copilotEmailMessage" class="admin-form-message"></p></div>
+</section>
+<section id="auditoria" class="view" data-admin-only><div class="card audit-head"><div><span class="section-kicker">Trazabilidad</span><h2>Auditoría del sistema</h2><p>Registro de accesos, navegación, exportaciones y acciones administrativas.</p></div><button id="auditRefresh" class="btn">Actualizar auditoría</button></div><div class="card"><div class="audit-toolbar"><input id="auditSearch" placeholder="Buscar usuario, acción, módulo o detalle"><select id="auditAction"><option value="">Todas las acciones</option><option>INICIO_SESION</option><option>CIERRE_SESION</option><option>NAVEGACION</option><option>EXPORTACION</option><option>CREAR_USUARIO</option><option>CAMBIAR_CONTRASENA</option><option>CAMBIAR_ESTADO</option></select></div><div class="table-wrap"><table class="audit-table"><thead><tr><th>Fecha</th><th>Usuario</th><th>Rol</th><th>Acción</th><th>Módulo</th><th>Detalle</th><th>Equipo</th></tr></thead><tbody id="auditBody"><tr><td colspan="7">Cargando auditoría…</td></tr></tbody></table></div></div></section>
+<section id="acerca" class="view"><div class="about-hero card"><img src="assets/cio-ava-logo.svg" alt="CIO AVA"><div><span class="version-pill">Versión 3.0 Decision Intelligence</span><h2>CIO AVA</h2><h3>Centro de Inteligencia Operativa AVA</h3><p>Plataforma para el seguimiento ejecutivo de recuperación, incidencias, Honestidad, tendencias, rutas y desempeño operativo.</p></div></div><div class="grid two"><div class="card"><h2>Identidad institucional</h2><p><b>Gerencia Regional de Recaudación VHT</b><br>Mobility ADO</p><p class="about-muted">La información presentada depende de los registros disponibles en Google Sheets y de los filtros activos.</p></div><div class="card"><h2>Capacidades de la versión 3.0</h2><div class="about-list"><span>✓ Accesos por roles</span><span>✓ Indicadores y tendencias</span><span>✓ Reportes PDF, Excel y CSV</span><span>✓ Administración de usuarios</span><span>✓ Auditoría de actividad</span><span>✓ PWA instalable y temas claro/oscuro</span><span>✓ CIO Copilot con memoria de contexto</span><span>✓ Executive Score y recomendaciones</span><span>✓ Predicción por escenarios</span><span>✓ Reconocimientos automáticos</span><span>✓ Centro de alertas y línea del tiempo</span></div></div></div></section>
+<section id="config" class="view"><div class="card config-grid"><label>Meta mensual<input id="cfgMeta" type="number" value="50000"></label><label>Umbral de alerta<input id="cfgUmbral" type="number" value="10000"></label><label>Actualización<select id="cfgRefresh"><option value="60000">60 segundos</option><option value="300000">5 minutos</option><option value="0">Desactivada</option></select></label><button id="saveCfg" class="btn primary">Guardar</button></div></section></main>
+<div id="detailPanel" class="detail"><button id="closeDetail">×</button><div id="detailContent"></div></div><div id="toast" class="toast"></div>
+
+<!-- Autobús de Ayuda AVA -->
+<button id="helpBusBtn" class="help-bus-btn" type="button" aria-label="Abrir Autobús de Ayuda" title="Autobús de Ayuda">
+  <img class="help-bus-logo" src="assets/cio-ava-logo.svg" alt="CIO AVA"><span class="help-bus-pulse"></span>
+</button>
+<section id="helpChat" class="help-chat" aria-hidden="true">
+  <header class="help-chat-header">
+    <div class="help-chat-avatar"><img src="assets/cio-ava-logo.svg" alt="CIO AVA"></div>
+    <div><strong>Autobús de Ayuda</strong><small>Asistente de CIO AVA</small></div>
+    <button id="helpChatClose" type="button" aria-label="Cerrar chat">×</button>
+  </header>
+  <div id="helpChatMessages" class="help-chat-messages" aria-live="polite"></div>
+  <div id="helpSuggestions" class="help-suggestions">
+    <button type="button" data-question="¿Cuál es el total cobrado?">Total cobrado</button>
+    <button type="button" data-question="¿Quiénes son los top cajeros?" data-admin-only>Top cajeros</button>
+    <button type="button" data-question="¿Quiénes son los conductores con más incidencias?">Top conductores</button>
+    <button type="button" data-question="¿Dónde hay más incidencias de Honestidad?">Lugares de Honestidad</button>
+  </div>
+  <form id="helpChatForm" class="help-chat-form">
+    <input id="helpChatInput" autocomplete="off" placeholder="Pregunta sobre datos, conductores, rutas…" aria-label="Escribe tu pregunta">
+    <button type="submit" aria-label="Enviar pregunta">➤</button>
+  </form>
+  <footer>Las respuestas usan la información actualmente cargada y los filtros activos.</footer>
+</section>
+<footer class="site-footer"><img src="assets/cio-ava-logo.svg" alt="CIO AVA"><div><strong>CIO AVA</strong><span>Centro de Inteligencia Operativa AVA</span></div><div class="footer-center">Gerencia Regional de Recaudación VHT<br>Mobility ADO · CIO AVA Enterprise 3.0</div></footer><script src="js/app.js" defer></script><script src="js/admin-users.js" defer></script><script src="js/audit.js" defer></script><script src="js/enterprise3.js" defer></script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(console.error));}let deferredInstall;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;const b=document.getElementById("installBtn");if(b)b.hidden=false;});window.addEventListener("appinstalled",()=>{const b=document.getElementById("installBtn");if(b)b.hidden=true;deferredInstall=null;});document.addEventListener("click",async e=>{const b=e.target.closest("#installBtn");if(!b||!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;b.hidden=true;});</script></body></html>
