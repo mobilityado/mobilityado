@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#4c1d95" />
+  <title>Mobility ADO | Centro de Aplicaciones</title>
+  <style>
+    :root{
+      --bg1:#f7f5ff;
+      --bg2:#eef2ff;
+      --ink:#201a2e;
+      --muted:#6f6880;
+      --purple:#5b2ca0;
+      --purple2:#7c3aed;
+      --card:rgba(255,255,255,.84);
+      --line:rgba(91,44,160,.12);
+      --shadow:0 18px 45px rgba(38,20,70,.12);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(124,58,237,.14), transparent 28%),
+        radial-gradient(circle at 85% 0%, rgba(91,44,160,.10), transparent 25%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+    }
+
+    .shell{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+      padding:28px 0 40px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:24px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .brand-mark{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      color:white;
+      font-size:20px;
+      background:linear-gradient(135deg,var(--purple),var(--purple2));
+      box-shadow:0 10px 25px rgba(91,44,160,.28);
+    }
+
+    .brand small{
+      display:block;
+      font-weight:600;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .status{
+      padding:9px 13px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.7);
+      color:#4f3b70;
+      font-size:13px;
+      font-weight:700;
+      backdrop-filter:blur(10px);
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      padding:38px;
+      border-radius:30px;
+      background:
+        linear-gradient(120deg,rgba(45,20,82,.96),rgba(91,44,160,.94) 60%,rgba(124,58,237,.90));
+      color:white;
+      box-shadow:var(--shadow);
+      margin-bottom:26px;
+    }
+
+    .hero:before,.hero:after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+      filter:blur(.2px);
+    }
+    .hero:before{width:260px;height:260px;right:-65px;top:-95px}
+    .hero:after{width:150px;height:150px;right:130px;bottom:-85px}
+
+    .hero-content{position:relative;z-index:1;max-width:760px}
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 11px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.10);
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:16px;
+    }
+    h1{
+      margin:0 0 12px;
+      font-size:clamp(32px,5vw,58px);
+      line-height:1.02;
+      letter-spacing:-1.5px;
+    }
+    .hero p{
+      margin:0;
+      max-width:680px;
+      font-size:clamp(15px,2vw,18px);
+      line-height:1.6;
+      color:rgba(255,255,255,.86);
+    }
+
+    .toolbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin:24px 0 18px;
+      flex-wrap:wrap;
+    }
+    .search{
+      flex:1 1 320px;
+      position:relative;
+    }
+    .search input{
+      width:100%;
+      height:50px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.85);
+      color:var(--ink);
+      padding:0 16px 0 46px;
+      outline:none;
+      box-shadow:0 8px 28px rgba(38,20,70,.06);
+      font-size:15px;
+    }
+    .search input:focus{
+      border-color:rgba(124,58,237,.4);
+      box-shadow:0 0 0 4px rgba(124,58,237,.08);
+    }
+    .search span{
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#7b6d91;
+    }
+    .counter{
+      font-size:14px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .app-card{
+      --accent:#6d28d9;
+      text-decoration:none;
+      color:inherit;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+      min-height:180px;
+      display:flex;
+      flex-direction:column;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 10px 30px rgba(36,23,58,.07);
+      backdrop-filter:blur(14px);
+      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .app-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 18px 38px rgba(36,23,58,.13);
+      border-color:rgba(109,40,217,.28);
+    }
+    .app-card:after{
+      content:"";
+      position:absolute;
+      width:110px;
+      height:110px;
+      border-radius:50%;
+      right:-45px;
+      top:-45px;
+      background:color-mix(in srgb,var(--accent) 16%, transparent);
+    }
+    .icon{
+      width:48px;
+      height:48px;
+      border-radius:15px;
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      background:color-mix(in srgb,var(--accent) 11%, white);
+      border:1px solid color-mix(in srgb,var(--accent) 15%, transparent);
+      margin-bottom:17px;
+    }
+    .app-card h3{margin:0 0 7px;font-size:18px}
+    .app-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+      flex:1;
+    }
+    .open{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:13px;
+      font-weight:800;
+      color:var(--accent);
+    }
+    .arrow{
+      width:30px;height:30px;border-radius:10px;
+      display:grid;place-items:center;
+      background:color-mix(in srgb,var(--accent) 10%, white);
+      transition:transform .2s ease;
+    }
+    .app-card:hover .arrow{transform:translateX(3px)}
+
+    .empty{
+      display:none;
+      text-align:center;
+      padding:36px 16px;
+      color:var(--muted);
+    }
+
+    footer{
+      padding:26px 4px 0;
+      text-align:center;
+      color:#847a95;
+      font-size:13px;
+    }
+
+    @media (max-width:900px){
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .hero{padding:30px}
+    }
+    @media (max-width:600px){
+      .shell{width:min(100% - 20px,1180px);padding-top:16px}
+      .topbar{align-items:flex-start}
+      .status{display:none}
+      .hero{border-radius:22px;padding:25px 22px}
+      .grid{grid-template-columns:1fr}
+      .app-card{min-height:160px}
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div>
+          Mobility ADO
+          <small>Portal de aplicaciones</small>
+        </div>
+      </div>
+      <div class="status">● Servicios disponibles</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <div class="eyebrow">✦ Centro Digital Villahermosa</div>
+        <h1>Todo tu ecosistema<br>en un solo lugar.</h1>
+        <p>Accede rápidamente a las aplicaciones, reportes y herramientas operativas desde un único portal.</p>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="search">
+        <span>⌕</span>
+        <input id="search" type="search" placeholder="Buscar una aplicación..." autocomplete="off">
+      </div>
+      <div class="counter"><span id="count">10</span> aplicaciones</div>
+    </section>
+
+    <section class="grid" id="apps">
+      <a class="app-card" href="./AVA/" data-name="ava centro inteligencia operativa" style="--accent:#7c3aed">
+        <div class="icon">📊</div>
+        <h3>AVA</h3>
+        <p>Centro de inteligencia operativa y seguimiento de indicadores AVA.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./CONCIL-IA/" data-name="concil ia conciliaciones inteligencia" style="--accent:#5b21b6">
+        <div class="icon">🧠</div>
+        <h3>CONCIL-IA</h3>
+        <p>Portal inteligente para análisis y apoyo a procesos de conciliación.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./CONCILIACIONES/" data-name="conciliaciones" style="--accent:#4338ca">
+        <div class="icon">🧾</div>
+        <h3>Conciliaciones</h3>
+        <p>Herramientas para integración, validación y conciliación de información.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./CapturasPorcentrodePago/" data-name="capturas porcentaje pago" style="--accent:#2563eb">
+        <div class="icon">💳</div>
+        <h3>Capturas % de Pago</h3>
+        <p>Consulta y captura de información relacionada con porcentajes de pago.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./ChatBoot/" data-name="chatboot chatbot asistente" style="--accent:#0891b2">
+        <div class="icon">💬</div>
+        <h3>ChatBoot</h3>
+        <p>Acceso al asistente y herramientas conversacionales del portal.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./FIK/" data-name="fik asegura tu factor" style="--accent:#059669">
+        <div class="icon">🛡️</div>
+        <h3>Asegura tu Factor</h3>
+        <p>Consulta y validación de factores de pago por marca y corrida.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./HappyMoments/" data-name="happy moments cumpleaños aniversarios felicitaciones" style="--accent:#db2777">
+        <div class="icon">🎉</div>
+        <h3>Happy Moments</h3>
+        <p>Gestión de felicitaciones, cumpleaños y momentos especiales.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./INGRESOS/" data-name="ingresos reporte rcv" style="--accent:#ea580c">
+        <div class="icon">📈</div>
+        <h3>Ingresos</h3>
+        <p>Consulta, análisis y concentración de información de ingresos.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./JD_ERPCO/" data-name="jd erpco" style="--accent:#ca8a04">
+        <div class="icon">🔎</div>
+        <h3>JD · ERPCO</h3>
+        <p>Validación y conciliación de información operativa JD contra ERPCO.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="app-card" href="./RCV/" data-name="rcv report ia recaudacion" style="--accent:#dc2626">
+        <div class="icon">📋</div>
+        <h3>RCV</h3>
+        <p>Reportes y herramientas de seguimiento para Recaudación Villahermosa.</p>
+        <div class="open"><span>Abrir aplicación</span><span class="arrow">→</span></div>
+      </a>
+    </section>
+
+    <div class="empty" id="empty">No encontré una aplicación con ese nombre.</div>
+
+    <footer>
+      Mobility ADO · Portal interno de aplicaciones · Villahermosa
+    </footer>
+  </main>
+
+  <script>
+    const search = document.getElementById('search');
+    const cards = [...document.querySelectorAll('.app-card')];
+    const count = document.getElementById('count');
+    const empty = document.getElementById('empty');
+
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach(card => {
+        const match = card.dataset.name.includes(q) || card.innerText.toLowerCase().includes(q);
+        card.style.display = match ? 'flex' : 'none';
+        if (match) visible++;
+      });
+
+      count.textContent = visible;
+      empty.style.display = visible ? 'none' : 'block';
+    });
+  </script>
+</body>
+</html>
