@@ -1,0 +1,1057 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Asistente Abordo 9.2 · Mobile real</title>
+<script>
+(function(){
+  var ua=navigator.userAgent||"";
+  var touch=(navigator.maxTouchPoints||0)>0 || window.matchMedia('(pointer:coarse)').matches;
+  var smallScreen=Math.min(screen.width||9999,screen.height||9999)<=900;
+  var mobileUA=/Android|iPhone|iPad|iPod|Mobile|IEMobile|Opera Mini/i.test(ua);
+  if(mobileUA || (touch && smallScreen)){document.documentElement.classList.add('force-mobile');}
+})();
+</script>
+<style>
+:root{
+  --primary:#5b2c83; --primary-2:#7c3fad; --accent:#00a987; --danger:#dc3545;
+  --bg:#eef1f7; --panel:#ffffff; --panel-2:#f7f8fc; --text:#182230; --muted:#667085;
+  --border:#e4e7ec; --shadow:0 24px 60px rgba(26,30,45,.13); --radius:24px;
+  --bot:#fff; --bot-text:#1f2937; --me:#5b2c83; --me-text:#fff; --sheet-primary:#5b2c83;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:
+ radial-gradient(circle at 10% 10%,rgba(91,44,131,.15),transparent 30%),
+ radial-gradient(circle at 90% 90%,rgba(0,169,135,.13),transparent 28%),var(--bg);overflow:hidden}
+body.dark{--bg:#0f1420;--panel:#151c2a;--panel-2:#1c2535;--text:#f8fafc;--muted:#a6b0c3;--border:#2a3547;--bot:#202a3b;--bot-text:#f8fafc;--me:#7c3fad;--shadow:0 25px 65px rgba(0,0,0,.45)}
+.app-shell{width:min(1440px,96vw);height:min(94vh,940px);margin:3vh auto;display:grid;grid-template-columns:285px minmax(0,1fr);background:var(--panel);border:1px solid rgba(255,255,255,.5);border-radius:30px;box-shadow:var(--shadow);overflow:hidden}
+.sidebar{background:linear-gradient(180deg,#2f1646 0%,#4c236f 55%,#163d3a 135%);color:#fff;padding:24px 18px;display:flex;flex-direction:column;gap:22px;position:relative;overflow:hidden}
+.sidebar:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;border:1px solid rgba(255,255,255,.08);right:-120px;bottom:-80px}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 5px 18px;border-bottom:1px solid rgba(255,255,255,.13)}
+.brand-logo{width:52px;height:52px;border-radius:16px;background:#fff;padding:6px;display:grid;place-items:center;flex:none}.brand-logo svg{width:100%;height:100%;display:block}.brand-title{font-size:18px;font-weight:800}.brand-subtitle{font-size:12px;opacity:.75;margin-top:3px}
+.side-label{text-transform:uppercase;letter-spacing:.12em;font-size:10px;opacity:.55;margin:0 8px}
+.side-nav{display:grid;gap:8px}.side-btn{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;color:#fff;padding:12px 13px;border-radius:14px;text-align:left;font:inherit;font-weight:650;cursor:pointer;transition:.2s}.side-btn:hover,.side-btn.active{background:rgba(255,255,255,.13);transform:translateX(3px)}.side-btn span:first-child{font-size:20px;width:24px;text-align:center}
+.side-card{margin-top:auto;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);padding:15px;border-radius:18px;font-size:13px;line-height:1.5}.side-card strong{display:block;margin-bottom:5px}
+.main-panel{min-width:0;min-height:0;height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto auto;background:var(--panel);overflow:hidden}
+.header{height:78px;padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);z-index:5}.dark .header{background:rgba(21,28,42,.88)}
+.header .info{display:flex;align-items:center;gap:12px}.avatar{width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,#f4eafa,#e6fff9);display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--border)}.avatar img{width:31px;height:31px;object-fit:contain}.avatar svg{width:34px;height:34px;display:block}.header .title{font-size:17px;font-weight:800}.header .small{font-size:12px;color:var(--muted);margin-top:3px}.header-actions{display:flex;align-items:center;gap:8px}.status-pill{display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:#ecfdf3;color:#067647;font-size:12px;font-weight:750}.status-dot{width:8px;height:8px;border-radius:50%;background:#12b76a;box-shadow:0 0 0 4px rgba(18,183,106,.12)}.icon-btn{border:1px solid var(--border);background:var(--panel);color:var(--text);width:39px;height:39px;border-radius:12px;cursor:pointer;font-size:18px}.mobile-menu{display:none}
+.hero{padding:18px 22px 8px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border-bottom:1px solid var(--border)}.hero-inner{display:flex;align-items:center;justify-content:space-between;gap:18px}.hero h2{margin:0;font-size:22px}.hero p{margin:5px 0 0;color:var(--muted);font-size:13px}.quick-actions{display:flex;gap:8px;flex-wrap:wrap}.quick-btn{border:1px solid var(--border);background:var(--panel);color:var(--text);padding:9px 12px;border-radius:13px;cursor:pointer;font-weight:700;font-size:12px}.quick-btn:hover{border-color:var(--primary);color:var(--primary)}
+.chat{min-height:0;height:100%;max-height:100%;padding:20px 24px 34px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;scroll-padding-bottom:34px;background:linear-gradient(180deg,var(--panel-2),var(--panel));-webkit-overflow-scrolling:touch}.chat::-webkit-scrollbar{width:8px}.chat::-webkit-scrollbar-thumb{background:#c9c2d2;border-radius:20px}
+.bubble{max-width:min(74%,720px);padding:13px 15px;border-radius:18px;line-height:1.45;box-shadow:0 6px 18px rgba(16,24,40,.07);animation:rise .22s ease;word-wrap:break-word}.bot{align-self:flex-start;background:var(--bot);color:var(--bot-text);border:1px solid var(--border);border-bottom-left-radius:6px}.me{align-self:flex-end;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:var(--me-text);border-bottom-right-radius:6px}.time{display:block;font-size:10px;color:var(--muted);margin-top:7px}.me .time{color:rgba(255,255,255,.72)}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.option-btn{border:1px solid var(--border);background:var(--panel-2);color:var(--text);padding:11px 13px;border-radius:13px;cursor:pointer;font-weight:700;text-align:left;transition:.18s}.option-btn:hover{transform:translateY(-1px);border-color:var(--primary);box-shadow:0 7px 18px rgba(91,44,131,.12)}.option-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+#global-search{display:flex!important;gap:9px!important;padding:12px 18px!important;background:var(--panel)!important;border-top:1px solid var(--border)!important}#global-search input{flex:1!important;border:1px solid var(--border)!important;background:var(--panel-2)!important;color:var(--text)!important;border-radius:15px!important;padding:12px 15px!important}#global-search button{border-radius:15px!important;padding:10px 18px!important;background:var(--primary)!important}
+.footer{padding:8px 18px 14px;border-top:0;display:flex;gap:8px;align-items:center;background:var(--panel)}.footer .small{color:var(--muted);font-size:11px}.restart{margin-left:auto;border:1px solid var(--border);background:var(--panel-2);color:var(--text);padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:700}
+#robot-avatar{position:fixed;right:calc(2vw + 22px);bottom:calc(3vh + 88px);z-index:20}.robot-card{width:120px;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:8px;box-shadow:0 16px 35px rgba(16,24,40,.18);display:flex;flex-direction:column;align-items:center;gap:7px}.robot-face{width:78px;height:78px;border-radius:16px;overflow:hidden}.robot-face img{width:100%;height:100%;object-fit:cover}#mic-btn{border:0;background:var(--primary);color:#fff;padding:8px 11px;border-radius:999px;cursor:pointer;font-weight:750}#mic-btn.listening{background:var(--danger)}#mic-indicator{font-size:9px;text-align:center;color:var(--muted)}
+.lightbox{position:fixed;inset:0;background:rgba(8,12,20,.92);display:none;align-items:center;justify-content:center;z-index:9999}.lightbox iframe{width:min(1100px,92vw);height:84vh;border:0;border-radius:18px;background:#fff}.close-btn{position:absolute;top:22px;right:24px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;padding:10px 15px;border-radius:12px;cursor:pointer}.sheet-notice{border-left:4px solid var(--primary)!important;background:var(--panel-2)!important}.rating-row{align-self:flex-start;color:var(--muted);font-size:12px}.rating-row button{background:var(--panel)!important;color:var(--text)!important;border-color:var(--border)!important}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media(max-width:900px){body{overflow:hidden}.app-shell{width:100%;height:100dvh;margin:0;border-radius:0;grid-template-columns:1fr}.sidebar{position:fixed;inset:0 auto 0 0;width:285px;z-index:100;transform:translateX(-105%);transition:.25s;box-shadow:20px 0 45px rgba(0,0,0,.25)}.sidebar.open{transform:none}.mobile-menu{display:inline-grid;place-items:center}.hero-inner{align-items:flex-start}.quick-actions{display:none}#robot-avatar{right:10px;bottom:85px}.status-pill{display:none}}
+@media(max-width:600px){.header{height:68px;padding:10px 12px}.header .avatar{width:40px;height:40px}.header-actions{gap:5px}.hero{padding:14px 14px 7px}.hero h2{font-size:18px}.chat{padding:14px}.bubble{max-width:89%;font-size:14px}.options{grid-template-columns:1fr}.robot-card{width:92px}.robot-face{width:60px;height:60px}#mic-indicator{display:none}#global-search{padding:9px!important}#global-search button{padding:10px 13px!important}.footer{padding:4px 10px 10px}.footer .small{display:none}}
+button:focus-visible,input:focus-visible{outline:3px solid rgba(91,44,131,.25);outline-offset:2px}
+
+/* === Adaptación móvil 9.1 === */
+:root{--app-height:100dvh}
+html{width:100%;height:100%;overflow:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{width:100%;height:var(--app-height);min-height:100svh;overflow:hidden;overscroll-behavior:none;padding:0;margin:0}
+img,video,iframe,svg{max-width:100%}
+button,input,textarea,select{min-width:0}
+@media(max-width:900px){
+  .app-shell{position:fixed;inset:0;width:100%;max-width:none;height:var(--app-height);min-height:100svh;max-height:none;margin:0;border:0;border-radius:0;grid-template-columns:minmax(0,1fr);overflow:hidden}
+  .main-panel{width:100%;height:100%;min-height:0;grid-template-rows:auto auto minmax(0,1fr) auto auto;overflow:hidden}
+  .header{padding-top:max(10px,env(safe-area-inset-top));height:auto;min-height:68px;flex:none}
+  .hero{flex:none}
+  .chat{width:100%;min-height:0;height:auto;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(24px + env(safe-area-inset-bottom));touch-action:pan-y;scrollbar-width:thin}
+  #global-search{flex:none;padding-bottom:calc(10px + env(safe-area-inset-bottom))!important}
+  .footer{flex:none;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+  .sidebar{padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(18px + env(safe-area-inset-bottom));max-width:86vw;overflow-y:auto}
+  .lightbox{padding:calc(52px + env(safe-area-inset-top)) 8px calc(10px + env(safe-area-inset-bottom));align-items:stretch}
+  .lightbox iframe{width:100%;height:100%;border-radius:12px}
+  .close-btn{top:calc(8px + env(safe-area-inset-top));right:10px}
+}
+@media(max-width:600px){
+  .header .title{font-size:15px}.header .small{font-size:11px}
+  .hero{padding:10px 12px 6px}.hero h2{font-size:17px;line-height:1.2}.hero p{font-size:12px;line-height:1.35}
+  .chat{padding:12px 10px 20px;gap:9px}
+  .bubble{max-width:94%;font-size:14px;padding:11px 12px;border-radius:16px}
+  .options{width:100%;grid-template-columns:1fr;gap:7px;margin-top:8px}
+  .option-btn{width:100%;padding:12px;min-height:46px;font-size:14px;overflow-wrap:anywhere}
+  #global-search{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto;gap:7px!important;padding:8px 9px!important}
+  #global-search input{grid-column:1/-1;width:100%;font-size:16px!important;padding:11px 12px!important}
+  #global-search button{min-height:42px;padding:9px 11px!important;font-size:12px;white-space:nowrap}
+  #robot-avatar{right:8px;bottom:calc(126px + env(safe-area-inset-bottom));pointer-events:none}
+  .robot-card{width:66px;padding:5px;border-radius:16px;opacity:.94;pointer-events:auto}.robot-face{width:48px;height:48px}.robot-card #mic-btn{font-size:0;width:38px;height:38px;padding:0}.robot-card #mic-btn::after{content:'🎤';font-size:17px}.robot-card #mic-indicator{display:none}
+  .footer{padding:3px 8px calc(6px + env(safe-area-inset-bottom))}.restart{padding:7px 10px;font-size:12px}
+}
+@media(max-width:380px){
+  .header{padding-left:8px;padding-right:8px}.header .info{gap:7px}.header .avatar{width:36px;height:36px}.header .title{font-size:14px}.header .small{display:none}
+  .hero h2{font-size:15px}.hero p{display:none}.icon-btn{width:36px;height:36px}
+  #global-search button{font-size:11px;padding:8px!important}
+}
+@media(orientation:landscape) and (max-height:520px){
+  .hero{display:none}.header{min-height:56px;padding-top:max(6px,env(safe-area-inset-top));padding-bottom:6px}
+  #robot-avatar{display:none}.chat{padding-top:8px;padding-bottom:12px}
+}
+
+
+/* === Mobile real 9.2: se activa por dispositivo, no solo por viewport === */
+html.force-mobile,html.force-mobile body{width:100%!important;height:100%!important;min-height:100%!important;overflow:hidden!important}
+html.force-mobile body{background:var(--panel)!important}
+html.force-mobile .app-shell{
+  position:fixed!important;inset:0!important;width:100%!important;max-width:none!important;
+  height:var(--app-height,100dvh)!important;min-height:100svh!important;max-height:none!important;
+  margin:0!important;border:0!important;border-radius:0!important;display:block!important;overflow:hidden!important;
+}
+html.force-mobile .main-panel{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;
+  display:grid!important;grid-template-rows:auto auto minmax(0,1fr) auto auto!important;overflow:hidden!important;
+}
+html.force-mobile .sidebar{
+  position:fixed!important;z-index:1002!important;inset:0 auto 0 0!important;width:min(82vw,320px)!important;max-width:320px!important;
+  transform:translateX(-108%)!important;transition:transform .25s ease!important;overflow-y:auto!important;
+  padding-top:calc(18px + env(safe-area-inset-top))!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;
+  box-shadow:22px 0 55px rgba(0,0,0,.38)!important;
+}
+html.force-mobile .sidebar.open{transform:translateX(0)!important}
+html.force-mobile .mobile-menu{display:inline-grid!important;place-items:center!important}
+html.force-mobile .header{
+  min-height:64px!important;height:auto!important;padding:calc(8px + env(safe-area-inset-top)) 10px 8px!important;
+}
+html.force-mobile .header .info{gap:8px!important;min-width:0!important}
+html.force-mobile .header .avatar{width:38px!important;height:38px!important;border-radius:12px!important;flex:0 0 auto!important}
+html.force-mobile .header .title{font-size:14px!important;white-space:nowrap!important}
+html.force-mobile .header .small{font-size:10px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:180px!important}
+html.force-mobile .status-pill{display:none!important}
+html.force-mobile .hero{padding:10px 11px 8px!important}
+html.force-mobile .hero-inner{display:block!important}
+html.force-mobile .hero h2{font-size:18px!important;line-height:1.15!important;margin:0!important}
+html.force-mobile .hero p{font-size:11px!important;line-height:1.3!important;margin-top:4px!important}
+html.force-mobile .quick-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;margin-top:9px!important}
+html.force-mobile .quick-btn{width:100%!important;min-height:40px!important;padding:8px 6px!important;font-size:11px!important;text-align:center!important}
+html.force-mobile .chat{
+  width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;
+  padding:12px 10px calc(16px + env(safe-area-inset-bottom))!important;gap:9px!important;-webkit-overflow-scrolling:touch!important;
+}
+html.force-mobile .bubble{max-width:94%!important;font-size:14px!important;padding:11px 12px!important}
+html.force-mobile .options{width:100%!important;grid-template-columns:1fr!important;gap:7px!important;margin-top:5px!important}
+html.force-mobile .option-btn{width:100%!important;min-height:46px!important;padding:12px!important;font-size:14px!important}
+html.force-mobile #global-search{
+  display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;padding:8px 9px calc(8px + env(safe-area-inset-bottom))!important;
+  background:var(--panel)!important;position:relative!important;z-index:12!important;
+}
+html.force-mobile #global-search input{grid-column:1/-1!important;width:100%!important;font-size:16px!important;min-height:45px!important;padding:11px 12px!important}
+html.force-mobile #global-search button{width:100%!important;min-height:43px!important;padding:9px 7px!important;font-size:12px!important}
+html.force-mobile .footer{padding:3px 9px calc(6px + env(safe-area-inset-bottom))!important;min-height:42px!important}
+html.force-mobile .footer .small{display:none!important}
+html.force-mobile #robot-avatar{right:8px!important;bottom:calc(132px + env(safe-area-inset-bottom))!important;z-index:30!important}
+html.force-mobile .robot-card{width:58px!important;padding:4px!important;border-radius:16px!important}
+html.force-mobile .robot-face{width:46px!important;height:46px!important}
+html.force-mobile #mic-btn{width:38px!important;height:38px!important;padding:0!important;font-size:0!important}
+html.force-mobile #mic-btn::after{content:'🎤';font-size:17px!important}
+html.force-mobile #mic-indicator{display:none!important}
+html.force-mobile .lightbox{padding:calc(54px + env(safe-area-inset-top)) 6px calc(8px + env(safe-area-inset-bottom))!important;align-items:stretch!important}
+html.force-mobile .lightbox iframe{width:100%!important;height:100%!important;border-radius:10px!important}
+html.force-mobile .close-btn{top:calc(8px + env(safe-area-inset-top))!important;right:8px!important}
+html.force-mobile .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(12,8,20,.55);z-index:1001;backdrop-filter:blur(2px)}
+html.force-mobile .mobile-overlay.show{display:block}
+@media(max-width:420px){
+ html.force-mobile .hero p{display:none!important}
+ html.force-mobile .quick-btn{font-size:10.5px!important}
+ html.force-mobile .header .small{max-width:145px!important}
+}
+
+</style>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#5B2C83">
+</head>
+<body>
+<div class="mobile-overlay" id="mobile-overlay" aria-hidden="true"></div>
+
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <button class="close-btn" onclick="closeLightbox()">✕ Cerrar</button>
+  <iframe id="lightboxFrame" src="" allowfullscreen></iframe>
+</div>
+
+<div id="robot-avatar" role="region" aria-label="Asistente virtual">
+  <div class="robot-card" aria-hidden="false">
+    <div class="robot-face" id="robot-face" aria-hidden="true">
+      <!-- GIF avatar (siempre visible) -->
+      <img src="./LY89s3JCNl.gif" alt="Avatar" id="robot-gif">
+    </div>
+    <button id="mic-btn" aria-pressed="false" title="Presiona para hablar (activar micrófono)">
+      <span id="mic-icon">🎤</span>
+      <span id="mic-text">Hablar</span>
+    </button>
+    <div id="mic-indicator" class="small">Toca y habla — formato: "Quiero saber mi sueldo"</div>
+  </div>
+</div>
+
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="brand-logo" aria-hidden="true"><svg viewBox="0 0 64 64" role="img" aria-label="Asistente Abordo" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c3fad"/><stop offset="1" stop-color="#00a987"/></linearGradient></defs><rect x="4" y="8" width="56" height="44" rx="14" fill="url(#g)"/><rect x="14" y="17" width="36" height="25" rx="8" fill="white" opacity=".96"/><circle cx="25" cy="29" r="4" fill="#5b2c83"/><circle cx="39" cy="29" r="4" fill="#5b2c83"/><path d="M24 37c5 4 11 4 16 0" fill="none" stroke="#00a987" stroke-width="3" stroke-linecap="round"/><path d="M32 8V3" stroke="#5b2c83" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="3" r="3" fill="#00a987"/></svg></span><div><div class="brand-title">Asistente Abordo</div><div class="brand-subtitle">Movilidad y Recaudación</div></div></div>
+    <div><div class="side-label">Navegación</div><nav class="side-nav">
+      <button class="side-btn active" data-jump="menuPrincipal"><span>🏠</span><span>Inicio</span></button>
+      <button class="side-btn" data-jump="sueldo_menu"><span>💰</span><span>Sueldo y descuentos</span></button>
+      <button class="side-btn" data-jump="incentivos_marca"><span>📊</span><span>Incentivos</span></button>
+      <button class="side-btn" data-jump="proceso_cova"><span>🧰</span><span>Herramientas</span></button>
+      <button class="side-btn" data-jump="videos_hub"><span>🎥</span><span>Videos</span></button>
+      <button class="side-btn" data-jump="documentos_hub"><span>📄</span><span>Documentos</span></button>
+      <button class="side-btn" data-jump="hablar_asesor"><span>👤</span><span>Hablar con asesor</span></button>
+    </nav></div>
+    <div class="side-card"><strong>Información dinámica</strong>Los avisos, menús y respuestas se actualizan desde Google Sheets sin volver a publicar el sitio.<br><a href="./diagnostico.html" target="_blank" rel="noopener" style="color:#fff;font-weight:700">🔎 Abrir diagnóstico</a><br><a href="./admin.html" style="color:#fff;font-weight:700">🔐 Administrar contenido</a></div>
+  </aside>
+  <main class="main-panel">
+    <div class="header">
+      <div class="info">
+        <button class="icon-btn mobile-menu" id="mobile-menu" aria-label="Abrir menú">☰</button>
+        <div class="avatar" aria-hidden="true"><svg viewBox="0 0 64 64" role="img" aria-label="Asistente Abordo" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c3fad"/><stop offset="1" stop-color="#00a987"/></linearGradient></defs><rect x="4" y="8" width="56" height="44" rx="14" fill="url(#g)"/><rect x="14" y="17" width="36" height="25" rx="8" fill="white" opacity=".96"/><circle cx="25" cy="29" r="4" fill="#5b2c83"/><circle cx="39" cy="29" r="4" fill="#5b2c83"/><path d="M24 37c5 4 11 4 16 0" fill="none" stroke="#00a987" stroke-width="3" stroke-linecap="round"/><path d="M32 8V3" stroke="#5b2c83" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="3" r="3" fill="#00a987"/></svg></div>
+        <div><div class="title">Asistente Abordo</div><div class="small">Recaudación VHT · Atención digital</div></div>
+      </div>
+      <div class="header-actions"><div class="status-pill" id="connection-status"><span class="status-dot"></span><span>Información actualizada</span></div><button class="icon-btn" id="theme-toggle" title="Cambiar tema">🌙</button></div>
+    </div>
+    <section class="hero"><div class="hero-inner"><div><h2>¿En qué podemos ayudarte hoy?</h2><p>Consulta información, tutoriales, documentos y herramientas desde un solo lugar.</p></div><div class="quick-actions"><button class="quick-btn" data-jump="sueldo_menu">💰 Sueldo</button><button class="quick-btn" data-jump="factor_pasajero">🔎 Consulta factor</button><button class="quick-btn" data-jump="fonacot">🏦 Fonacot</button><button class="quick-btn" data-jump="hablar_asesor">💬 Asesor</button></div></div></section>
+    <div id="chat" class="chat" aria-live="polite"></div>
+
+  <div class="footer">
+    <div class="small">La información mostrada es orientativa y puede actualizarse.</div>
+    <button id="restart" class="restart" title="Reiniciar">↻ Reiniciar</button>
+  </div>
+  </main>
+</div>
+
+<script>
+/* helpers */
+function openLightbox(videoUrl) {
+  const lb = document.getElementById('lightbox');
+  const frame = document.getElementById('lightboxFrame');
+  frame.src = videoUrl;
+  lb.style.display = 'flex';
+  lb.setAttribute('aria-hidden', 'false');
+}
+function openPdf(pdfUrl) {
+  const lb = document.getElementById('lightbox');
+  const frame = document.getElementById('lightboxFrame');
+  lb.style.display = 'flex';
+  lb.style.background = 'rgba(0, 0, 0, 0.7)';
+  const absolutePdfUrl = new URL(pdfUrl, window.location.href).href;
+  const viewerUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(absolutePdfUrl);
+  frame.style.background = '#fff';
+  frame.src = viewerUrl;
+  lb.setAttribute('aria-hidden', 'false');
+}
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  const frame = document.getElementById('lightboxFrame');
+  frame.src = '';
+  lb.style.display = 'none';
+  lb.setAttribute('aria-hidden', 'true');
+}
+
+/* chat core */
+const chatEl = document.getElementById('chat');
+let autoScrollLocked = false;
+const keepChatAtBottom = new MutationObserver(() => {
+  if(!autoScrollLocked) scrollEnd();
+});
+keepChatAtBottom.observe(chatEl, {childList:true, subtree:true});
+const restartBtn = document.getElementById('restart');
+
+/* Recuperación visual si una imagen no carga */
+document.querySelectorAll('img').forEach(img => {
+  img.addEventListener('error', () => {
+    if (img.dataset.fallbackApplied) return;
+    img.dataset.fallbackApplied = '1';
+    if (img.id === 'robot-gif') return;
+    img.src = './image-removebg-preview%20(22).png';
+    img.style.objectFit = 'contain';
+  });
+});
+
+function nowTime(){ const d=new Date(); return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+function scrollEnd(target=null){
+  const move = () => {
+    if(!chatEl) return;
+    chatEl.scrollTop = chatEl.scrollHeight;
+    if(target && target.scrollIntoView){
+      target.scrollIntoView({block:'end', inline:'nearest', behavior:'auto'});
+    }
+  };
+  requestAnimationFrame(() => {
+    move();
+    requestAnimationFrame(move);
+  });
+  setTimeout(move, 80);
+  setTimeout(move, 220);
+}
+/* voice/read flags */
+let lastInputWasVoice = false; // set true when user spoke
+let suppressBotSpeak = false;  // used to avoid double-reading after confirmation
+const speakResponsesWhenUserSpoke = true; // per user's preference
+
+function addBotBubble(html, options=null){
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble bot';
+  wrap.innerHTML = html;
+  const time = document.createElement('div');
+  time.className = 'time';
+  time.textContent = nowTime();
+  wrap.appendChild(time);
+
+  chatEl.appendChild(wrap);
+
+  let lastInserted = wrap;
+  if(options){
+    const optDiv = document.createElement('div');
+    optDiv.className = 'options';
+    options.forEach(opt=>{
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      if(opt.primary) btn.classList.add('primary');
+      btn.innerText = opt.label;
+      btn.type = 'button';
+      btn.dataset.next = opt.next || '';
+      btn.dataset.label = opt.label || '';
+      btn.dataset.primary = opt.primary ? '1' : '0';
+      optDiv.appendChild(btn);
+    });
+    chatEl.appendChild(optDiv);
+    lastInserted = optDiv;
+  }
+  scrollEnd(lastInserted);
+
+  // speak bot text only when appropriate (user used voice)
+  const clean = html.replace(/<[^>]*>/g, '');
+  if(!suppressBotSpeak){
+    speak(clean);
+
+    lastInputWasVoice = false;
+  } else if(suppressBotSpeak){
+    suppressBotSpeak = false;
+    lastInputWasVoice = false;
+  }
+}
+
+function addUserBubble(text){
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble me';
+  wrap.textContent = text;
+  const time = document.createElement('div');
+  time.className = 'time';
+  time.textContent = nowTime();
+  wrap.appendChild(time);
+  chatEl.appendChild(wrap);
+  scrollEnd(wrap);
+}
+
+/* Control centralizado de opciones: funciona también con contenido dinámico */
+chatEl.addEventListener('click', (event) => {
+  const button = event.target.closest('button.option-btn[data-next]');
+  if (!button || !chatEl.contains(button)) return;
+  event.preventDefault();
+  event.stopPropagation();
+  if (button.disabled) return;
+  const opt = {
+    label: button.dataset.label || button.textContent.trim(),
+    next: button.dataset.next,
+    primary: button.dataset.primary === '1'
+  };
+  try {
+    handleOption(opt);
+  } catch (error) {
+    console.error('Error al abrir opción:', opt, error);
+    addBotBubble('No fue posible abrir esta opción. Presiona Reiniciar e inténtalo nuevamente.');
+  }
+});
+
+/* nodes (unchanged content) */
+const nodes = {
+  main: {
+    type:'question',
+    id:'main',
+    prompt: 'Hola, soy tu asistente virtual de Recaudación, y estoy para responder tus dudas, deseas iniciar?',
+    options:[
+      {id:'SI', label:'SI', next:'menuPrincipal'},
+      {id:'NO', label:'NO', next:'endNo'}
+    ]
+  },
+  endNo:{ type:'message', id:'endNo', text:'Perfecto. Si necesitas ayuda después, puedes reiniciar el chat.'},
+
+  menuPrincipal:{
+    type:'question',
+    id:'menuPrincipal',
+    prompt: 'ELIJE UNA OPCION',
+    options:[
+      {id:'SUELDOS_Y_CARTERA', label:'SUELDOS Y CARTERA', next:'sueldo_menu'},
+      {id:'INCENTIVOS', label:'INCENTIVOS', next:'incentivos_marca'},
+      {id:'PROCESO_COVA', label:'PROCESO_COVA', next:'proceso_cova'},
+      {id:'CREDITOS_EXTERNOS', label:'CREDITOS EXTERNOS', next:'creditos_externos'},
+      {id:'HABLAR_CON_UN_ASESOR', label:'HABLAR CON UN ASESOR', next:'hablar_asesor'}
+    ]
+  },
+
+  hablar_asesor:{
+    type:'message',
+    id:'hablar_asesor',
+    text: 'Si deseas hablar con un asesor, haz clic en el enlace de atención. (Abrirá una página externa).',
+attachments: [{type:'image', url:'./WHATS-removebg-preview.png', link:'https://wa.me/529372547287?text=Hola%2C%20necesito%20apoyo%20de%20Recaudaci%C3%B3n.'}]
+  },
+
+  sueldo_menu:{
+    type:'question',
+    id:'sueldo_menu',
+    prompt: 'SELECCIONA UNA OPCION',
+    options:[
+      {id:'FACTOR_PASAJERO', label:'¿Cuánto debo de ingresar para alcanzar Factor Pasajero?', next:'factor_pasajero'},
+      {id:'COMO_CALCULO_SUELDO', label:'¿Cómo cálculo mi sueldo?', next:'calcula_sueldo_marca'},
+      {id:'QUE_CONCEPTOS', label:'¿Qué conceptos me descuentan en Nómina?', next:'conceptos_nomina'},
+      {id:'CUANTO_ISR', label:'¿Cuánto me descuentan  de ISR al mes?', next:'cuanto_isr_marca'},
+      {id:'CUANTO_IMSS', label:'¿Cuánto me descuentan  de IMSS al mes?', next:'cuanto_imss_marca'},
+      {id:'CUOTA_SINDICAL', label:'¿Cómo se calcula la  Cuota sindical al mes?', next:'cuota_sindical_marca'},
+      {id:'DESCUENTO_FONDO', label:'¿Cuánto es el descuento de Fondo de ahorro?', next:'descuento_fondo_marca'},
+      {id:'FECHA_FONDO', label:'¿Cuál es la fecha límite para cubrir mi Fondo de Ahorro?', next:'fecha_fondo'},
+      {id:'QUE_SON_EXCEDENTES', label:'¿Qué son los excedentes?', next:'excedentes'},
+      {id:'CUANTO_IMPUESTOS', label:'¿Cuánto debo de impuestos?', next:'impuestos_link'},
+      {id:'REGRESAR', label:'REGRESAR', next:'menuPrincipal'}
+    ]
+  },
+
+  factor_pasajero:{
+    type:'message',
+    id:'factor_pasajero',
+    text: 'Te invitamos a usar la siguiente aplicación, donde podrás tener el factor mínimo de las corridas donde operas.',
+    attachments: [{type:'image', url:'./CONSULTA-removebg-preview.png', link:'https://n9.cl/xlctvd'}]
+  },
+
+  calcula_sueldo_marca:{
+    type:'question',
+    id:'calcula_sueldo_marca',
+    prompt:'SELECCIONA TU MARCA',
+    options:[
+      {id:'ADO', label:'ADO', next:'calculo_sueldo_ADO'},
+      {id:'TRT', label:'TRT/SUR INTERMEDIO', next:'calculo_sueldo_TRT'},
+      {id:'VOLKBUS', label:'VOLKBUS', next:'calculo_sueldo_VOLKBUS'},
+      {id:'REGRESAR', label:'REGRESAR', next:'sueldo_menu'}
+    ]
+  },
+
+  calculo_sueldo_ADO:{
+    type:'message',
+    id:'calculo_sueldo_ADO',
+    text:`Identifica el ingreso total de tu viaje sin IVA y divídelo entre el precio del boleto de tu viaje realizado; el resultado será tu factor pasajero.
+Localiza el factor pasajero en la Tabla de pago que te corresponda y toma el factor que se ubica en la columna PK y PP.
+Multiplica el factor PK por el kilometraje realizado en tu viaje y obtendrás el pago por kilómetro.
+Multiplica el factor PP por el kilometraje realizado en tu viaje y obtendrás el pago por pasajero transportado.
+La suma de ambos pagos es el sueldo bruto que percibirás por el viaje realizado antes de impuestos o descuentos de cartera.
+Si tienes dudas te invitamos a que visualices el siguiente video:`,
+    attachments:[{type:'video', url:'<iframe src="https://player.vimeo.com/video/1104559211?h=15cdc4e413" width="340" height="360" frameborder="0" allowfullscreen></iframe>'}]},
+
+  calculo_sueldo_TRT:{
+    type:'message',
+    id:'calculo_sueldo_TRT',
+    text:`Identifica el ingreso total de tu viaje sin IVA multiplícalo por el 95%; y el resultado divídelo entre el total de kilometros recorridos; esto nos da tu factor ingreso-kilómetro;
+Ubica tu FIK en la tabla de pago, entre el rango mínimo,medio y máximo tomando el factor que se ubica en las columnas PK y PP;
+Multiplica el factor de la columna PK por el total de kilómetros y esto nos dará el pago por kilometraje;
+Multiplica el factor de la columna PP por el total de kilómetros y esto nos dará el pago por pasajero transportado;
+La suma de ambos pagos es considerado como tu sueldo bruto antes de impuestos u otros descuentos de cartera.
+Si tienes dudas te invitamos a que visualices el siguiente video:`,
+    attachments:[{type:'video', url:'<iframe src="https://player.vimeo.com/video/1104559136?h=bfe7ba53ad" width="340" height="360" frameborder="0" allowfullscreen></iframe>'}]},
+
+  calculo_sueldo_VOLKBUS:{
+    type:'message',
+    id:'calculo_sueldo_VOLKBUS',
+    text:`Debes de tener en cuenta que tu cálculo se genera de manera semanal tomando el corte de LUNES a DOMINGO; Identifica el total de tus ingresos de tus secuencias realizadas por día y divídelo entre el total de tus kilómetros recorridos; esto nos dará el factor INGRESO-KILOMETRO: FIK; Ubica tu FIK en la tabla de pago, entre el rango mínimo, medio y superior toma el factor de la columna total y multiplícalo por los kilómetros  recorridos; el resultado será tu comisión diaria; El proceso se repite por cada uno de los días de la semana laborados para así obtener tu comisión semanal antes de impuestos u otros descuentos de cartera; Recuerda que tienes un sueldo de garantía el cual se te pagará en caso de no haber obtenido factor. Si tienes dudas te invitamos a que visualices el siguiente video: `,
+    attachments:[{type:'video', url:'<iframe src="https://player.vimeo.com/video/1104558946?h=5c22c1a9b4" width="340" height="360" frameborder="0" allowfullscreen></iframe>'}]},
+
+
+  conceptos_nomina:{ type:'message', id:'conceptos_nomina', text:'IMSS, ISR, INFONAVIT, Anticipo de Sueldo, Gastos no comprobados, Pistas no comprobadas, Uniformes, Fonacot, Paga Daños e Inspección.'},
+
+  cuanto_isr_marca:{
+    type:'question',
+    id:'cuanto_isr_marca',
+    prompt:'SELECCIONA TU MARCA',
+    options:[
+      {id:'ADO', label:'ADO', next:'isr_ADO'},
+      {id:'TRT', label:'TRT/SUR INTERMEDIO', next:'isr_TRT'},
+      {id:'VOLKBUS', label:'VOLKBUS', next:'isr_VOLKBUS'},
+      {id:'REGRESAR', label:'REGRESAR', next:'sueldo_menu'}
+    ]
+  },
+  isr_ADO:{ type:'message', id:'isr_ADO', text:'Por 28 días $2,463.85, Por 30 días $2,639.84, por 31 días $2,727.83.'},
+  isr_TRT:{ type:'message', id:'isr_TRT', text:'Por 28 días $1,732.06, Por 30 días $1,855.78, por 31 días $1,917.64.'},
+  isr_VOLKBUS:{ type:'message', id:'isr_VOLKBUS', text:'Tú perteneces al regimen General de Ley, por lo tanto tus impuestos, van en función a tus percepciones brutas.'},
+
+  cuanto_imss_marca:{
+    type:'question',
+    id:'cuanto_imss_marca',
+    prompt:'SELECCIONA TU MARCA',
+    options:[
+      {id:'ADO', label:'ADO', next:'imss_ADO'},
+      {id:'TRT', label:'TRT/SUR INTERMEDIO', next:'imss_TRT'},
+      {id:'VOLKBUS', label:'VOLKBUS', next:'imss_VOLKBUS'},
+      {id:'REGRESAR', label:'REGRESAR', next:'sueldo_menu'}
+    ]
+  },
+  imss_ADO:{ type:'message', id:'imss_ADO', text:'Por 28 días $873.61, Por 30 días $936.01, por 31 días $967.21.'},
+  imss_TRT:{ type:'message', id:'imss_TRT', text:'Por 28 días $602.85, Por 30 días $645.91, por 31 días $667.44.'},
+  imss_VOLKBUS:{ type:'message', id:'imss_VOLKBUS', text:'Tu perteneces al regimen General de Ley, por lo tanto tus impuestos, van en función a tus percepciones brutas.'},
+
+  cuota_sindical_marca:{
+    type:'question',
+    id:'cuota_sindical_marca',
+    prompt:'SELECCIONA TU MARCA',
+    options:[
+      {id:'ADO', label:'ADO', next:'cuota_ADO'},
+      {id:'TRT', label:'TRT/SUR INTERMEDIO', next:'cuota_TRT'},
+      {id:'VOLKBUS', label:'VOLKBUS', next:'cuota_VOLKBUS'},
+      {id:'REGRESAR', label:'REGRESAR', next:'sueldo_menu'}
+    ]
+  },
+  cuota_ADO:{ type:'message', id:'cuota_ADO', text:'Se multiplica $11.50 por todos los dias trabajados del mes inmediato anterior.'},
+  cuota_TRT:{ type:'message', id:'cuota_TRT', text:'Se descuenta el 2% sobre tu percepción del viaje realizado.'},
+  cuota_VOLKBUS:{ type:'message', id:'cuota_VOLKBUS', text:'Se descuenta el 2% sobre tu percepción de los  viajes realizados. '},
+
+  descuento_fondo_marca:{
+    type:'question',
+    id:'descuento_fondo_marca',
+    prompt:'SELECCIONA TU MARCA',
+    options:[
+      {id:'ADO', label:'ADO', next:'fondo_ADO'},
+      {id:'SUR', label:'SUR INTERMEDIO', next:'fondo_SUR'},
+      {id:'TRT_INTERMEDI', label:'TRT INTERMEDI', next:'fondo_TRT_INTERMEDI'},
+      {id:'VOLKBUS', label:'VOLKBUS', next:'fondo_VOLKBUS'},
+      {id:'REGRESAR', label:'REGRESAR', next:'sueldo_menu'}
+    ]
+  },
+  fondo_ADO:{ type:'message', id:'fondo_ADO', text:'$1,587.78 mensual'},
+  fondo_SUR:{ type:'message', id:'fondo_SUR', text:'$1,013.64 mensual'},
+  fondo_TRT_INTERMEDI:{ type:'message', id:'fondo_TRT_INTERMEDI', text:'$1,013.64 mensual'},
+  fondo_VOLKBUS:{ type:'message', id:'fondo_VOLKBUS', text:'Tu contrato colectivo no cuenta con esta prestación'},
+
+  fecha_fondo:{ type:'message', id:'fecha_fondo', text:'Tienes hasta el último día del mes, siempre y cuando hayas cubierto tu deuda de cartera (IMSS,ISR,INFONAVIT,PAGO x DAÑOS).'},
+
+  excedentes:{ type:'message', id:'excedentes', text:'Son los montos de impuestos que no alcanzaste a cubrir dentro del mes (ISR, IMSS e INFONAVIT).'},
+
+  impuestos_link:{
+    type:'message',
+    id:'impuestos_link',
+    text:'Para una mejor administración de tus finanzas te invito a consultar el siguiente Link de App Saldos por conductor.',
+    attachments:[{type:'image', url:'./SALDOS-removebg-preview.png', link:'https://n9.cl/31e71t'}]
+  },
+
+  incentivos_marca:{
+    type:'question',
+    id:'incentivos_marca',
+    prompt:'SELECCIONA TU MARCA',
+    options:[
+      {id:'INC_ADO', label:'ADO', next:'incentivos_ADO'},
+      {id:'INC_TRT', label:'TRT/SUR INTERMEDIO', next:'incentivos_TRT'},
+      {id:'INC_VOLKBUS', label:'VOLKBUS', next:'incentivos_VOLKBUS'},
+      {id:'REGRESAR', label:'REGRESAR', next:'menuPrincipal'}
+    ]
+  },
+
+  incentivos_ADO:{
+    type:'question',
+    id:'incentivos_ADO',
+    prompt:'ESTOS SON LOS DIFERENTES INCENTIVOS QUE RECIBES, SELECCIONA ALGUNO PARA SABER MAS',
+    options:[
+      {id:'ICO', label:'ICO', next:'ico_msg'},
+      {id:'INS', label:'INS', next:'ins_msg'},
+      {id:'REGRESAR', label:'REGRESAR', next:'incentivos_marca'}
+    ]
+  },
+  ico_msg:{ type:'message', id:'ico_msg', text:'Es el Incentivo por Cumplimiento Operativo.  Aplica para los conductores que hayan trabajado durante todo el mes de acuerdo a su contrato colectivo sin registrar ninguna incidencia como por ejemplo: falta, permiso, curso de reforzamiento, baja, suspensión, incapacidad; se paga de manera mensual  a partir del día 15 de cada mes.   '},
+  ins_msg:{ type:'message', id:'ins_msg', text:'Es el Incentivo por No Siniestralidad. Su pago se genera en dos tipos: 1.- Cuatrimestral, de ENERO-ABRIL; MAYO-AGOSTO; SEPTIEMBRE-DICIEMBRE el cual se paga tres veces al año a partir del día 18 del mes inmediato de cada cuatrimestre; 2.- El anual, se gana al haber obtenido los tres pagos cuatrimestrales; se determina del 1 de septiembre al 31 de agosto del año siguiente y su pago se realiza a partir del día 18 de octubre. Para obtener este incentivo  recuerda cumplir con el 65% o más del kilometraje programado por región, marca y zona y no tener accidente con responsabilidad. '},
+
+  incentivos_TRT:{
+    type:'question',
+    id:'incentivos_TRT',
+    prompt:'ESTOS SON LOS DIFERENTES INCENTIVOS QUE RECIBES, SELECCIONA ALGUNO PARA SABER MAS',
+    options:[
+      {id:'IBECC', label:'IBECC', next:'ibecc_msg'},
+      {id:'ICO', label:'ICO', next:'ico_msg'},
+      {id:'INS', label:'INS', next:'ins_msg'},
+      {id:'REGRESAR', label:'REGRESAR', next:'incentivos_marca'}
+    ]
+  },
+  ibecc_msg:{ type:'message', id:'ibecc_msg', text:'Es el Incentivo por Boleto Efectivo Cortado en Camino. Su cálculo es del día 1 al 30 de cada mes  y su pago se realiza a partir del dia 5 del siguiente mes; Aplica para conductor de intermedio sin ayudante y se determina por la venta a bordo realizada, Puedes obtenerlo siempre y cuando no tengas ningún reporte de INSPECCION ni anomalias de AVA.'},
+  incentivos_VOLKBUS:{ type:'message', id:'incentivos_VOLKBUS', text:'Tu contrato colectivo no cuenta con un esquema de incentivos.'},
+
+  proceso_cova:{
+    type:'question',
+    id:'proceso_cova',
+    prompt:'PROCESO COVA',
+    options:[
+      {id:'ACCIDENTE_SIIAB', label:'¿Qué hacer en caso de accidente o falla siiab?', next:'accidente_siiab'},
+      {id:'NO_REPORTE_FIN_TURNO', label:'¿Qué hago si la SIIAB no me dió el reporte y el fin de turno ?', next:'no_reporte_fin_turno'},
+      {id:'MAQUINA_FALLO', label:'¿Qué debo hacer si la máquina SIIAB falló y emitió boletos de más?', next:'maquina_fallo'},
+      {id:'DATOS_TARJETA_INCORRECTOS', label:'¿Qué hago si los datos de mi tarjeta de viaje no están correctos? ', next:'datos_tarjeta'},
+      {id:'REQUISITOS_LIQUIDAR', label:'¿Qué requisitos debo tener para liquidar mi viaje en Recaudación?', next:'requisitos_liquidar'},
+      {id:'TERMINALES_AUTORIZADAS', label:'¿Cuáles son las terminales autorizadas para realizar depositos en camino?', next:'terminales_autorizadas'},
+      {id:'COMPROBANTE_LIQUIDACION', label:'¿Cuál es mi comprobante de liquidación?', next:'comprobante_liquidacion'},
+      {id:'REGRESAR', label:'REGRESAR', next:'menuPrincipal'}
+    ]
+  },
+
+  accidente_siiab:{ type:'message', id:'accidente_siiab', text:'Repórtalo al 55-32-24-13-21 o bien haz click en el siguiente boton.', attachments:[{type:'link', title:'🚌 CONTIGO EN CAMINO 📞', url:'./CONTIGOENELCAMINO.pdf'}]},
+  no_reporte_fin_turno:{ type:'message', id:'no_reporte_fin_turno', text:'Repórtalo con tráfico y solicita un detallado de tu venta en el área de Recaudación.'},
+  maquina_fallo:{ type:'message', id:'maquina_fallo', text:'Levanta un reporte en el área de mantenimiento y solicita un pase de aclaración por cancelación con tu preceptor y recaba firma del Gerente de Operaciones.'},
+  datos_tarjeta:{ type:'message', id:'datos_tarjeta', text:'No la aceptes y pide en ese momento una nueva tarjeta con los controladores de tráfico.'},
+  requisitos_liquidar:{ type:'message', id:'requisitos_liquidar', text:'Tarjeta de viaje confirmada por tráfico, efectivo, boletos de canjes, depósitos en camino y gastos autorizados.', attachments:[{type:'video', url:'<iframe src="https://player.vimeo.com/video/1104559098?h=575d0fcf42" width="340" height="360" frameborder="0" allowfullscreen></iframe>'}]},
+
+  terminales_autorizadas:{ type:'message', id:'terminales_autorizadas', text:'Recaudación Cárdenas, Terminal Coatzacoalcos, Terminal La Venta, Terminal Cárdenas, Catab, Terminal Emiliano Zapata, Terminal Tenosique, Terminal Ciudad del Carmen, Recaudación Tuxtla, Terminal Tuxtla, Terminal Mérida.'},
+  comprobante_liquidacion:{ type:'message', id:'comprobante_liquidacion', text:'Al término de tu liquidación; siempre que no debas AVA o abones a tu deuda, el área de Recaudación te emitirá un PASE DE NO ADEUDO.'},
+
+  creditos_externos:{
+    type:'question',
+    id:'creditos_externos',
+    prompt:'SELECCIONA EL TIPO DE CREDITO',
+    options:[
+      {id:'INFONAVIT', label:'INFONAVIT', next:'infonavit'},
+      {id:'FONACOT', label:'FONACOT', next:'fonacot'},
+      {id:'REGRESAR', label:'REGRESAR', next:'menuPrincipal'}
+    ]
+  },
+
+  infonavit:{
+    type:'question',
+    id:'infonavit',
+    prompt:'INFONAVIT',
+    options:[
+      {id:'REQ_INFONAVIT', label:'¿Cuáles son los requisitos para obtener un crédito de Infonavit?', next:'req_infonavit'},
+      {id:'AVISO_RETENCION', label:'Cómo puedo obtener mi aviso de retension y/o actualizacion de factor de descuento?', next:'aviso_infonavit'},
+      {id:'REGRESAR', label:'REGRESAR', next:'creditos_externos'}
+    ]
+  },
+  req_infonavit:{ type:'message', id:'accidente_siiab', text:' Accede al siguiente enlace para conocer todos los requisitos que necesitas cumplir para obtener tu crédito INFONAVIT y descubre lo sencillo que es:', attachments:[{type:'link', title:'🏠 REQUISITOS INFONAVIT', url:'./Requisitos_y_documentos_Comprar.pdf'}]},
+  aviso_infonavit:{ type:'message', id:'aviso_infonavit', text:'Desde el portal "Mi cuenta Infonavit" en la opción -Micrédito - Aviso de suspención, Retención y Modificación de descuento', attachments:[{type:'video', url:'<iframe src="https://player.vimeo.com/video/1104559004?h=d3bfd28b15" width="340" height="360" frameborder="0" allowfullscreen></iframe>'}]},
+
+  fonacot:{
+    type:'question',
+    id:'fonacot',
+    prompt:'FONACOT',
+    options:[
+      {id:'REQ_FONACOT', label:'¿Cuáles son los requisitos para obtener un crédito Fonacot?', next:'req_fonacot'},
+      {id:'CONST_PERCEPCIONES', label:'¿Cómo puedo obtener una constancia de percepciones?', next:'constancia_percepciones'},
+      {id:'REGRESAR', label:'REGRESAR', next:'creditos_externos'}
+    ]
+  },
+  req_fonacot:{ type:'message', id:'accidente_siiab', text:' Accede al siguiente enlace para conocer todos los requisitos que necesitas cumplir para obtener tu crédito FONACOT y descubre lo sencillo que es agendar tu cita de manera rápida y segura:', attachments:[{type:'link', title:'💲 💰 REQUISITOS FONACOT', url:'./REQFONACOT.pdf'}]},
+  constancia_percepciones:{ type:'message', id:'constancia_percepciones', text:'Acude al área de Relaciones industriales de RH para que puedan extenderte dicho documento.'},
+
+
+  videos_hub:{
+    type:'question', id:'videos_hub', prompt:'TUTORIALES EN VIDEO',
+    options:[
+      {id:'VIDEO_SUELDO_ADO',label:'Cálculo de sueldo ADO',next:'calculo_sueldo_ADO'},
+      {id:'VIDEO_SUELDO_TRT',label:'Cálculo de sueldo TRT / SUR',next:'calculo_sueldo_TRT'},
+      {id:'VIDEO_SUELDO_VOLKBUS',label:'Cálculo de sueldo VOLKBUS',next:'calculo_sueldo_VOLKBUS'},
+      {id:'VIDEO_INFONAVIT',label:'Aviso de retención Infonavit',next:'aviso_infonavit'},
+      {id:'REGRESAR',label:'REGRESAR',next:'menuPrincipal'}
+    ]
+  },
+  documentos_hub:{
+    type:'question', id:'documentos_hub', prompt:'DOCUMENTOS DISPONIBLES',
+    options:[
+      {id:'DOC_CAMINO',label:'Contigo en el camino',next:'accidente_siiab'},
+      {id:'DOC_INFONAVIT',label:'Requisitos Infonavit',next:'req_infonavit'},
+      {id:'DOC_FONACOT',label:'Requisitos Fonacot',next:'req_fonacot'},
+      {id:'REGRESAR',label:'REGRESAR',next:'menuPrincipal'}
+    ]
+  },
+
+}; // end nodes
+window.nodes = nodes;
+
+let historyStack = [];
+let currentNode = null;
+
+function presentNode(nodeId, pushToHistory=true)
+{
+
+  const node = nodes[nodeId];
+  if(!node){
+    console.warn('Node not found', nodeId);
+    addBotBubble('Esta opción no está disponible por el momento.', [
+      {label:'VOLVER AL INICIO', next:'menuPrincipal', primary:true}
+    ]); return;
+  }
+  currentNode = nodeId;
+
+  if(node.type === 'question'){
+    const available=(node.options||[]).filter(o=>['REGRESAR','__REGRESAR__'].includes(o.next) || !!nodes[o.next]);
+    const actionable=available.filter(o=>!['REGRESAR','__REGRESAR__'].includes(o.next));
+    if(!actionable.length){
+      addBotBubble(`<strong>${escapeHtml(node.prompt)}</strong><br><br>Esta sección aún no tiene información asociada. Puedes regresar o consultar otra categoría.`,[
+        {label:'REGRESAR',next:'__REGRESAR__',primary:true},
+        {label:'IR AL INICIO',next:'menuPrincipal',primary:false}
+      ]);
+      return;
+    }
+    addBotBubble(`<strong>${escapeHtml(node.prompt)}</strong>`, available.map(o=>({label:o.label, next:o.next, primary:false})));
+  } else if(node.type === 'message'){
+    let html = `<div>${escapeHtml(node.text).replace(/\n/g,'<br>')}</div>`;
+    if(node.attachments && node.attachments.length){
+      node.attachments.forEach(att=>{
+        if(att.type === 'image'){
+          html += `<a class="link-card" href="${att.link||att.url}" target="_blank" rel="noopener noreferrer"><img src="${att.url}" alt="" style="max-width:100%;border-radius:6px"><div style="margin-top:6px;font-weight:600"></div></a>`;
+        } else if(att.type === 'video'){
+          const vimeoUrlMatch = att.url.match(/src="([^"]+)"/);
+          const vimeoUrl = vimeoUrlMatch ? vimeoUrlMatch[1] : '';
+          html += `<div class="small" style="margin-top:8px">
+            <button class="option-btn video-btn" onclick="openLightbox('${vimeoUrl}')">
+              <img src="./videos-01.png" alt="Ver video" style="width:180px; height:auto; border:none; cursor:pointer;">
+            </button>
+          </div>`;
+        } else if(att.type === 'link'){
+          if(att.url.endsWith('.pdf') || att.url.includes('.pdf')) {
+            html += `<button class="option-btn primary" onclick="openPdf('${att.url}')">${escapeHtml(att.title || '📄 Ver PDF')}</button>`;
+          } else {
+            html += `<a class="link-card" href="${att.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(att.title||att.url)}</a>`;
+          }
+        }
+      });
+    }
+    addBotBubble(html, [{label:'REGRESAR', next:'__REGRESAR__', primary:true}]);
+    scrollEnd();
+  }
+}
+
+function handleOption(opt){
+  lastInputWasVoice = false;
+  addUserBubble(opt.label || opt);
+  if(opt.next === '__REGRESAR__' || opt.next === 'REGRESAR'){
+    goBack(); return;
+  }
+  if(currentNode) historyStack.push(currentNode);
+  presentNode(opt.next, false);
+}
+
+function goBack(){
+  if(historyStack.length === 0){ presentNode('main', false); return; }
+  const prev = historyStack.pop();
+  presentNode(prev, false);
+}
+
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function start(){
+  chatEl.innerHTML = '';
+  historyStack = [];
+  currentNode = null;
+  presentNode('main', false);
+  scrollEnd();
+}
+
+
+function validateNodes(showMessage=false){
+  const errors=[]; const warnings=[];
+  Object.entries(nodes).forEach(([id,node])=>{
+    if(!node || !node.type){ errors.push(`${id}: nodo inválido`); return; }
+    if(node.type==='question'){
+      const actionable=(node.options||[]).filter(o=>o.next && !['REGRESAR','__REGRESAR__'].includes(o.next));
+      if(!actionable.length) warnings.push(`${id}: menú sin contenido`);
+      (node.options||[]).forEach(o=>{
+        if(o.next && !['REGRESAR','__REGRESAR__'].includes(o.next) && !nodes[o.next]) errors.push(`${id} → ${o.next}: destino inexistente`);
+      });
+    }
+  });
+  window.CHATBOOT_DIAGNOSTIC={errors,warnings,total:Object.keys(nodes).length};
+  if(showMessage){ addBotBubble(errors.length ? `Se encontraron ${errors.length} errores de navegación.` : `Validación correcta: ${Object.keys(nodes).length} nodos disponibles.`); }
+  return window.CHATBOOT_DIAGNOSTIC;
+}
+validateNodes(false);
+
+/* API pública para la integración con Google Sheets */
+window.nodes = nodes;
+window.presentNode = presentNode;
+window.handleOption = handleOption;
+window.addBotBubble = addBotBubble;
+window.addUserBubble = addUserBubble;
+window.start = start;
+window.openLightbox = openLightbox;
+window.openPdf = openPdf;
+window.closeLightbox = closeLightbox;
+window.escapeHtml = escapeHtml;
+window.validateNodes = validateNodes;
+
+start();
+restartBtn.addEventListener('click', ()=> start());
+document.addEventListener('keydown', (e)=>{ if(e.key === 'r' && (e.ctrlKey||e.metaKey)){ start(); } });
+
+/* Speech Synthesis */
+const robotFace = document.getElementById('robot-face');
+const robotGif = document.getElementById('robot-gif');
+
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'es-MX';
+  utter.pitch = 1.05;
+  utter.rate = 1;
+  utter.volume = 1;
+
+  utter.onstart = () => { /* could add small visual cue on GIF (not altering GIF) */ };
+  utter.onend = () => { };
+  window.speechSynthesis.cancel();
+  const voices = window.speechSynthesis.getVoices();
+  if(voices && voices.length){
+    let v = voices.find(v=> /es[-_]?mx/i.test(v.lang) && /female|woman|mujer|female/i.test(v.name));
+    if(!v) v = voices.find(v=> /es[-_]?mx/i.test(v.lang));
+    if(!v) v = voices.find(v=> /es/i.test(v.lang));
+    if(v) utter.voice = v;
+  }
+  window.speechSynthesis.speak(utter);
+}
+
+function speakAndThen(text, cb){
+  if(!('speechSynthesis' in window)){
+    if(cb) cb(); return;
+  }
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'es-MX';
+  utter.pitch = 1.05;
+  utter.rate = 1;
+  utter.volume = 1;
+  utter.onend = () => { if(cb) cb(); };
+  const voices = window.speechSynthesis.getVoices();
+  if(voices && voices.length){
+    let v = voices.find(v=> /es[-_]?mx/i.test(v.lang) && /female|woman|mujer|female/i.test(v.name));
+    if(!v) v = voices.find(v=> /es[-_]?mx/i.test(v.lang));
+    if(!v) v = voices.find(v=> /es/i.test(v.lang));
+    if(v) utter.voice = v;
+  }
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+/* Speech Recognition */
+const micBtn = document.getElementById('mic-btn');
+const micText = document.getElementById('mic-text');
+const micIcon = document.getElementById('mic-icon');
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+let recognition = null;
+let listening = false;
+
+if(SpeechRecognition){
+  recognition = new SpeechRecognition();
+  recognition.lang = 'es-MX';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  recognition.continuous = false;
+
+  recognition.onstart = () => {
+    listening = true;
+    micBtn.classList.add('listening');
+    micBtn.setAttribute('aria-pressed','true');
+    micText.textContent = 'Escuchando...';
+    micIcon.textContent = '🔴';
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    listening = false;
+    micBtn.classList.remove('listening');
+    micBtn.setAttribute('aria-pressed','false');
+    micText.textContent = 'Hablar';
+    micIcon.textContent = '🎤';
+
+    lastInputWasVoice = true;
+    addUserBubble(transcript);
+    handleSpokenText(transcript);
+  };
+
+  recognition.onerror = (ev) => {
+    listening = false;
+    micBtn.classList.remove('listening');
+    micBtn.setAttribute('aria-pressed','false');
+    micText.textContent = 'Hablar';
+    micIcon.textContent = '🎤';
+    console.error('Speech recognition error', ev);
+    addBotBubble('No pude oírte bien. Intenta de nuevo por favor.');
+  };
+
+  recognition.onend = () => {
+    listening = false;
+    micBtn.classList.remove('listening');
+    micBtn.setAttribute('aria-pressed','false');
+    micText.textContent = 'Hablar';
+    micIcon.textContent = '🎤';
+  };
+} else {
+  micBtn.disabled = true;
+  micBtn.title = 'Tu navegador no soporta reconocimiento de voz (Web Speech API). Usa un navegador moderno (Chrome/Edge).';
+  document.getElementById('mic-indicator').textContent = 'Reconocimiento de voz no disponible en este navegador.';
+}
+
+micBtn.addEventListener('click', ()=>{
+  if(!recognition) return;
+  if(!listening){
+    try { recognition.start(); } catch(e){ console.warn(e); }
+  } else {
+    recognition.stop();
+  }
+});
+
+/* Contextual Restringido: solo coincidir con opciones del menú actual */
+function handleSpokenText(text){
+  if(!text) return;
+  const clean = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[.,!?¿¡]/g, "");
+  console.log("Usuario dijo:", clean);
+
+  // direct commands always allowed
+  if(/regresar|volver|atras|inicio|menu/.test(clean)){
+    speakAndThen('Regresando al menú anterior.', ()=> goBack());
+    return;
+  }
+
+  // try to match only among current node options
+  const restrictedMatch = findBestOptionMatchRestricted(clean);
+  if(restrictedMatch){
+    const confirmation = `Entendí que quieres ${restrictedMatch.label}. Te muestro la información.`;
+    suppressBotSpeak = true;
+    speakAndThen(confirmation, ()=> {
+      if(currentNode) historyStack.push(currentNode);
+      presentNode(restrictedMatch.next);
+    });
+    return;
+  }
+
+  // If it matches a global mapping but not available in current context, inform the user
+  const globalKeywords = {
+    'sueldo':['sueldo','nomina','cartera','pago','ganar','mi sueldo','salario','factor'],
+    'incentivos':['incentivo','bono','premio','ico','ins','ibecc'],
+    'proceso_cova':['cova','siiab','accidente','falla','maquina','tarjeta','liquidacion','deposito','terminal'],
+    'infonavit':['infonavit','credito infonavit','retencion','requisitos infonavit','mi cuenta infonavit'],
+    'fonacot':['fonacot','credito fonacot','requisitos fonacot','constancia de percepciones'],
+    'hablar_asesor':['asesor','hablar','ayuda','persona','whatsapp','contactar']
+  };
+
+  for(const key in globalKeywords){
+    if(globalKeywords[key].some(k=> clean.includes(k))){
+      // found a global intent that's not available in this menu
+      const resp = 'Esa opción no está disponible en este menú. Di "Regresar" para volver al menú anterior o selecciona una de las opciones visibles.';
+      addBotBubble(resp);
+      if(lastInputWasVoice) speak(resp);
+      lastInputWasVoice = false;
+      return;
+    }
+  }
+
+  // regex-based restricted intents (helpful shortcuts) - check only if they reference allowed keywords in current options
+  if(/isr|descuento.*isr/.test(clean)){
+    const opt = findBestOptionMatchRestricted('isr');
+    if(opt){ return speakAndThen('Te muestro información sobre ISR.', ()=> { if(currentNode) historyStack.push(currentNode); presentNode(opt.next); }); }
+  }
+
+  // fallback
+  const fallback = 'Perdón, no entendí exactamente. Di el nombre de la opción tal como aparece en pantalla o selecciona uno de los botones.';
+  addBotBubble(fallback);
+  if(lastInputWasVoice) speak(fallback);
+  lastInputWasVoice = false;
+}
+
+/* restricted matching: only uses options of the current node */
+function findBestOptionMatchRestricted(text){
+  const lowered = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const current = nodes[currentNode];
+  if(current && current.options){
+    for(const opt of current.options){
+      const label = opt.label.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const cleanLabel = label.replace(/[¿?¡!]/g, '').trim();
+      if(lowered.includes(cleanLabel) || cleanLabel.includes(lowered)) return opt;
+      const keywords = cleanLabel.split(/\s+/).filter(w => w.length > 3);
+      if(keywords.some(w => lowered.includes(w))) return opt;
+    }
+  }
+  return null;
+}
+
+/* Professional UI layer */
+const themeToggle = document.getElementById('theme-toggle');
+const sidebar = document.getElementById('sidebar');
+const mobileMenu = document.getElementById('mobile-menu');
+const savedTheme = localStorage.getItem('chatboot_theme');
+if(savedTheme === 'dark'){ document.body.classList.add('dark'); themeToggle.textContent='☀️'; }
+themeToggle?.addEventListener('click',()=>{ document.body.classList.toggle('dark'); const dark=document.body.classList.contains('dark'); themeToggle.textContent=dark?'☀️':'🌙'; localStorage.setItem('chatboot_theme',dark?'dark':'light'); });
+mobileMenu?.addEventListener('click',()=>sidebar?.classList.toggle('open'));
+document.addEventListener('click',(e)=>{ const b=e.target.closest('[data-search],[data-jump]'); if(!b)return; sidebar?.classList.remove('open'); if(b.dataset.jump && window.presentNode){ historyStack=[]; presentNode(b.dataset.jump); return; } const input=document.getElementById('global-search-input'); if(input){input.value=b.dataset.search||''; document.getElementById('global-search-btn')?.click();} });
+
+/* end of script */
+</script>
+  <script src="./api-config.js"></script>
+  <script src="./api-integration.js"></script>
+  <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
+
+<script>
+document.addEventListener('error',function(e){
+  const img=e.target;
+  if(!(img instanceof HTMLImageElement) || img.id==='robot-gif') return;
+  const box=document.createElement('div');
+  box.className=img.className||'';
+  box.setAttribute('aria-label',img.alt||'Recurso visual');
+  box.style.cssText='display:grid;place-items:center;min-width:44px;min-height:44px;border-radius:12px;background:linear-gradient(135deg,#7c3fad,#00a987);color:white;font-size:24px;font-weight:800';
+  box.textContent='🤖';
+  img.replaceWith(box);
+},true);
+</script>
+
+<style>
+.ai-search-btn{background:linear-gradient(135deg,#6d28d9,#9333ea)!important;white-space:nowrap}
+.ai-badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:#f1e8ff;color:#5b2188;font-size:12px;font-weight:800;margin-bottom:8px}
+.ai-sources{margin-top:12px;padding-top:10px;border-top:1px solid var(--border,#ddd);display:flex;gap:7px;flex-wrap:wrap}
+.ai-source{border:1px solid #ccb5e6;background:#fff;color:#51206e;border-radius:14px;padding:7px 10px;cursor:pointer;text-align:left}
+.ai-thinking{min-width:150px}.typing-dots{display:flex;gap:5px;margin-top:8px}.typing-dots i{width:7px;height:7px;border-radius:50%;background:#71349a;animation:aiDot 1.1s infinite}.typing-dots i:nth-child(2){animation-delay:.18s}.typing-dots i:nth-child(3){animation-delay:.36s}@keyframes aiDot{0%,70%,100%{opacity:.25;transform:translateY(0)}35%{opacity:1;transform:translateY(-4px)}}
+@media(max-width:700px){#global-search{flex-wrap:wrap!important}#global-search input{flex-basis:100%!important}.ai-search-btn,#global-search-btn{flex:1}}
+</style>
+<script src="./ai-assistant.js?v=9.2"></script>
+<script src="./experience-upgrades.js?v=9.2"></script>
+
+<script>
+/* Altura móvil estable: corrige la barra del navegador y el teclado virtual */
+(function(){
+  const setHeight=()=>{
+    const h=(window.visualViewport&&window.visualViewport.height)||window.innerHeight;
+    document.documentElement.style.setProperty('--app-height',Math.round(h)+'px');
+    const chat=document.getElementById('chat');
+    if(chat) requestAnimationFrame(()=>{chat.scrollTop=chat.scrollHeight;});
+  };
+  setHeight();
+  window.addEventListener('resize',setHeight,{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(setHeight,120),{passive:true});
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize',setHeight,{passive:true});
+    window.visualViewport.addEventListener('scroll',setHeight,{passive:true});
+  }
+  document.addEventListener('focusin',e=>{
+    if(e.target.matches('input,textarea,select')) setTimeout(()=>{setHeight();e.target.scrollIntoView({block:'nearest'});},180);
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  const sidebar=document.getElementById('sidebar');
+  const overlay=document.getElementById('mobile-overlay');
+  const menu=document.getElementById('mobile-menu');
+  function isRealMobile(){
+    const touch=(navigator.maxTouchPoints||0)>0 || matchMedia('(pointer:coarse)').matches;
+    return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (touch && Math.min(screen.width,screen.height)<=900);
+  }
+  if(isRealMobile()) root.classList.add('force-mobile');
+  function syncOverlay(){
+    const open=sidebar?.classList.contains('open');
+    overlay?.classList.toggle('show',!!open);
+    overlay?.setAttribute('aria-hidden',open?'false':'true');
+  }
+  menu?.addEventListener('click',()=>setTimeout(syncOverlay,0));
+  overlay?.addEventListener('click',()=>{sidebar?.classList.remove('open');syncOverlay();});
+  sidebar?.addEventListener('click',e=>{if(e.target.closest('[data-jump],a')){sidebar.classList.remove('open');syncOverlay();}});
+  window.addEventListener('resize',()=>{if(isRealMobile())root.classList.add('force-mobile');syncOverlay();},{passive:true});
+})();
+</script>
+
+</body>
+</html>
