@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#6d28d9">
+  <title>CONCIL.IA · Sistema Inteligente de Conciliación</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-populate@1.21.0/browser/xlsx-populate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">C.IA</div>
+    <span class="eyebrow purple">RECAUDACIÓN VILLAHERMOSA</span>
+    <h1>CONCIL.<span class="ia-mark">IA</span></h1>
+    <p>Conciliación Inteligente Automatizada · CIA y ERPCO</p>
+    <label>Usuario
+      <select id="loginUser" autocomplete="username" disabled>
+        <option value="">Cargando usuarios…</option>
+      </select>
+    </label>
+    <label>Contraseña<input id="loginPassword" type="password" autocomplete="current-password" placeholder="Contraseña"></label>
+    <button id="loginBtn" class="primary full" disabled>Ingresar</button>
+    <button id="reloadUsersBtn" class="secondary full login-reload" type="button">↻ Actualizar lista de usuarios</button>
+    <div id="loginMessage" class="login-message"></div>
+    <small>Usuarios validados mediante Google Sheets. Los archivos de conciliación permanecen en este navegador.</small>
+  </div>
+</div>
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="brand"><span>C.IA</span><div><b>CONCIL.<i>IA</i></b><small>Enterprise 9.3</small></div></div>
+  <nav>
+    <a href="#resultsCard">▦ Dashboard</a>
+    <a href="#uploadCard">⇧ Nueva conciliación</a>
+    <a href="#detailCard">≋ Diferencias</a>
+    <a href="#driverCard">◎ Conductores</a>
+    <a href="#chartsCard">⌁ Estadísticas</a>
+    <a href="#auditCard">◇ Auditoría inteligente</a>
+    <a href="#historyCard">◷ Historial</a>
+    <a href="#configCard">⚙ Configuración</a>
+  </nav>
+  <div class="sidebar-user"><div class="avatar">A</div><div><b id="currentUser">Administrador</b><small>Sesión local</small></div></div>
+  <button id="logoutBtn" class="logout">Cerrar sesión</button>
+</aside>
+<div class="app-content">
+<div class="topbar">
+  <button id="mobileMenuBtn" class="mobile-menu-btn" type="button" aria-label="Abrir menú">☰</button>
+  <div class="topbar-title"><strong>Centro de conciliación</strong><small>Operación diaria · Villahermosa</small></div>
+  <div class="topbar-meta"><span class="secure-pill">● Sesión segura</span><div class="topbar-user"><span id="topbarAvatar">A</span><div><b id="topbarUser">Administrador</b><small id="topbarRole">Usuario autorizado</small></div></div></div>
+</div>
+<header class="hero" id="home">
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow">RECAUDACIÓN VILLAHERMOSA</span>
+      <h1>CONCIL.<span class="ia-mark">IA</span> <em>9.3</em></h1>
+      <p>Sistema inteligente de conciliación CIA · ERPCO, generación del formato oficial MasterWeb y análisis por conductor.</p>
+    </div>
+    <div class="hero-actions"><div class="hero-badges"><span>🔒 Procesamiento local</span><span>⚡ Sin servidor</span></div><button id="themeToggle" class="theme-toggle" title="Cambiar apariencia">🌙 Modo oscuro</button></div>
+  </div>
+</header>
+
+<main>
+  <section class="enterprise-home" id="enterpriseHome">
+    <div class="enterprise-welcome">
+      <span class="portal-kicker" id="greetingLabel">BUEN DÍA</span>
+      <h2><span id="greetingText">👋 Hola</span>, <strong id="greetingName">Usuario</strong>.</h2>
+      <p id="greetingMessage">Ya está todo listo para comenzar la conciliación de hoy.</p>
+      <div class="enterprise-actions">
+        <button class="primary" id="startConciliationBtn" type="button">＋ Nueva conciliación</button>
+        <button class="secondary" id="goHistoryBtn" type="button">◷ Consultar historial</button>
+      </div>
+    </div>
+    <div class="daily-panel">
+      <div class="daily-date"><small>FECHA DE CONCILIACIÓN</small><strong id="dailyDate">—</strong><span>Periodo operativo automático</span></div>
+      <div class="daily-grid">
+        <div><small>Estado del motor</small><strong><i class="online-dot"></i> Disponible</strong></div>
+        <div><small>Archivos cargados</small><strong id="dailyFiles">0 de 9</strong></div>
+        <div><small>Última conciliación</small><strong id="dailyLast">Sin registros</strong></div>
+        <div><small>Resultado reciente</small><strong id="dailyResult">Pendiente</strong></div>
+      </div>
+    </div>
+  </section>
+  <section class="security-strip">
+    <span>🔒 Procesamiento privado en el navegador</span><span>✓ Plantilla corporativa protegida</span><span>✓ Sesión validada con Google Sheets</span>
+  </section>
+  <nav class="steps" aria-label="Flujo de trabajo">
+    <span><b>1</b> Archivos</span><span><b>2</b> Datos</span><span><b>3</b> Conciliar</span><span><b>4</b> Descargar</span>
+  </nav>
+
+  <section class="card card-accent" id="uploadCard">
+    <div class="section-title"><div><span>1</span><div><h2>Carga inteligente de archivos</h2><small class="section-subtitle">Selecciona reportes individuales o un archivo ZIP</small></div></div><button id="demoBtn" class="ghost">Limpiar carga</button></div>
+    <p class="hint">Carga los reportes como archivos individuales o, cuando ya los tengas agrupados, mediante un ZIP. También puedes arrastrar ambas opciones al mismo recuadro.</p>
+    <div class="upload-options">
+      <label class="upload-option primary-option">
+        <input id="files" type="file" multiple accept=".xls,.xlsx,.csv,.pdf">
+        <span class="upload-icon">📄</span>
+        <b>Cargar archivos sueltos</b>
+        <small>Selecciona CIA, ERPCO, AVA y depósitos de forma individual.</small>
+      </label>
+      <label class="upload-option">
+        <input id="zipFiles" type="file" multiple accept=".zip,application/zip">
+        <span class="upload-icon">🗜️</span>
+        <b>Cargar archivo ZIP</b>
+        <small>El sistema lo descomprime y reconoce automáticamente los reportes.</small>
+      </label>
+    </div>
+    <div class="drop" id="dropZone" role="button" tabindex="0"><strong>Arrastra aquí archivos sueltos o ZIP</strong><small>Formatos admitidos: XLS, XLSX, CSV, PDF y ZIP</small></div>
+    <div id="zipStatus" class="zip-status hidden"></div>
+    <div id="fileGrid" class="file-grid"></div>
+    <div id="coverage" class="coverage"></div>
+  </section>
+
+  <section class="card">
+    <div class="section-title"><div><span>2</span><div><h2>Datos manuales</h2><small class="section-subtitle">Completa únicamente los campos requeridos</small></div></div></div>
+    <div class="form-grid">
+      <label>Recaudación<input id="recaudacion" value="Villahermosa"></label>
+      <label>Fecha de conciliación (día anterior, horario de México)<input id="fecha" type="date" readonly></label>
+      <label class="wide">Observaciones<textarea id="observaciones" rows="3" placeholder="Ej. AJUSTES EN CIA POR -$55"></textarea></label>
+    </div>
+    <div class="fichas-head"><h3>Fichas e importes</h3><button id="addFicha" class="ghost">+ Agregar fila</button></div>
+    <div id="fichas"></div>
+  </section>
+
+  <section class="card" id="resultsCard">
+    <div class="section-title"><div><span>3</span><div><h2>Validación y resultado</h2><small class="section-subtitle">Revisa importes y diferencias antes de descargar</small></div></div><button id="procesar" class="primary primary-large">Procesar conciliación</button></div>
+    <div id="status" class="status muted">Carga los archivos y presiona “Procesar conciliación”.</div>
+    <div id="summary" class="summary hidden"></div>
+    <div id="brandBreakdown" class="brand-grid hidden"></div>
+    <div class="actions hidden" id="actions">
+      <button id="previewMasterweb" class="secondary">Vista previa ejecutiva</button>
+      <button id="download" class="primary">Descargar Masterweb + diferencias</button>
+      <button id="pdfReport" class="secondary">Descargar reporte PDF</button>
+      <button id="csvDiff" class="ghost">Descargar diferencias CSV</button>
+    </div>
+  </section>
+
+  <section class="card hidden" id="detailCard">
+    <div class="section-title"><div><span>4</span><h2>Diferencias por conductor</h2></div><div class="legend"><i class="okdot"></i> Cuadrado <i class="warndot"></i> Diferencia <i class="baddot"></i> Faltante</div></div>
+    <div class="toolbar">
+      <input id="searchDiff" placeholder="Buscar conductor, nombre o marca">
+      <select id="filterDiff"><option value="TODOS">Todos</option><option value="CUADRADO">Cuadrados</option><option value="MÁS EN CIA">Más en CIA</option><option value="MÁS EN ERPCO">Más en ERPCO</option><option value="FALTANTE">Faltantes</option></select>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Conductor</th><th>Marca</th><th>CIA</th><th>ERPCO</th><th>Diferencia</th><th>Resultado</th></tr></thead><tbody id="diffBody"></tbody></table></div>
+    <p id="diffCount" class="hint"></p>
+  </section>
+
+
+  <section class="card hidden" id="intelligenceCard">
+    <div class="section-title"><div><span>🤖</span><h2>Análisis inteligente de conciliación</h2></div><button id="copyAnalysis" class="ghost">Copiar análisis</button></div>
+    <div id="smartAnalysis" class="analysis-box"></div>
+  </section>
+
+  <section class="card hidden" id="chartsCard">
+    <div class="section-title"><div><span>📈</span><h2>Indicadores visuales</h2></div></div>
+    <div class="chart-grid">
+      <div class="chart-panel"><h3>Diferencia absoluta por marca</h3><canvas id="brandChart" width="620" height="280"></canvas></div>
+      <div class="chart-panel"><h3>Estado de conductores</h3><canvas id="statusChart" width="620" height="280"></canvas></div>
+    </div>
+  </section>
+
+
+  <section class="card audit-card hidden" id="auditCard">
+    <div class="section-title"><div><span>◇</span><div><h2>Centro de auditoría inteligente</h2><small class="section-subtitle">Validaciones automáticas, nivel de riesgo y recomendaciones operativas</small></div></div><button id="exportAudit" class="ghost" type="button">Exportar resumen</button></div>
+    <div class="audit-hero">
+      <div class="audit-score"><div class="audit-ring" id="auditRing"><strong id="auditScore">—</strong><small>confianza</small></div><div><span class="portal-kicker">DICTAMEN AUTOMÁTICO</span><h3 id="auditVerdict">Procesa una conciliación</h3><p id="auditNarrative">Aquí aparecerá una evaluación basada en integridad de archivos, diferencias, faltantes y consistencia de importes.</p></div></div>
+      <div class="audit-meta"><div><small>Archivos reconocidos</small><strong id="auditFiles">0/9</strong></div><div><small>Incidencias</small><strong id="auditIncidents">—</strong></div><div><small>Importe en revisión</small><strong id="auditExposure">—</strong></div></div>
+    </div>
+    <div class="audit-layout">
+      <div class="audit-checks"><h3>Lista de validaciones</h3><div id="auditChecks" class="check-list"><div class="status muted">Aún no hay resultados para auditar.</div></div></div>
+      <div class="audit-priority"><h3>Prioridades de revisión</h3><div id="auditPriorities" class="priority-list"><div class="status muted">Las incidencias principales aparecerán aquí.</div></div></div>
+    </div>
+  </section>
+
+  <section class="card insights-card" id="insightsCard">
+    <div class="section-title"><div><span>◈</span><div><h2>Perspectiva histórica local</h2><small class="section-subtitle">Tendencias calculadas con las conciliaciones guardadas en este navegador</small></div></div></div>
+    <div class="insight-grid" id="historyInsights">
+      <div><small>Conciliaciones registradas</small><strong>0</strong><span>Sin historial</span></div>
+      <div><small>Días cuadrados</small><strong>0%</strong><span>Sin historial</span></div>
+      <div><small>Diferencia promedio</small><strong>$0.00</strong><span>Valor absoluto</span></div>
+      <div><small>Último operador</small><strong>—</strong><span>Sin actividad</span></div>
+    </div>
+  </section>
+
+  <section class="card hidden" id="driverCard">
+    <div class="section-title"><div><span>👤</span><h2>Consulta rápida de conductor</h2></div></div>
+    <div class="driver-search"><input id="driverQuery" placeholder="Escribe número o nombre del conductor"><button id="driverSearchBtn" class="secondary">Consultar</button></div>
+    <div id="driverResult" class="driver-result status muted">Procesa una conciliación y busca un conductor.</div>
+  </section>
+
+  <section class="card" id="configCard">
+    <div class="section-title"><div><span>⚙️</span><h2>Configuración</h2></div></div>
+    <div class="form-grid compact">
+      <label>Tolerancia para considerar cuadrado ($)<input id="tolerance" type="number" step="0.01" min="0" value="0.01"></label>
+      <label>Diferencia importante desde ($)<input id="criticalAmount" type="number" step="0.01" min="0" value="500"></label>
+    </div>
+    <p class="hint">La configuración se guarda únicamente en este navegador.</p>
+  </section>
+
+  <section class="card" id="historyCard">
+    <div class="section-title"><div><span>⏱</span><h2>Historial local y bitácora</h2></div><button id="clearHistory" class="ghost">Borrar historial</button></div>
+    <p class="hint">Se guarda únicamente un resumen en este navegador. Los archivos originales nunca se almacenan.</p>
+    <div id="history" class="history"></div>
+  </section>
+</main>
+<footer>CONCIL.IA Enterprise 9.3 · Conciliación Inteligente Automatizada · Los documentos se procesan localmente.</footer>
+</div></div>
+<div id="welcomeOverlay" class="welcome-overlay hidden" aria-hidden="true">
+  <div class="welcome-panel">
+    <div class="welcome-symbol">C.IA</div>
+    <span class="eyebrow purple">RECAUDACIÓN VILLAHERMOSA</span>
+    <h2 id="welcomeGreeting">👋 Hola, Usuario.</h2>
+    <p id="welcomeMessage">Ya está todo listo para comenzar la conciliación de hoy.</p>
+    <div class="welcome-user"><strong id="welcomeName">Usuario</strong><small id="welcomeRole">Rol</small></div>
+    <button id="welcomeContinue" class="primary full">Comenzar conciliación</button>
+  </div>
+</div>
+
+<div id="completionOverlay" class="completion-overlay hidden" aria-hidden="true">
+  <div class="completion-panel">
+    <div class="completion-check">✓</div>
+    <h2 id="completionTitle">Conciliación procesada</h2>
+    <p id="completionText">Los archivos fueron analizados correctamente.</p>
+    <div class="completion-kpis">
+      <div><small>Periodo</small><strong id="completionDate">—</strong></div>
+      <div><small>Tiempo de proceso</small><strong id="completionTime">—</strong></div>
+      <div><small>Diferencia global</small><strong id="completionDifference">—</strong></div>
+    </div>
+    <button id="completionClose" class="primary full">Revisar resultados</button>
+  </div>
+</div>
+<div id="processingOverlay" class="processing-overlay hidden" aria-hidden="true">
+  <div class="processing-card">
+    <div class="processing-orbit"><span>C.IA</span></div>
+    <h2>Analizando conciliación</h2>
+    <p id="processingMessage">Identificando y validando los archivos…</p>
+    <div class="processing-track"><i></i></div>
+    <small>Los documentos permanecen en este equipo.</small>
+  </div>
+</div>
+<div id="previewOverlay" class="preview-overlay hidden" aria-hidden="true">
+  <div class="preview-modal">
+    <div class="preview-head"><div><span class="eyebrow purple">VISTA PREVIA EJECUTIVA</span><h2>Resumen previo a la descarga</h2></div><button id="closePreview" type="button" aria-label="Cerrar">×</button></div>
+    <div id="previewContent" class="preview-content"></div>
+    <div class="preview-actions"><button id="previewDownload" class="primary" type="button">Descargar MasterWeb oficial</button><button id="previewBack" class="ghost" type="button">Volver</button></div>
+  </div>
+</div>
+
+<button id="copilotLauncher" class="copilot-launcher" type="button" aria-label="Abrir copiloto">
+  <img src="assets/concilia-coin.png" alt="Moneda asistente de CONCIL.IA">
+  <span><b>Copiloto</b><small>Pregúntame sobre la conciliación</small></span>
+</button>
+<aside id="copilotPanel" class="copilot-panel" aria-hidden="true">
+  <header class="copilot-header">
+    <div class="copilot-identity"><img src="assets/concilia-coin.png" alt="Moneda asistente"><div><b>CONCI</b><small>Copiloto de conciliación</small></div></div>
+    <button id="copilotClose" type="button" aria-label="Cerrar copiloto">×</button>
+  </header>
+  <div id="copilotMessages" class="copilot-messages" aria-live="polite"></div>
+  <div class="copilot-suggestions" id="copilotSuggestions">
+    <button type="button" data-question="¿La conciliación está cuadrada?">¿Está cuadrada?</button>
+    <button type="button" data-question="¿Cuáles son las diferencias más importantes?">Diferencias importantes</button>
+    <button type="button" data-question="¿Cuánto hay de AVA y depósitos?">AVA y depósitos</button>
+    <button type="button" data-question="¿Qué archivos faltan?">Archivos faltantes</button>
+  </div>
+  <form id="copilotForm" class="copilot-form">
+    <input id="copilotInput" type="text" autocomplete="off" placeholder="Ej. ¿Quién tiene más diferencia?" aria-label="Pregunta para el copiloto">
+    <button type="submit" aria-label="Enviar pregunta">➤</button>
+  </form>
+  <small class="copilot-note">CONCI responde con los datos cargados en esta sesión. No envía archivos a servicios externos.</small>
+</aside>
+
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+<script src="app.js"></script>
+<script>
+(function(){
+  const menuBtn=document.getElementById('mobileMenuBtn');
+  const sidebar=document.querySelector('.sidebar');
+  if(menuBtn&&sidebar){menuBtn.addEventListener('click',()=>sidebar.classList.toggle('mobile-open'));}
+  document.querySelectorAll('.sidebar nav a').forEach(a=>a.addEventListener('click',()=>sidebar&&sidebar.classList.remove('mobile-open')));
+  const syncUser=()=>{
+    const name=(document.getElementById('currentUser')?.textContent||'Administrador').trim();
+    const top=document.getElementById('topbarUser'); if(top) top.textContent=name;
+    const av=document.getElementById('topbarAvatar'); if(av) av.textContent=(name[0]||'A').toUpperCase();
+    const stored=JSON.parse(localStorage.getItem('masterweb_session')||localStorage.getItem('concilia_session')||'null');
+    const role=stored?.rol||stored?.role||'Usuario autorizado';
+    const tr=document.getElementById('topbarRole'); if(tr) tr.textContent=role;
+  };
+  setTimeout(syncUser,400); setInterval(syncUser,2500);
+  const nav=[...document.querySelectorAll('.sidebar nav a')];
+  const sections=nav.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){nav.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}})}, {rootMargin:'-20% 0px -70% 0px'});
+    sections.forEach(s=>io.observe(s));
+  }
+})();
+</script>
+</body>
+</html>
