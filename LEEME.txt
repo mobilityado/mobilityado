@@ -1,0 +1,23 @@
+MOBILITY ADO - PORTAL PWA
+
+Archivos a subir a la raíz del repositorio:
+- index.html
+- manifest.json
+- service-worker.js
+- carpeta icons/
+
+IMPORTANTE:
+Conserva también tus carpetas actuales:
+AVA/
+CONCIL-IA/
+CONCILIACIONES/
+CapturasPorcentrodePago/
+ChatBoot/
+FIK/
+HappyMoments/
+INGRESOS/
+JD_ERPCO/
+RCV/
+
+La instalación PWA aparece cuando el navegador considera que el sitio cumple los requisitos.
+En GitHub Pages y con tu dominio HTTPS funcionará correctamente.
