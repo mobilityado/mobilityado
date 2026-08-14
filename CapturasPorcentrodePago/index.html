@@ -21,6 +21,51 @@
     .brands{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{padding:8px 10px;background:#262a48;border:1px solid #393e65;border-radius:999px;font-size:12px;cursor:pointer}.chip.active{background:#4b3bb1;border-color:#7c5cff}.empty{color:var(--muted);text-align:center;padding:28px}.note{font-size:12px;color:var(--muted);margin-top:10px}.hidden{display:none!important}
     @media(max-width:1050px){.top,.charts{grid-template-columns:1fr}.cards{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.app{padding:14px}.hero{align-items:flex-start;flex-direction:column}.cards{grid-template-columns:repeat(2,1fr)}.panel{padding:14px}.mode{flex-direction:column}}
   </style>
+
+  <!-- Botón flotante para regresar al portal principal -->
+  <style id="portal-back-button-style">
+    .portal-back-button {
+      position: fixed;
+      left: max(14px, env(safe-area-inset-left));
+      bottom: max(14px, env(safe-area-inset-bottom));
+      z-index: 2147483647;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 15px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      background: rgba(76, 29, 149, .96);
+      color: #fff !important;
+      text-decoration: none !important;
+      font: 700 14px/1.1 Arial, Helvetica, sans-serif;
+      letter-spacing: .1px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.24);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    .portal-back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0,0,0,.30);
+    }
+    .portal-back-button:active { transform: translateY(0); }
+    .portal-back-button:focus-visible {
+      outline: 3px solid rgba(196,181,253,.95);
+      outline-offset: 3px;
+    }
+    .portal-back-button .portal-home-icon { font-size: 18px; line-height: 1; }
+    @media (max-width: 520px) {
+      .portal-back-button {
+        min-height: 42px;
+        padding: 9px 13px;
+        font-size: 13px;
+      }
+    }
+    @media print { .portal-back-button { display: none !important; } }
+  </style>
 </head>
 <body>
 <div class="app">
@@ -191,5 +236,11 @@ function group(a,key){return a.reduce((o,x)=>{const k=key(x);(o[k]??=[]).push(x)
 $('csvBtn').onclick=()=>{const s=summary(filteredRows()),headers=['Usuario','Viajes','Ing Abordo','Venta Manual / Canje','Ing Taquilla','Equipaje','Prepago','Promoción','Total 6 conceptos','Kms','Boletos'];const lines=[headers.join(','),...s.map(r=>[r.user,r.trips,r.abordo.toFixed(2),r.manual.toFixed(2),r.taquilla.toFixed(2),r.equipaje.toFixed(2),r.prepago.toFixed(2),r.promocion.toFixed(2),r.total.toFixed(2),r.kms.toFixed(2),r.tickets].map(csv).join(','))];const blob=new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='resumen_usuarios.csv';a.click();URL.revokeObjectURL(a.href)};
 function csv(v){v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function escapeAttr(s){return escapeHtml(s)}
 </script>
+
+  <!-- Regreso al portal. ../ funciona tanto con el dominio personalizado como con GitHub Pages. -->
+  <a class="portal-back-button" href="../" aria-label="Volver al portal principal" title="Volver al portal">
+    <span class="portal-home-icon" aria-hidden="true">⌂</span>
+    <span>Volver al portal</span>
+  </a>
 </body>
 </html>

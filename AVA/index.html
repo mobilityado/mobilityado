@@ -1,4 +1,49 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CIO AVA | Centro de Inteligencia Operativa AVA</title><link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><meta name="theme-color" content="#5b21b6"><meta name="application-name" content="CIO AVA"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/pwa/apple-touch-icon.png"><link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/enterprise3.css"><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script></head>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CIO AVA | Centro de Inteligencia Operativa AVA</title><link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><meta name="theme-color" content="#5b21b6"><meta name="application-name" content="CIO AVA"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/pwa/apple-touch-icon.png"><link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/enterprise3.css"><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Botón flotante para regresar al portal principal -->
+  <style id="portal-back-button-style">
+    .portal-back-button {
+      position: fixed;
+      left: max(14px, env(safe-area-inset-left));
+      bottom: max(14px, env(safe-area-inset-bottom));
+      z-index: 2147483647;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 15px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      background: rgba(76, 29, 149, .96);
+      color: #fff !important;
+      text-decoration: none !important;
+      font: 700 14px/1.1 Arial, Helvetica, sans-serif;
+      letter-spacing: .1px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.24);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    .portal-back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0,0,0,.30);
+    }
+    .portal-back-button:active { transform: translateY(0); }
+    .portal-back-button:focus-visible {
+      outline: 3px solid rgba(196,181,253,.95);
+      outline-offset: 3px;
+    }
+    .portal-back-button .portal-home-icon { font-size: 18px; line-height: 1; }
+    @media (max-width: 520px) {
+      .portal-back-button {
+        min-height: 42px;
+        padding: 9px 13px;
+        font-size: 13px;
+      }
+    }
+    @media print { .portal-back-button { display: none !important; } }
+  </style>
+</head>
 <body class="light auth-locked"><div id="loginScreen" class="login-screen" aria-hidden="false">
   <div class="login-shell">
     <section class="login-brand-panel">
@@ -169,4 +214,10 @@
   </form>
   <footer>Las respuestas usan la información actualmente cargada y los filtros activos.</footer>
 </section>
-<footer class="site-footer"><img src="assets/cio-ava-logo.svg" alt="CIO AVA"><div><strong>CIO AVA</strong><span>Centro de Inteligencia Operativa AVA</span></div><div class="footer-center">Gerencia Regional de Recaudación VHT<br>Mobility ADO · CIO AVA Enterprise 3.0</div></footer><script src="js/app.js" defer></script><script src="js/admin-users.js" defer></script><script src="js/audit.js" defer></script><script src="js/enterprise3.js" defer></script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(console.error));}let deferredInstall;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;const b=document.getElementById("installBtn");if(b)b.hidden=false;});window.addEventListener("appinstalled",()=>{const b=document.getElementById("installBtn");if(b)b.hidden=true;deferredInstall=null;});document.addEventListener("click",async e=>{const b=e.target.closest("#installBtn");if(!b||!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;b.hidden=true;});</script></body></html>
+<footer class="site-footer"><img src="assets/cio-ava-logo.svg" alt="CIO AVA"><div><strong>CIO AVA</strong><span>Centro de Inteligencia Operativa AVA</span></div><div class="footer-center">Gerencia Regional de Recaudación VHT<br>Mobility ADO · CIO AVA Enterprise 3.0</div></footer><script src="js/app.js" defer></script><script src="js/admin-users.js" defer></script><script src="js/audit.js" defer></script><script src="js/enterprise3.js" defer></script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(console.error));}let deferredInstall;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;const b=document.getElementById("installBtn");if(b)b.hidden=false;});window.addEventListener("appinstalled",()=>{const b=document.getElementById("installBtn");if(b)b.hidden=true;deferredInstall=null;});document.addEventListener("click",async e=>{const b=e.target.closest("#installBtn");if(!b||!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;b.hidden=true;});</script>
+  <!-- Regreso al portal. ../ funciona tanto con el dominio personalizado como con GitHub Pages. -->
+  <a class="portal-back-button" href="../" aria-label="Volver al portal principal" title="Volver al portal">
+    <span class="portal-home-icon" aria-hidden="true">⌂</span>
+    <span>Volver al portal</span>
+  </a>
+</body></html>
