@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Moments | Centro de Felicitaciones Automáticas</title>
+<style>
+
+:root{
+  --purple:#25004f;
+  --purple2:#3b0764;
+  --purple3:#6d28d9;
+  --pink:#ef164d;
+  --pink2:#ff4f87;
+  --red:#ef1238;
+  --green:#159447;
+  --blue:#168be8;
+  --orange:#ff9800;
+  --ink:#24134f;
+  --muted:#6f6a7e;
+  --line:#e9e4f2;
+  --bg:#f7f3fb;
+  --card:#fff;
+  --shadow:0 16px 42px rgba(49,20,91,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);background:#f8f5fb}
+body{min-height:100vh}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:255px 1fr;
+  background:
+    radial-gradient(circle at 85% 10%,rgba(255,79,135,.08),transparent 30%),
+    linear-gradient(135deg,#fbf8ff,#fff 58%,#f9f5ff);
+}
+
+.sidebar{
+  position:sticky;top:0;height:100vh;
+  padding:22px 16px;
+  color:white;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(255,35,103,.18),transparent 32%),
+    linear-gradient(180deg,#2a0057 0%,#1b003e 100%);
+  box-shadow:12px 0 35px rgba(30,0,68,.12);
+  overflow:auto;
+}
+.brand{
+  text-align:center;
+  padding:8px 10px 18px;
+}
+.brand-title{
+  font-family:Georgia,serif;
+  font-style:italic;
+  line-height:.9;
+  font-size:42px;
+  font-weight:900;
+  letter-spacing:-2px;
+  text-shadow:0 5px 14px rgba(0,0,0,.25);
+}
+.brand-title span{display:block;color:#ff2f69}
+.brand-sub{margin-top:16px;font-weight:800;font-size:14px;letter-spacing:.5px;line-height:1.5}
+.brand-sub small{display:block;color:#ff78a2;font-size:12px;margin-top:4px}
+
+.nav{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+.nav-item{
+  border:0;background:transparent;color:#fff;width:100%;
+  padding:13px 14px;border-radius:15px;display:flex;gap:12px;align-items:center;text-align:left;
+  transition:.2s;
+}
+.nav-item:hover{background:rgba(255,255,255,.08)}
+.nav-item.active{
+  background:linear-gradient(135deg,#ff274e,#db2b82);
+  box-shadow:0 10px 24px rgba(239,18,56,.25)
+}
+.nav-icon{width:34px;height:34px;display:grid;place-items:center;font-size:24px}
+.nav-copy strong{display:block;font-size:15px}
+.nav-copy small{display:block;color:#ddd1ec;font-size:12px;margin-top:3px}
+.nav-item.active .nav-copy small{color:#ffe6ee}
+.nav-divider{height:1px;background:rgba(255,255,255,.12);margin:12px 6px}
+
+.sidebar-quote{
+  margin-top:22px;padding:16px;border:1px solid rgba(255,255,255,.18);border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+  font-size:13px;line-height:1.5
+}
+.sidebar-quote b{color:#ffc447}
+.sidebar-quote span{color:#ff4f87}
+
+.main{min-width:0}
+.hero{
+  position:relative;
+  min-height:315px;
+  background-image:url('assets/hero-red-bus.png');
+  background-size:cover;
+  background-position:center;
+  border-bottom:1px solid #eee5f7;
+}
+.hero::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 65%,rgba(255,255,255,.28));
+  pointer-events:none
+}
+.content{
+  padding:18px 24px 28px;
+  margin-top:-6px;
+}
+.top-tabs{
+  background:#fff;border:1px solid #ece6f3;border-radius:20px;box-shadow:var(--shadow);
+  padding:8px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px
+}
+.tab{
+  padding:13px 16px;border-radius:14px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:.2s
+}
+.tab:hover{background:#faf7fd}
+.tab.active{color:white;background:linear-gradient(135deg,#ef1238,#ff4e79);box-shadow:0 9px 22px rgba(239,18,56,.22)}
+.tab .ti{font-size:26px}
+.tab strong{display:block;font-size:15px}
+.tab small{display:block;color:#7f788c;font-size:12px;margin-top:2px}
+.tab.active small{color:#ffe9ef}
+
+.section{display:none}
+.section.active{display:block;animation:fade .2s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.dashboard-grid{
+  display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.75fr);gap:18px
+}
+.card{
+  background:#fff;border:1px solid #ece6f3;border-radius:22px;box-shadow:var(--shadow);padding:24px
+}
+.card h3{margin:0 0 20px;font-size:23px;color:#d51532}
+.card h3::after{content:"";display:block;width:52px;height:4px;border-radius:99px;background:linear-gradient(90deg,#ef1238,#ff4f87);margin-top:9px}
+.fields{display:grid;gap:11px}
+.field{position:relative}
+.field .ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:#43127d;z-index:2}
+input,select,textarea{
+  width:100%;border:1px solid #ded8e9;background:#fff;border-radius:12px;padding:13px 14px 13px 45px;outline:none;color:#33284f;
+  box-shadow:0 3px 12px rgba(40,15,80,.04)
+}
+textarea{min-height:130px;resize:vertical;padding-left:14px}
+input:focus,select:focus,textarea:focus{border-color:#9a67d2;box-shadow:0 0 0 4px rgba(109,40,217,.10)}
+.actions{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-top:15px}
+.btn{border:0;color:#fff;border-radius:12px;padding:12px 18px;font-weight:800;display:inline-flex;align-items:center;gap:8px;justify-content:center;min-width:160px}
+.save{background:linear-gradient(135deg,#ef1238,#ff2f67);box-shadow:0 9px 20px rgba(239,18,56,.2)}
+.sheet{background:linear-gradient(135deg,#3b0764,#6d28d9);box-shadow:0 9px 20px rgba(109,40,217,.2)}
+.send{background:linear-gradient(135deg,#149642,#25bb60)}
+.delete{background:linear-gradient(135deg,#c70e32,#ef3157)}
+.media{background:linear-gradient(135deg,#5b21b6,#8b5cf6)}
+.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+
+.moment-card{
+  min-height:100%;text-align:center;display:flex;flex-direction:column;justify-content:center;
+  background:
+    radial-gradient(circle at 20% 15%,rgba(255,64,126,.08),transparent 22%),
+    radial-gradient(circle at 90% 0%,rgba(249,115,22,.06),transparent 22%),
+    #fff;
+}
+.moment-card h2{font-family:Georgia,serif;font-style:italic;color:#d51c43;margin:0 0 20px;font-size:29px}
+.moments{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:10px 0 18px}
+.moment{padding:12px 4px}
+.moment .emoji{font-size:52px}
+.moment b{display:block;font-size:13px;color:#43127d;margin-top:8px}
+.moment-text{border-top:1px solid #eadff0;padding-top:18px;color:#2f1c68;line-height:1.5;font-weight:700}
+.heart{font-size:30px;color:#ef1238;margin-top:10px}
+
+.status-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px
+}
+.status-card{background:#fff;border:1px solid #ece6f3;border-radius:16px;box-shadow:0 8px 22px rgba(54,24,90,.07);padding:15px;display:flex;align-items:center;gap:11px}
+.status-card .si{font-size:34px}
+.status-card b{display:block;font-size:13px}
+.status-card small{display:block;color:#6f6a7e;font-size:11px;margin-top:3px}
+
+.table-card{overflow:hidden}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{background:#f6f1fb;color:#4a237c;font-size:12px;text-align:left;padding:12px;border-bottom:1px solid #e8e0f0}
+td{padding:12px;font-size:12px;border-bottom:1px solid #f0ebf4;vertical-align:middle}
+tbody tr:hover{background:#fdfaff}
+td button{min-width:38px;padding:8px 10px;border-radius:9px;border:0;color:#fff;margin:2px}
+
+.footer{
+  margin-top:20px;background:linear-gradient(90deg,#260053,#36016a);color:white;padding:12px 24px;display:flex;justify-content:space-between;gap:20px;font-size:12px
+}
+.footer em{color:#ffd8e5}
+
+@media(max-width:1050px){
+  .app{grid-template-columns:82px 1fr}
+  .brand-title{font-size:0}.brand-title::after{content:"🎉";font-size:40px}
+  .brand-sub,.nav-copy,.sidebar-quote{display:none}
+  .nav-item{justify-content:center;padding:12px 8px}
+  .nav-icon{font-size:26px}
+}
+@media(max-width:800px){
+  .app{display:block}
+  .sidebar{position:relative;height:auto;padding:10px;display:flex;align-items:center;gap:8px;overflow-x:auto}
+  .brand{display:none}.nav{flex-direction:row;margin:0;gap:7px}.nav-divider,.sidebar-quote{display:none}
+  .nav-item{width:auto;min-width:54px}.hero{min-height:205px}
+  .user-chip{right:10px;top:10px}
+  .content{padding:12px}
+  .top-tabs{grid-template-columns:1fr 1fr}
+  .dashboard-grid{grid-template-columns:1fr}
+  .status-row{grid-template-columns:1fr 1fr}
+  .footer{flex-direction:column}
+}
+@media(max-width:520px){
+  .hero{min-height:150px}
+  .top-tabs{grid-template-columns:1fr}
+  .status-row{grid-template-columns:1fr}
+  .moments{grid-template-columns:1fr}
+  .actions .btn{width:100%}
+  .card{padding:18px}
+}
+
+
+/* ===== ACCESO INTEGRADO ===== */
+body.login-open {
+  overflow:hidden;
+}
+
+#loginGate {
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:
+    linear-gradient(rgba(28,0,64,.40),rgba(28,0,64,.62)),
+    url('assets/login-bg.png') center/cover no-repeat;
+  transition:opacity .35s ease, visibility .35s ease;
+}
+
+#loginGate.hidden {
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.login-panel {
+  width:min(410px,94vw);
+  border-radius:26px;
+  padding:30px 30px;
+  background:rgba(28,0,64,.58);
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 28px 80px rgba(31,0,70,.35);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  text-align:center;
+}
+
+.login-logo {
+  width:78px;
+  height:78px;
+  margin:0 auto 14px;
+  border-radius:24px;
+  display:grid;
+  place-items:center;
+  font-size:40px;
+  background:linear-gradient(135deg,#ef1238,#ff4f87);
+  box-shadow:0 14px 30px rgba(239,18,56,.24);
+}
+
+.login-panel h1 {
+  margin:0;
+  color:#ffffff;
+  font-size:28px;
+}
+
+.login-panel .login-sub {
+  margin:7px 0 22px;
+  color:#f2eaf8;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.login-field {
+  position:relative;
+  margin-top:12px;
+}
+
+.login-field .login-ico {
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:2;
+}
+
+.login-panel select,
+.login-panel input {
+  width:100%;
+  min-height:50px;
+  border:1px solid #ddd4e8;
+  border-radius:14px;
+  background:white;
+  color:#2e2542;
+  padding:12px 14px 12px 45px;
+  outline:none;
+}
+
+.login-panel select:focus,
+.login-panel input:focus {
+  border-color:#9a67d2;
+  box-shadow:0 0 0 4px rgba(109,40,217,.10);
+}
+
+.login-submit {
+  width:100%;
+  min-height:50px;
+  margin-top:17px;
+  border:0;
+  border-radius:14px;
+  color:#fff;
+  font-weight:900;
+  font-size:15px;
+  background:linear-gradient(135deg,#ef1238,#ff2f67);
+  box-shadow:0 12px 26px rgba(239,18,56,.22);
+}
+
+.login-submit:disabled {
+  opacity:.65;
+  cursor:not-allowed;
+}
+
+.login-status,
+.login-error {
+  min-height:19px;
+  margin-top:12px;
+  font-size:13px;
+}
+
+.login-status { color:#ffffff; }
+.login-error { color:#ffd2dc;font-weight:700; }
+
+.login-foot {
+  margin-top:18px;
+  padding-top:15px;
+  border-top:1px solid rgba(255,255,255,.18);
+  color:#eadff5;
+  font-size:12px;
+}
+
+#appRoot {
+  display:none;
+}
+
+#appRoot.visible {
+  display:block;
+}
+
+.logout-btn {
+  margin-left:8px;
+  width:30px;
+  height:30px;
+  min-width:30px;
+  border:0;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:linear-gradient(135deg,#ef1238,#ff4f87);
+  font-weight:900;
+}
+
+@media(max-width:800px){
+  #loginGate {
+    align-items:center;
+    padding:14px;
+  }
+  .login-panel {
+    padding:26px 20px;
+    margin-bottom:18px;
+  }
+}
+
+.logout-menu{
+  margin-top:12px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.10);
+}
+.logout-menu:hover{
+  background:linear-gradient(135deg,#ef1238,#ff4f87);
+}
+
+
+.session-user-chip{
+  position:absolute;
+  z-index:3;
+  right:24px;
+  top:20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:235px;
+  padding:10px 14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(255,255,255,.96);
+  box-shadow:0 10px 25px rgba(80,20,120,.16);
+  backdrop-filter:blur(10px);
+}
+.session-user-chip .user-avatar{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:linear-gradient(135deg,#ef1238,#ff4f87);
+}
+.session-user-chip strong{
+  display:block;
+  color:#24134f;
+  font-size:12px;
+  line-height:1.25;
+  margin:1px 0;
+}
+.session-user-chip small{
+  display:block;
+  color:#766d82;
+  font-size:10px;
+}
+@media(max-width:800px){
+  .session-user-chip{
+    right:10px;
+    top:10px;
+    min-width:190px;
+    max-width:calc(100% - 20px);
+    padding:8px 10px;
+  }
+  .session-user-chip strong{font-size:10px}
+}
+
+
+/* ===== CLOUDINARY / GALERÍA HAPPY MOMENTS ===== */
+.cloudinary-toolbar{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.cloudinary-toolbar .btn{
+  min-width:190px;
+}
+.cloudinary-info{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#f8f3ff;
+  border:1px solid #eadff6;
+  color:#5b4774;
+  font-size:12px;
+  line-height:1.5;
+}
+.media-preview-box{
+  display:none;
+  margin-top:16px;
+  padding:14px;
+  border:1px solid #e8e0f0;
+  border-radius:16px;
+  background:#fbf9fe;
+}
+.media-preview-box.active{display:block}
+.media-preview-box img,
+.media-preview-box video{
+  display:block;
+  width:100%;
+  max-height:360px;
+  object-fit:contain;
+  border-radius:12px;
+  background:#16072a;
+}
+.media-preview-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.media-preview-head strong{color:#4a176f}
+.gallery-overlay{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:rgba(21,0,47,.72);
+  backdrop-filter:blur(8px);
+}
+.gallery-overlay.open{display:flex}
+.gallery-modal{
+  width:min(1050px,96vw);
+  max-height:90vh;
+  overflow:hidden;
+  background:#fff;
+  border-radius:24px;
+  box-shadow:0 30px 80px rgba(15,0,40,.35);
+  display:flex;
+  flex-direction:column;
+}
+.gallery-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:18px 22px;
+  border-bottom:1px solid #eee6f3;
+  background:linear-gradient(135deg,#35105f,#671ea1);
+  color:#fff;
+}
+.gallery-header h2{
+  margin:0;
+  font-size:21px;
+}
+.gallery-close{
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:10px;
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-size:22px;
+}
+.gallery-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:14px 18px;
+  border-bottom:1px solid #eee8f3;
+}
+.gallery-grid{
+  padding:18px;
+  overflow:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:14px;
+  min-height:240px;
+}
+.gallery-empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:50px 20px;
+  color:#7c7287;
+}
+.gallery-item{
+  position:relative;
+  border:2px solid transparent;
+  border-radius:16px;
+  overflow:hidden;
+  background:#f8f5fb;
+  box-shadow:0 8px 22px rgba(47,17,80,.08);
+  cursor:pointer;
+  transition:.18s ease;
+}
+.gallery-item:hover{
+  transform:translateY(-2px);
+  border-color:#b987e5;
+}
+.gallery-item.selected{
+  border-color:#ef174c;
+  box-shadow:0 0 0 4px rgba(239,23,76,.10);
+}
+.gallery-thumb{
+  width:100%;
+  height:145px;
+  display:grid;
+  place-items:center;
+  background:#1b082d;
+}
+.gallery-thumb img,
+.gallery-thumb video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.gallery-meta{
+  padding:10px 11px;
+}
+.gallery-meta strong{
+  display:block;
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.gallery-meta small{
+  display:block;
+  color:#887e91;
+  font-size:10px;
+  margin-top:3px;
+}
+.gallery-use{
+  margin:0 18px 18px;
+  padding:13px 18px;
+  border:0;
+  border-radius:12px;
+  font-weight:800;
+  color:#fff;
+  background:linear-gradient(135deg,#ef1238,#ff4f87);
+}
+.gallery-use:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+.gallery-delete{
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:30px;
+  height:30px;
+  border:0;
+  border-radius:9px;
+  color:#fff;
+  background:rgba(20,3,38,.72);
+  z-index:2;
+}
+@media(max-width:600px){
+  .gallery-grid{grid-template-columns:1fr 1fr;padding:12px}
+  .gallery-thumb{height:120px}
+}
+
+
+/* ===== VIDEOTECA HAPPY MOMENTS ===== */
+.video-library-toolbar{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:10px;
+  margin-bottom:18px;
+}
+.video-library-toolbar input{
+  padding-left:14px;
+}
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:16px;
+}
+.video-card{
+  background:#fff;
+  border:1px solid #e9e2f0;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 10px 26px rgba(48,18,80,.08);
+}
+.video-player{
+  background:#140522;
+  aspect-ratio:16/9;
+  display:grid;
+  place-items:center;
+}
+.video-player video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#140522;
+}
+.video-card-body{
+  padding:13px;
+}
+.video-card-title{
+  font-size:13px;
+  font-weight:800;
+  color:#3b165f;
+  margin-bottom:6px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.video-card-url{
+  font-size:10px;
+  color:#8a7e95;
+  line-height:1.35;
+  word-break:break-all;
+  max-height:42px;
+  overflow:hidden;
+}
+.video-card-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.video-card-actions button{
+  min-width:auto;
+  flex:1 1 110px;
+}
+.video-empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:55px 20px;
+  color:#7e7489;
+  background:#fbf9fd;
+  border:1px dashed #d9cde6;
+  border-radius:18px;
+}
+.copy-toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:12000;
+  padding:11px 16px;
+  border-radius:12px;
+  color:#fff;
+  background:linear-gradient(135deg,#159447,#23b85d);
+  box-shadow:0 10px 25px rgba(21,148,71,.25);
+  opacity:0;
+  transform:translateY(10px);
+  pointer-events:none;
+  transition:.2s ease;
+}
+.copy-toast.show{
+  opacity:1;
+  transform:none;
+}
+@media(max-width:760px){
+  .video-library-toolbar{
+    grid-template-columns:1fr;
+  }
+}
+
+
+.build-badge{
+  position:fixed;
+  right:8px;
+  bottom:8px;
+  z-index:9998;
+  padding:5px 8px;
+  border-radius:8px;
+  background:rgba(37,0,79,.78);
+  color:#fff;
+  font-size:9px;
+  letter-spacing:.3px;
+  pointer-events:none;
+}
+
+</style>
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+</head>
+<body class="login-open">
+
+<div id="loginGate">
+  <div class="login-panel">
+    <div class="login-logo">🎉</div>
+    <h1>Happy Moments</h1>
+    <div class="login-sub">Centro de Felicitaciones Automáticas<br>Inicia sesión para continuar.</div>
+
+    <div class="login-field">
+      <span class="login-ico">👤</span>
+      <select id="loginUsuario" disabled>
+        <option value="">Cargando usuarios...</option>
+      </select>
+    </div>
+
+    <div class="login-field">
+      <span class="login-ico">🔒</span>
+      <input type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password">
+    </div>
+
+    <button class="login-submit" id="loginBtn" onclick="iniciarSesion()">Ingresar a Happy Moments</button>
+
+    <div class="login-status" id="loginStatus"></div>
+    <div class="login-error" id="loginError"></div>
+
+    <div class="login-foot">Automatiza momentos especiales • Conecta corazones ❤️</div>
+  </div>
+</div>
+
+<div id="appRoot">
+
+<div class="app">
+
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-title">Happy <span>Moments</span></div>
+    <div class="brand-sub">❤️ FELICITACIONES ❤️<br>AUTOMATIZADAS<small>Momentos que dejan huella</small></div>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-item active" data-tab="contacto"><span class="nav-icon">🏠</span><span class="nav-copy"><strong>Registro</strong><small>Nuevo contacto</small></span></button>
+    <button class="nav-item" data-tab="plantilla"><span class="nav-icon">💌</span><span class="nav-copy"><strong>Alta Tarjetas</strong><small>Crear tarjetas</small></span></button>
+    <button class="nav-item" data-tab="lista"><span class="nav-icon">👥</span><span class="nav-copy"><strong>Contactos</strong><small>Lista de contactos</small></span></button>
+    <button class="nav-item" data-tab="plantillas"><span class="nav-icon">🎴</span><span class="nav-copy"><strong>Tarjetas</strong><small>Mis tarjetas</small></span></button>
+    <button class="nav-item" data-tab="galeria"><span class="nav-icon">🎬</span><span class="nav-copy"><strong>Galería</strong><small>Imágenes y videos</small></span></button>
+  </nav>
+
+  
+  <button class="nav-item logout-menu" onclick="cerrarSesion()">
+    <span class="nav-icon">🚪</span>
+    <span class="nav-copy"><strong>Cerrar sesión</strong><small>Salir de Happy Moments</small></span>
+  </button>
+
+  <div class="sidebar-quote">⭐ <b>Automatiza momentos</b><br>que dejan huella <span>•</span><br>conecta corazones ❤️</div>
+</aside>
+
+<main class="main">
+  <header class="hero">
+    <div class="user-chip session-user-chip">
+      <div class="user-avatar">👤</div>
+      <div>
+        <small>Bienvenido</small>
+        <strong id="usuarioActual">USUARIO</strong>
+        <small id="rolActual">Sesión activa</small>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="top-tabs">
+      <div class="tab active" data-tab="contacto"><span class="ti">👤</span><span><strong>Registro</strong><small>Nuevo contacto</small></span></div>
+      <div class="tab" data-tab="plantilla"><span class="ti">💌</span><span><strong>Alta Tarjetas</strong><small>Crear tarjetas</small></span></div>
+      <div class="tab" data-tab="lista"><span class="ti">👥</span><span><strong>Contactos</strong><small>Lista de contactos</small></span></div>
+      <div class="tab" data-tab="plantillas"><span class="ti">🎴</span><span><strong>Tarjetas</strong><small>Mis tarjetas</small></span></div>
+      <div class="tab" data-tab="galeria"><span class="ti">🎬</span><span><strong>Galería</strong><small>Media Cloudinary</small></span></div>
+    </div>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="section active">
+      <div class="dashboard-grid">
+        <div class="card">
+          <h3>🎉 Registrar nuevo contacto</h3>
+          <div class="fields">
+            <div class="field"><span class="ico">👤</span><input id="nombre" placeholder="Nombre completo"></div>
+            <div class="field"><span class="ico">📞</span><input id="telefono" placeholder="521XXXXXXXXXX"></div>
+            <div class="field"><span class="ico">🎂</span>
+              <select id="marca">
+                <option>ADMIN CUMPLEAÑOS</option><option>ADMIN ANIVERSARIO</option><option>ADMIN RECONOCIMIENTO</option>
+                <option>ADO CUMPLEAÑOS</option><option>ADO ANIVERSARIO</option><option>ADO RECONOCIMIENTO</option>
+                <option>SUR CUMPLEAÑOS</option><option>SUR ANIVERSARIO</option><option>SUR RECONOCIMIENTO</option>
+                <option>TRT CUMPLEAÑOS</option><option>TRT ANIVERSARIO</option><option>TRT RECONOCIMIENTO</option>
+              </select>
+            </div>
+            <div class="field"><span class="ico">📅</span><input type="date" id="fecha"></div>
+          </div>
+          <div class="actions">
+            <button class="btn save" onclick="agregarContacto()">✔ Guardar contacto</button>
+            <button class="btn sheet" onclick="window.open('https://docs.google.com/spreadsheets/d/1nojKLQL2J4OZlrf2zxPHWuSwagHR8etSYrC7Pvrus4g/edit')">☁ Carga masiva</button>
+          </div>
+        </div>
+
+        <div class="card moment-card">
+          <h2>Celebra cada momento</h2>
+          <div class="moments">
+            <div class="moment"><div class="emoji">🎂</div><b>Cumpleaños</b></div>
+            <div class="moment"><div class="emoji">🎈</div><b>Aniversarios</b></div>
+            <div class="moment"><div class="emoji">🏆</div><b>Reconocimientos</b></div>
+          </div>
+          <div class="moment-text">Cada mensaje enviado es una sonrisa<br>que fortalece conexiones.</div>
+          <div class="heart">❤️</div>
+        </div>
+      </div>
+
+      <div class="status-row">
+        <div class="status-card"><span class="si">🎉</span><span><b style="color:#ef1238">Envíos Automáticos</b><small>Programados y confiables</small></span></div>
+        <div class="status-card"><span class="si">💬</span><span><b style="color:#159447">Integrado con WhatsApp</b><small>Envíos rápidos y efectivos</small></span></div>
+        <div class="status-card"><span class="si">☁️</span><span><b style="color:#168be8">Respaldo en la Nube</b><small>Seguro y siempre disponible</small></span></div>
+        <div class="status-card"><span class="si">🛡️</span><span><b style="color:#ff9800">Seguro y Privado</b><small>Tus datos están protegidos</small></span></div>
+      </div>
+    </section>
+
+    <!-- PLANTILLA -->
+    <section id="plantilla" class="section">
+      <div class="card">
+        <h3>💌 Crear tarjeta de felicitación</h3>
+        <div class="fields">
+          <select id="marcaPlantilla">
+            <option>ADMIN CUMPLEAÑOS</option><option>ADMIN ANIVERSARIO</option><option>ADMIN RECONOCIMIENTO</option>
+            <option>ADO CUMPLEAÑOS</option><option>ADO ANIVERSARIO</option><option>ADO RECONOCIMIENTO</option>
+            <option>SUR CUMPLEAÑOS</option><option>SUR ANIVERSARIO</option><option>SUR RECONOCIMIENTO</option>
+            <option>TRT CUMPLEAÑOS</option><option>TRT ANIVERSARIO</option><option>TRT RECONOCIMIENTO</option>
+          </select>
+          <textarea id="textoPlantilla">Hola {Nombre}</textarea>
+          <input id="urlMedia" placeholder="URL imagen/video" oninput="actualizarVistaPreviaMedia()">
+        </div>
+
+        <div class="cloudinary-toolbar">
+          <button class="btn media" onclick="abrirCloudinaryUpload()">☁️ Subir imagen o video</button>
+          <button class="btn sheet" onclick="abrirGaleriaHappy()">🖼️ Galería Happy Moments</button>
+        </div>
+
+        <div class="cloudinary-info">
+          Los archivos que subas desde Happy Moments se guardan en Cloudinary y se registran en Google Sheets para mantener una galería compartida y persistente.
+          Al seleccionar uno, su URL se colocará automáticamente en la tarjeta.
+        </div>
+
+        <div id="mediaPreviewBox" class="media-preview-box">
+          <div class="media-preview-head">
+            <strong>👁 Vista previa del archivo seleccionado</strong>
+            <button class="delete" style="min-width:auto;padding:7px 10px" onclick="limpiarMediaSeleccionada()">✕</button>
+          </div>
+          <div id="mediaPreviewContent"></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn save" onclick="guardarPlantilla()">💾 Guardar tarjeta</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTOS -->
+    <section id="lista" class="section">
+      <div class="card table-card">
+        <h3>👥 Directorio de contactos</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nombre</th><th>Teléfono</th><th>Área</th><th>Fecha</th><th>Estado</th><th>Acción</th></tr></thead>
+            <tbody id="tabla"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARJETAS -->
+    <section id="plantillas" class="section">
+      <div class="card table-card">
+        <h3>🎴 Biblioteca de tarjetas</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Área</th><th>Mensaje</th><th>Media</th><th>Acción</th></tr></thead>
+            <tbody id="tablaPlantillas"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    
+    <!-- GALERÍA -->
+    <section id="galeria" class="section">
+      <div class="card">
+        <h3>🖼️ Galería Happy Moments</h3>
+
+        <div class="video-library-toolbar">
+          <input id="mediaUrlManual" placeholder="Pega aquí una URL de imagen o video de Cloudinary">
+          <button class="btn media" onclick="agregarMediaManual()">➕ Agregar URL</button>
+          <button class="btn sheet" onclick="abrirCloudinaryUpload()">☁️ Subir archivo</button>
+        </div>
+
+        <div class="cloudinary-info">
+          Aquí puedes ver imágenes y videos, reproducir videos, copiar la URL y usar cualquier archivo directamente en una tarjeta.
+          Los archivos que subas desde Happy Moments se guardan en Cloudinary y su catálogo se sincroniza en Google Sheets para que todos los usuarios vean la misma galería.
+        </div>
+
+        <div id="mediaGalleryGrid" class="video-grid" style="margin-top:18px"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <span>🔒 Happy Moments © 2026 | Todos los derechos reservados<span style="opacity:.75"> · GALERÍA BUILD 19-07-2026</span></span>
+    <em>Gracias por permitirnos ser parte de tus momentos especiales ❤️</em>
+  </footer>
+</main>
+</div>
+
+
+</div>
+
+
+<!-- GALERÍA CLOUDINARY HAPPY MOMENTS -->
+<div id="galleryOverlay" class="gallery-overlay">
+  <div class="gallery-modal">
+    <div class="gallery-header">
+      <div>
+        <h2>🎉 Galería Happy Moments</h2>
+        <div style="font-size:12px;opacity:.85;margin-top:3px">Imágenes y videos subidos desde este sistema</div>
+      </div>
+      <button class="gallery-close" onclick="cerrarGaleriaHappy()">×</button>
+    </div>
+    <div class="gallery-actions">
+      <button class="btn media" onclick="abrirCloudinaryUpload()">☁️ Subir nuevo archivo</button>
+      <button class="btn sheet" onclick="recargarGaleriaHappy()">🔄 Actualizar galería</button>
+    </div>
+    <div id="galleryGrid" class="gallery-grid"></div>
+    <button id="galleryUseButton" class="gallery-use" onclick="usarArchivoGaleria()" disabled>
+      ✅ Usar archivo seleccionado
+    </button>
+  </div>
+</div>
+
+<div id="copyToast" class="copy-toast">✅ URL copiada</div>
+<script>
+const LOGIN_API_URL = 'https://script.google.com/macros/s/AKfycbzxD8kyWlQ9KTalqdCnM56RMk9YcCh80JSxi3tqVuIIWfz-PQiA67LCWzL_wR_d5Wlf/exec';
+let loginUsuarios = [];
+
+document.addEventListener("DOMContentLoaded", async function(){
+  document.getElementById("loginPassword").addEventListener("keydown", function(e){
+    if(e.key === "Enter") iniciarSesion();
+  });
+
+  document.querySelectorAll("[data-tab]").forEach(tab =>{
+    tab.addEventListener("click", function(){
+      const id = this.dataset.tab;
+      activarTab(id);
+    });
+  });
+
+  const sesion = sessionStorage.getItem("usuario");
+  if(sesion){
+    mostrarAplicacion();
+    await cargarPlantillas();
+    await cargarContactos();
+    await cargarGaleriaServidor();
+  } else {
+    await cargarUsuariosLogin();
+  }
+});
+
+async function cargarUsuariosLogin(){
+  const select = document.getElementById("loginUsuario");
+  const status = document.getElementById("loginStatus");
+  const error = document.getElementById("loginError");
+
+  select.disabled = true;
+  error.textContent = "";
+  status.textContent = "Cargando lista de usuarios...";
+
+  try {
+    const respuesta = await fetch(LOGIN_API_URL + "?accion=usuarios&t=" + Date.now(), {cache:"no-store"});
+    if(!respuesta.ok) throw new Error("HTTP " + respuesta.status);
+    const data = await respuesta.json();
+    const lista = Array.isArray(data) ? data : (data.usuarios || data.data || data.resultado || []);
+
+    loginUsuarios = lista.map(item => {
+      if(typeof item === "string") return {usuario:item,nombre:item,rol:""};
+      return {
+        usuario:String(item.usuario ?? item.Usuario ?? item.user ?? "").trim(),
+        nombre:String(item.nombre ?? item.Nombre ?? item.name ?? item.usuario ?? "").trim(),
+        rol:String(item.rol ?? item.Rol ?? "").trim()
+      };
+    }).filter(x=>x.usuario);
+
+    select.innerHTML = '<option value="">Selecciona tu usuario</option>';
+    loginUsuarios.forEach(item=>{
+      const op = document.createElement("option");
+      op.value = item.usuario;
+      op.textContent = item.nombre || item.usuario;
+      select.appendChild(op);
+    });
+
+    select.disabled = false;
+    status.textContent = "";
+  } catch(e) {
+    console.error(e);
+    select.innerHTML = '<option value="">No se pudieron cargar los usuarios</option>';
+    error.textContent = "No fue posible cargar la lista de usuarios.";
+    status.textContent = "";
+  }
+}
+
+async function iniciarSesion(){
+  const usuario = document.getElementById("loginUsuario").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  const error = document.getElementById("loginError");
+  const status = document.getElementById("loginStatus");
+  const btn = document.getElementById("loginBtn");
+
+  error.textContent = "";
+  status.textContent = "";
+
+  if(!usuario){
+    error.textContent = "Selecciona un usuario.";
+    return;
+  }
+  if(!password){
+    error.textContent = "Ingresa tu contraseña.";
+    return;
+  }
+
+  btn.disabled = true;
+  status.textContent = "Validando acceso...";
+
+  try {
+    const url = LOGIN_API_URL
+      + "?accion=login"
+      + "&usuario=" + encodeURIComponent(usuario)
+      + "&password=" + encodeURIComponent(password)
+      + "&t=" + Date.now();
+
+    const respuesta = await fetch(url, {cache:"no-store"});
+    if(!respuesta.ok) throw new Error("HTTP " + respuesta.status);
+    const data = await respuesta.json();
+
+    if(data && data.acceso === true){
+      sessionStorage.setItem("usuario", data.usuario || usuario);
+      sessionStorage.setItem("nombreUsuario", data.nombre || usuario);
+      sessionStorage.setItem("rol", data.rol || "");
+
+      status.textContent = "Acceso correcto.";
+      mostrarAplicacion();
+      await cargarPlantillas();
+      await cargarContactos();
+      await cargarGaleriaServidor();
+      return;
+    }
+
+    error.textContent = data?.mensaje || "Usuario o contraseña incorrectos.";
+  } catch(e) {
+    console.error(e);
+    error.textContent = "No fue posible validar el acceso.";
+  } finally {
+    btn.disabled = false;
+    status.textContent = "";
+  }
+}
+
+function mostrarAplicacion(){
+  const gate = document.getElementById("loginGate");
+  const app = document.getElementById("appRoot");
+
+  const nombre = sessionStorage.getItem("nombreUsuario") || sessionStorage.getItem("usuario") || "USUARIO";
+  const rol = sessionStorage.getItem("rol") || "Sesión activa";
+
+  const usuarioActual = document.getElementById("usuarioActual");
+  const rolActual = document.getElementById("rolActual");
+  if(usuarioActual) usuarioActual.textContent = nombre.toUpperCase();
+  if(rolActual) rolActual.textContent = rol.toUpperCase();
+
+  app.classList.add("visible");
+  gate.classList.add("hidden");
+  document.body.classList.remove("login-open");
+}
+
+function cerrarSesion(){
+  sessionStorage.removeItem("usuario");
+  sessionStorage.removeItem("nombreUsuario");
+  sessionStorage.removeItem("nombre");
+  sessionStorage.removeItem("rol");
+  location.reload();
+}
+
+
+
+//////////////////////////////////////////////////
+// ☁️ CLOUDINARY HAPPY MOMENTS
+//////////////////////////////////////////////////
+const CLOUDINARY_CLOUD_NAME = "c0bhiaeq";
+const CLOUDINARY_UPLOAD_PRESET = "HappyMoments";
+
+let cloudinaryWidget = null;
+let archivoGaleriaSeleccionado = null;
+let galeriaServidor = [];
+
+/**
+ * Devuelve la copia en memoria de la galería cargada desde Google Sheets.
+ * Ya no usamos localStorage como fuente principal.
+ */
+function obtenerGaleriaLocal(){
+  return Array.isArray(galeriaServidor) ? galeriaServidor : [];
+}
+
+function guardarGaleriaLocal(lista){
+  galeriaServidor = Array.isArray(lista) ? lista : [];
+}
+
+/**
+ * Carga la galería central desde Google Sheets mediante Apps Script.
+ */
+async function cargarGaleriaServidor(){
+  try{
+    const res = await fetch(SCRIPT_URL + "?tipo=galeria&t=" + Date.now(), {cache:"no-store"});
+    if(!res.ok) throw new Error("HTTP " + res.status);
+
+    const data = await res.json();
+    galeriaServidor = Array.isArray(data) ? data : [];
+
+    renderGaleriaMedia();
+    renderVideoteca();
+    recargarGaleriaHappy();
+  }catch(error){
+    console.error("Error cargando galería desde Google Sheets:", error);
+    galeriaServidor = [];
+    renderGaleriaMedia();
+  }
+}
+
+/**
+ * Guarda la referencia del archivo Cloudinary en Google Sheets.
+ * Cloudinary conserva el archivo físico; Sheets conserva el catálogo compartido.
+ */
+async function registrarArchivoCloudinary(info){
+  const url = info.secure_url || info.url || "";
+  if(!url) return;
+
+  const item = {
+    public_id: info.public_id || url,
+    secure_url: url,
+    resource_type: info.resource_type || "image",
+    format: info.format || "",
+    original_filename: info.original_filename || info.public_id || "Archivo",
+    created_at: info.created_at || new Date().toISOString()
+  };
+
+  try{
+    const res = await fetch(SCRIPT_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain"},
+      body:JSON.stringify({
+        tipoOperacion:"guardarGaleria",
+        nombre:item.original_filename,
+        url:item.secure_url,
+        tipo:item.resource_type,
+        public_id:item.public_id,
+        formato:item.format,
+        fecha:item.created_at
+      })
+    });
+
+    const data = await res.json();
+    if(data && data.success === false){
+      throw new Error(data.error || "No fue posible guardar la galería");
+    }
+
+    await cargarGaleriaServidor();
+  }catch(error){
+    console.error("Error guardando archivo en la galería central:", error);
+    alert("El archivo se subió a Cloudinary, pero no se pudo registrar en Google Sheets.");
+  }
+}
+
+function abrirCloudinaryUpload(){
+  if(!window.cloudinary){
+    alert("No fue posible cargar Cloudinary. Revisa tu conexión a Internet.");
+    return;
+  }
+
+  if(!cloudinaryWidget){
+    cloudinaryWidget = cloudinary.createUploadWidget({
+      cloudName: CLOUDINARY_CLOUD_NAME,
+      uploadPreset: CLOUDINARY_UPLOAD_PRESET,
+      sources: ["local", "url", "camera"],
+      multiple: false,
+      resourceType: "auto",
+      clientAllowedFormats: ["png","jpg","jpeg","webp","gif","mp4","mov","webm"],
+      maxImageFileSize: 12000000,
+      maxVideoFileSize: 100000000,
+      showAdvancedOptions: false,
+      cropping: false,
+      styles: {
+        palette: {
+          window: "#FFFFFF",
+          windowBorder: "#6D28D9",
+          tabIcon: "#EF1238",
+          menuIcons: "#6D28D9",
+          textDark: "#24134F",
+          textLight: "#FFFFFF",
+          link: "#EF1238",
+          action: "#EF1238",
+          inactiveTabIcon: "#8E7BA5",
+          error: "#DC2626",
+          inProgress: "#6D28D9",
+          complete: "#159447",
+          sourceBg: "#F7F3FB"
+        }
+      }
+    }, async (error, result) => {
+      if(error){
+        console.error("Cloudinary Upload Widget:", error);
+        return;
+      }
+
+      if(result && result.event === "success"){
+        const info = result.info || {};
+        await registrarArchivoCloudinary(info);
+
+        const input = document.getElementById("urlMedia");
+        input.value = info.secure_url || "";
+        actualizarVistaPreviaMedia();
+
+        recargarGaleriaHappy();
+
+        alert(
+          info.resource_type === "video"
+            ? "🎬 Video subido correctamente a Cloudinary."
+            : "🖼️ Imagen subida correctamente a Cloudinary."
+        );
+      }
+    });
+  }
+
+  cloudinaryWidget.open();
+}
+
+function abrirGaleriaHappy(){
+  archivoGaleriaSeleccionado = null;
+  document.getElementById("galleryUseButton").disabled = true;
+  document.getElementById("galleryOverlay").classList.add("open");
+  recargarGaleriaHappy();
+  renderVideoteca();
+}
+
+function cerrarGaleriaHappy(){
+  document.getElementById("galleryOverlay").classList.remove("open");
+}
+
+function recargarGaleriaHappy(){
+  const grid = document.getElementById("galleryGrid");
+  const lista = obtenerGaleriaLocal();
+
+  if(!lista.length){
+    grid.innerHTML = `
+      <div class="gallery-empty">
+        <div style="font-size:54px">☁️</div>
+        <h3 style="margin:12px 0 6px">Tu galería todavía está vacía</h3>
+        <div>Sube tu primera imagen o video desde el botón <b>Subir nuevo archivo</b>.</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = lista.map((item, index) => {
+    const esVideo = item.resource_type === "video" ||
+      /\.(mp4|mov|webm)(\?.*)?$/i.test(item.secure_url || "");
+
+    const media = esVideo
+      ? `<video src="${escapeHtmlAttr(item.secure_url)}" muted preload="metadata"></video>`
+      : `<img src="${escapeHtmlAttr(item.secure_url)}" alt="">`;
+
+    return `
+      <div class="gallery-item" data-index="${index}" onclick="seleccionarArchivoGaleria(${index}, this)">
+        <button class="gallery-delete" onclick="event.stopPropagation(); eliminarArchivoGaleriaLocal(${index})" title="Quitar de esta galería">🗑</button>
+        <div class="gallery-thumb">${media}</div>
+        <div class="gallery-meta">
+          <strong>${escapeHtml(item.original_filename || "Archivo")}</strong>
+          <small>${esVideo ? "🎬 Video" : "🖼️ Imagen"} · Cloudinary</small>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function seleccionarArchivoGaleria(index, elemento){
+  const lista = obtenerGaleriaLocal();
+  archivoGaleriaSeleccionado = lista[index] || null;
+
+  document.querySelectorAll(".gallery-item").forEach(x => x.classList.remove("selected"));
+  if(elemento) elemento.classList.add("selected");
+
+  document.getElementById("galleryUseButton").disabled = !archivoGaleriaSeleccionado;
+}
+
+function usarArchivoGaleria(){
+  if(!archivoGaleriaSeleccionado) return;
+
+  document.getElementById("urlMedia").value = archivoGaleriaSeleccionado.secure_url;
+  actualizarVistaPreviaMedia();
+  cerrarGaleriaHappy();
+}
+
+async function eliminarArchivoGaleriaLocal(index){
+  const lista = obtenerGaleriaLocal();
+  const item = lista[index];
+  if(!item) return;
+
+  if(!confirm("¿Quitar este archivo de la galería compartida? El archivo seguirá existiendo en Cloudinary.")){
+    return;
+  }
+
+  try{
+    const res = await fetch(SCRIPT_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain"},
+      body:JSON.stringify({
+        tipoOperacion:"borrarGaleria",
+        public_id:item.public_id || "",
+        url:item.secure_url || ""
+      })
+    });
+
+    const data = await res.json();
+    if(data && data.success === false){
+      throw new Error(data.error || "No fue posible borrar el registro");
+    }
+
+    archivoGaleriaSeleccionado = null;
+    document.getElementById("galleryUseButton").disabled = true;
+    await cargarGaleriaServidor();
+  }catch(error){
+    console.error(error);
+    alert("No fue posible quitar el archivo de la galería.");
+  }
+}
+
+function actualizarVistaPreviaMedia(){
+  const url = String(document.getElementById("urlMedia").value || "").trim();
+  const box = document.getElementById("mediaPreviewBox");
+  const content = document.getElementById("mediaPreviewContent");
+
+  if(!url){
+    box.classList.remove("active");
+    content.innerHTML = "";
+    return;
+  }
+
+  const esVideo =
+    /\.(mp4|mov|webm|avi)(\?.*)?$/i.test(url) ||
+    url.includes("/video/upload/");
+
+  if(esVideo){
+    content.innerHTML = `<video src="${escapeHtmlAttr(url)}" controls preload="metadata"></video>`;
+  }else{
+    content.innerHTML = `<img src="${escapeHtmlAttr(url)}" alt="Vista previa de tarjeta" onerror="this.outerHTML='<div style=&quot;padding:30px;text-align:center;color:#8a728f&quot;>No fue posible mostrar una vista previa, pero la URL permanecerá guardada.</div>'">`;
+  }
+
+  box.classList.add("active");
+}
+
+function limpiarMediaSeleccionada(){
+  document.getElementById("urlMedia").value = "";
+  actualizarVistaPreviaMedia();
+}
+
+function escapeHtml(text){
+  return String(text ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function escapeHtmlAttr(text){
+  return escapeHtml(text);
+}
+
+// Cerrar modal al tocar fuera de la ventana.
+document.addEventListener("click", function(e){
+  const overlay = document.getElementById("galleryOverlay");
+  if(e.target === overlay) cerrarGaleriaHappy();
+});
+
+
+
+
+//////////////////////////////////////////////////
+// 🖼️ GALERÍA HAPPY MOMENTS
+//////////////////////////////////////////////////
+function renderGaleriaMedia(){
+  const grid = document.getElementById("mediaGalleryGrid");
+  if(!grid) return;
+
+  const items = obtenerGaleriaLocal();
+
+  if(!items.length){
+    grid.innerHTML = `
+      <div class="video-empty">
+        <div style="font-size:58px">🖼️🎬</div>
+        <h3 style="margin:12px 0 7px">Aún no hay archivos en tu galería</h3>
+        <div>Sube una imagen o video desde Happy Moments o pega una URL de Cloudinary.</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = items.map((item, index) => {
+    const urlRaw = String(item.secure_url || "");
+    const esVideo =
+      item.resource_type === "video" ||
+      /\.(mp4|mov|webm|avi)(\?.*)?$/i.test(urlRaw) ||
+      urlRaw.includes("/video/upload/");
+
+    const media = esVideo
+      ? `<video src="${escapeHtmlAttr(urlRaw)}" controls preload="metadata"></video>`
+      : `<img src="${escapeHtmlAttr(urlRaw)}" alt="" style="width:100%;height:100%;object-fit:contain;background:#140522">`;
+
+    const title = escapeHtml(item.original_filename || item.public_id || (esVideo ? "Video" : "Imagen"));
+
+    return `
+      <div class="video-card">
+        <div class="video-player">${media}</div>
+        <div class="video-card-body">
+          <div class="video-card-title">${title}</div>
+          <div class="video-card-url">${escapeHtml(urlRaw)}</div>
+          <div class="video-card-actions">
+            <button class="btn media" onclick="copiarUrlMedia('${encodeURIComponent(urlRaw)}')">📋 Copiar URL</button>
+            <button class="btn save" onclick="usarMediaEnTarjeta('${encodeURIComponent(urlRaw)}')">✅ Usar en tarjeta</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+async function agregarMediaManual(){
+  const input = document.getElementById("mediaUrlManual");
+  const url = String(input.value || "").trim();
+
+  if(!url){
+    alert("Pega primero una URL de imagen o video.");
+    return;
+  }
+
+  const esVideo =
+    /\.(mp4|mov|webm|avi)(\?.*)?$/i.test(url) ||
+    url.includes("/video/upload/");
+
+  await registrarArchivoCloudinary({
+    secure_url: url,
+    resource_type: esVideo ? "video" : "image",
+    original_filename: esVideo ? "Video agregado manualmente" : "Imagen agregada manualmente",
+    created_at: new Date().toISOString()
+  });
+
+  input.value = "";
+}
+
+async function copiarUrlMedia(encodedUrl){
+  const url = decodeURIComponent(encodedUrl);
+
+  try{
+    await navigator.clipboard.writeText(url);
+    mostrarToastCopiado();
+  }catch(e){
+    window.prompt("Copia la URL:", url);
+  }
+}
+
+function usarMediaEnTarjeta(encodedUrl){
+  const url = decodeURIComponent(encodedUrl);
+  const input = document.getElementById("urlMedia");
+  input.value = url;
+  actualizarVistaPreviaMedia();
+  activarTab("plantilla");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+//////////////////////////////////////////////////
+// 🎬 VIDEOTECA HAPPY MOMENTS
+//////////////////////////////////////////////////
+function obtenerVideosGaleria(){
+  return obtenerGaleriaLocal().filter(item => {
+    const url = String(item.secure_url || "");
+    return item.resource_type === "video" ||
+      /\.(mp4|mov|webm|avi)(\?.*)?$/i.test(url) ||
+      url.includes("/video/upload/");
+  });
+}
+
+function renderVideoteca(){
+  const grid = document.getElementById("videoGrid");
+  if(!grid) return;
+
+  const videos = obtenerVideosGaleria();
+
+  if(!videos.length){
+    grid.innerHTML = `
+      <div class="video-empty">
+        <div style="font-size:58px">🎬</div>
+        <h3 style="margin:12px 0 7px">Aún no hay videos en tu videoteca</h3>
+        <div>Sube uno desde Happy Moments o pega una URL de Cloudinary.</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = videos.map((item, index) => {
+    const title = escapeHtml(item.original_filename || item.public_id || "Video");
+    const url = escapeHtmlAttr(item.secure_url || "");
+    return `
+      <div class="video-card">
+        <div class="video-player">
+          <video src="${url}" controls preload="metadata"></video>
+        </div>
+        <div class="video-card-body">
+          <div class="video-card-title">${title}</div>
+          <div class="video-card-url">${escapeHtml(item.secure_url || "")}</div>
+          <div class="video-card-actions">
+            <button class="btn media" onclick="copiarUrlVideo('${encodeURIComponent(item.secure_url || "")}')">📋 Copiar URL</button>
+            <button class="btn save" onclick="usarVideoEnTarjeta('${encodeURIComponent(item.secure_url || "")}')">✅ Usar en tarjeta</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function agregarVideoManual(){
+  const input = document.getElementById("videoUrlManual");
+  const url = String(input.value || "").trim();
+
+  if(!url){
+    alert("Pega primero una URL de video.");
+    return;
+  }
+
+  const esVideo =
+    /\.(mp4|mov|webm|avi)(\?.*)?$/i.test(url) ||
+    url.includes("/video/upload/");
+
+  if(!esVideo){
+    alert("La URL no parece corresponder a un video compatible.");
+    return;
+  }
+
+  registrarArchivoCloudinary({
+    secure_url: url,
+    resource_type: "video",
+    original_filename: "Video agregado manualmente",
+    created_at: new Date().toISOString()
+  });
+
+  input.value = "";
+  renderVideoteca();
+}
+
+async function copiarUrlVideo(encodedUrl){
+  const url = decodeURIComponent(encodedUrl);
+
+  try{
+    await navigator.clipboard.writeText(url);
+    mostrarToastCopiado();
+  }catch(e){
+    window.prompt("Copia la URL:", url);
+  }
+}
+
+function mostrarToastCopiado(){
+  const toast = document.getElementById("copyToast");
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 1800);
+}
+
+function usarVideoEnTarjeta(encodedUrl){
+  const url = decodeURIComponent(encodedUrl);
+  const input = document.getElementById("urlMedia");
+  input.value = url;
+  actualizarVistaPreviaMedia();
+  activarTab("plantilla");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUX-hDUuKcj_we3d9GHsT8MCm0W0Er-nYKHqZsZigpmk1S6zWAuYMtPiFRV4uDjc0m/exec";
+
+let contactos = [];
+let plantillas = [];
+
+
+
+function activarTab(id){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.dataset.tab===id));
+  document.querySelectorAll(".nav-item[data-tab]").forEach(t=>t.classList.toggle("active", t.dataset.tab===id));
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  const destino = document.getElementById(id);
+  if(destino) destino.classList.add("active");
+}
+
+
+
+async function cargarContactos(){
+  let res = await fetch(SCRIPT_URL);
+  contactos = await res.json();
+  render();
+}
+
+async function agregarContacto(){
+  let nombre = document.getElementById("nombre").value;
+  let telefono = document.getElementById("telefono").value;
+  let marca = document.getElementById("marca").value;
+  let fecha = document.getElementById("fecha").value;
+
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({nombre,telefono,marca,fecha})
+  });
+
+  alert("✅ Guardado");
+  cargarContactos();
+}
+
+async function borrarContacto(telefono){
+  if(!confirm("¿Eliminar contacto?")) return;
+
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({accion:"borrar",telefono})
+  });
+
+  cargarContactos();
+}
+
+async function cargarPlantillas(){
+  let res = await fetch(SCRIPT_URL + "?tipo=plantillas");
+  plantillas = await res.json();
+  renderPlantillas();
+}
+
+async function guardarPlantilla(){
+  let marca = document.getElementById("marcaPlantilla").value;
+  let plantilla = document.getElementById("textoPlantilla").value;
+  let archivo = document.getElementById("urlMedia").value;
+
+  await fetch(SCRIPT_URL,{
+    method:"POST",
+    headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({
+      tipoOperacion:"guardarPlantilla",
+      marca,
+      plantilla,
+      archivoURLmanual:archivo
+    })
+  });
+
+  alert("✅ Plantilla guardada");
+  cargarPlantillas();
+}
+
+function render(){
+  let t = document.getElementById("tabla");
+  t.innerHTML = "";
+
+  contactos.forEach(c=>{
+    let estadoColor = c.estado === "ENVIADO" ? "#159447" : "#8b8497";
+
+    t.innerHTML += `
+      <tr>
+        <td>${c.nombre}</td>
+        <td>${c.telefono}</td>
+        <td>${c.marca}</td>
+        <td>${c.fecha}</td>
+        <td style="color:${estadoColor};font-weight:bold;">${c.estado || "PENDIENTE"}</td>
+        <td>
+          <button class="send" data-tel="${c.telefono}" data-nombre="${c.nombre}" data-marca="${c.marca}" onclick="enviarDesdeBoton(this)">📲</button>
+          <button class="delete" onclick="borrarContacto('${c.telefono}')">🗑</button>
+        </td>
+      </tr>`;
+  });
+}
+
+function renderPlantillas(){
+  let t = document.getElementById("tablaPlantillas");
+  t.innerHTML = "";
+
+  plantillas.forEach(p=>{
+    t.innerHTML += `
+      <tr>
+        <td>${p.marca}</td>
+        <td>${p.plantilla}</td>
+        <td>${p.archivo || ''}</td>
+        <td><button class="delete" onclick="borrarPlantilla('${p.marca}')">🗑</button></td>
+      </tr>`;
+  });
+}
+
+function borrarPlantilla(marca){
+  if(!confirm("¿Eliminar plantilla de " + marca + "?")) return;
+
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({tipoOperacion:"borrarPlantilla",marca})
+  }).then(()=>cargarPlantillas());
+}
+
+function enviarDesdeBoton(btn){
+  let telefono = btn.dataset.tel.replace(/\D/g,'');
+  let nombre = btn.dataset.nombre;
+  let marca = btn.dataset.marca;
+  enviarAhora(telefono,nombre,marca);
+}
+
+function tipoMedia(url){
+  if(/\.(jpg|jpeg|png|webp)$/i.test(url)) return "imagen";
+  if(/\.(mp4|mov|avi)$/i.test(url)) return "video";
+  return "ninguno";
+}
+
+function enviarAhora(telefono,nombre,marca){
+  let plantilla = plantillas.find(p =>
+    p.marca.trim().toUpperCase() === marca.trim().toUpperCase()
+  );
+
+  let mensaje = plantilla
+    ? plantilla.plantilla.replace("{Nombre}",nombre)
+    : "Hola " + nombre;
+
+  let media = plantilla ? plantilla.archivo : "";
+  let tipo = tipoMedia(media);
+
+  if(tipo === "imagen"){
+    window.open(`https://api.ultramsg.com/instance185034/messages/image?token=n8ynusu1nasvrnhb&to=${telefono}&image=${encodeURIComponent(media)}&caption=${encodeURIComponent(mensaje)}`);
+  } else {
+    window.open(`https://api.ultramsg.com/instance185034/messages/chat?token=n8ynusu1nasvrnhb&to=${telefono}&body=${encodeURIComponent(mensaje)}`);
+  }
+}
+
+</script>
+<div class="build-badge">GALERÍA v4</div>
+</body>
+</html>
