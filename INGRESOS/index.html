@@ -1,0 +1,1254 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#1f4fd6">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%236a5cff'/%3E%3Cstop offset='.5' stop-color='%232b7cff'/%3E%3Cstop offset='1' stop-color='%2344e0ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M32 3 55 16v32L32 61 9 48V16Z' fill='url(%23g)'/%3E%3Cpath d='M20 44V20h7l10 14V20h7v24h-7L27 30v14Z' fill='white'/%3E%3Cpath d='M43 17h8v8M36 31l15-14' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <title>NEXUS ONE | Enterprise Intelligence Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<section id="loginScreen" class="login-screen">
+  <div class="login-shell">
+    <aside class="login-visual">
+      <div class="login-brand">
+        <div class="brand-mark nexus-mark signature-mark">
+
+<svg class="signature-logo" viewBox="0 0 72 72" aria-hidden="true">
+  <defs>
+    <linearGradient id="sigGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8a6cff"/>
+      <stop offset="45%" stop-color="#2f74ff"/>
+      <stop offset="100%" stop-color="#43e3ff"/>
+    </linearGradient>
+  </defs>
+  <path d="M36 4 62 19v34L36 68 10 53V19Z" fill="url(#sigGrad)"/>
+  <path d="M22 48V24h8l12 16V24h8v24h-8L30 32v16Z" fill="#fff"/>
+  <path d="M48 19h10v10M40 36l18-17" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+</div>
+        <div><small>BUSINESS INTELLIGENCE</small><h1>NEXUS</h1><span class="mobility-signature">Mobility ADO</span></div>
+      </div>
+      <div class="login-message">
+        <span class="pill dark-pill">ACCESO SEGURO</span>
+        <h2>Información ejecutiva, disponible para las personas autorizadas.</h2>
+        <p>Consulta ingresos, históricos, comparativos y aplicaciones desde una sola plataforma.</p>
+      </div>
+      <div class="login-features">
+        <div><span>✓</span><p><b>Sesión protegida</b><small>Validación mediante Google Apps Script</small></p></div>
+        <div><span>✓</span><p><b>Datos centralizados</b><small>TRT, TRTVB, AAO y AAOVB</small></p></div>
+        <div><span>✓</span><p><b>Acceso por usuario</b><small>Nombre y rol dentro de la plataforma</small></p></div>
+      </div>
+    </aside>
+    <main class="login-form-card">
+      <div class="mobile-login-brand"><div class="brand-mark nexus-mark signature-mark">
+
+<svg class="signature-logo" viewBox="0 0 72 72" aria-hidden="true">
+  <defs>
+    <linearGradient id="sigGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8a6cff"/>
+      <stop offset="45%" stop-color="#2f74ff"/>
+      <stop offset="100%" stop-color="#43e3ff"/>
+    </linearGradient>
+  </defs>
+  <path d="M36 4 62 19v34L36 68 10 53V19Z" fill="url(#sigGrad)"/>
+  <path d="M22 48V24h8l12 16V24h8v24h-8L30 32v16Z" fill="#fff"/>
+  <path d="M48 19h10v10M40 36l18-17" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+</div><b>NEXUS</b></div>
+      <span class="login-kicker">BIENVENIDO</span>
+      <h2>Iniciar sesión</h2>
+      <p>Selecciona tu usuario y después escribe tu contraseña.</p>
+      <button id="refreshUsersBtn" class="refresh-users-btn" type="button">↻ Actualizar lista de usuarios</button>
+      <form id="loginForm">
+        <label>Usuario
+          <div class="input-icon select-icon"><span>◉</span>
+            <select id="loginUser" autocomplete="username" required>
+              <option value="">Cargando usuarios...</option>
+            </select>
+          </div>
+        </label>
+        <label>Contraseña
+          <div class="input-icon"><span>◆</span><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Escribe tu contraseña"><button id="togglePassword" type="button">Ver</button></div>
+        </label>
+        <div id="loginError" class="login-error hidden"></div>
+        <button id="loginBtn" class="login-submit" type="submit"><span>Ingresar a la plataforma</span><b>→</b></button>
+      </form>
+      <div class="login-security"><span>🔒</span> Las contraseñas no se almacenan en GitHub ni en el navegador.</div>
+    </main>
+  </div>
+</section>
+
+
+<section id="startupOverlay" class="startup-overlay hidden">
+  <div class="startup-content">
+    <div class="startup-logo-wrap">
+      <svg class="startup-logo" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="startupGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7a5cff"/>
+            <stop offset="48%" stop-color="#2f74ff"/>
+            <stop offset="100%" stop-color="#45e1ff"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 3 55 16v32L32 61 9 48V16Z" fill="url(#startupGrad)"/>
+        <path d="M20 44V20h7l10 14V20h7v24h-7L27 30v14Z" fill="#fff"/>
+        <path d="M43 17h8v8M36 31l15-14" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="startup-eyebrow">NEXUS ENTERPRISE</span>
+    <h1>Bienvenido, <span id="startupUserName">Usuario</span></h1>
+    <p>Enterprise Intelligence Platform · Mobility ADO</p>
+    <div class="startup-status">
+      <span><i></i>API</span>
+      <span><i></i>Google Sheets</span>
+      <span><i></i>Seguridad</span>
+      <span><i></i>NEXUS AI</span>
+    </div>
+    <div class="startup-progress"><i></i></div>
+  </div>
+</section>
+
+<div class="app-layout" id="appLayout">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand">
+      <div class="brand-mark nexus-mark signature-mark">
+
+<svg class="signature-logo" viewBox="0 0 72 72" aria-hidden="true">
+  <defs>
+    <linearGradient id="sigGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8a6cff"/>
+      <stop offset="45%" stop-color="#2f74ff"/>
+      <stop offset="100%" stop-color="#43e3ff"/>
+    </linearGradient>
+  </defs>
+  <path d="M36 4 62 19v34L36 68 10 53V19Z" fill="url(#sigGrad)"/>
+  <path d="M22 48V24h8l12 16V24h8v24h-8L30 32v16Z" fill="#fff"/>
+  <path d="M48 19h10v10M40 36l18-17" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+</div>
+      <div><small>BUSINESS INTELLIGENCE</small><b>NEXUS</b></div>
+    </div>
+    <nav class="side-nav">
+<button class="active" data-view="one"><span>◉</span>Inicio</button>
+<button data-view="ingresos"><span>▥</span>Analytics</button>
+<button data-view="ai"><span>✦</span>NEXUS AI</button>
+<button data-view="reportes"><span>▤</span>Reportes</button>
+<button data-view="publisher" class="publisher-nav"><span>⇧</span>Publisher</button>
+<button data-view="configuracion"><span>⚙</span>Configuración</button>
+<button data-view="usuarios" class="admin-nav"><span>👥</span>Usuarios</button>
+</nav>
+    <div class="product-build">
+        <small>NEXUS ENTERPRISE</small>
+        <b>2030</b>
+        <span>Build 3000.0713</span>
+      </div>
+      <div class="side-footer">
+      <span class="online-dot"></span>
+      <div><small>FUENTE ACTIVA</small><b>Google Sheets</b></div>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="app-header">
+      <button id="menuBtn" class="menu-btn">☰</button>
+      <div>
+        <small>BUSINESS INTELLIGENCE PLATFORM</small>
+        <h1 id="pageTitle">Centro ejecutivo</h1>
+      </div>
+      <div class="header-tools">
+        <span id="headerPeriod" class="period-badge">JUNIO 2026</span>
+        <span id="headerRoleBadge" class="header-role-badge">USUARIO</span><button id="presentationModeBtn" class="presentation-mode-btn" title="Modo presentación">▣ Presentación</button>
+        <div class="system-status-strip">
+          <span><i class="ok"></i>API</span>
+          <span><i class="ok"></i>Sheets</span>
+          <span><i id="historyStatusDot"></i>Histórico</span>
+        </div>
+        <div class="notification-menu">
+          <button id="notificationBtn" class="notification-btn" title="Notificaciones">🔔<span id="notificationCount">0</span></button>
+          <div id="notificationPanel" class="notification-panel hidden">
+            <div class="notification-head"><div><small>CENTRO DE AVISOS</small><h3>Notificaciones</h3></div><button id="clearNotificationsBtn">Limpiar</button></div>
+            <div id="notificationList" class="notification-list"></div>
+          </div>
+        </div>
+        <div class="user-menu">
+          <button id="userMenuBtn" class="user-chip"><span id="userInitial">U</span><div><b id="userName">Usuario</b><small id="userRole">Consulta</small></div><i>⌄</i></button>
+          <div id="userDropdown" class="user-dropdown hidden">
+            <div><b id="dropUserName">Usuario</b><small id="dropUserId">—</small></div>
+            <button id="profileBtn" class="profile-option">Mi perfil</button>
+            <button id="logoutBtn">Cerrar sesión</button>
+          </div>
+        </div>
+        <button id="themeBtn" class="icon-btn" title="Cambiar tema">◐</button>
+      </div>
+    </header>
+
+    <main class="content-shell">
+      
+      
+      <section class="view active" data-view-panel="one">
+<section class="one-hero glass-panel"><div><span class="one-kicker">NEXUS ONE · ENTERPRISE INTELLIGENCE</span><p id="oneGreetingLabel">Buenos días</p><h2 id="oneGreetingName">Usuario</h2><p>Consulta, analiza, publica y reporta desde una experiencia unificada.</p><div id="autoLoadStatus" class="autoload-status hidden">
+        <i></i><span id="autoLoadStatusText">Sincronizando Google Sheets...</span>
+      </div>
+      <div class="one-hero-actions"><button id="oneRefreshBtn">↻ Actualizar datos</button><button id="oneReportBtn">▤ Generar informe</button></div></div><div class="one-health"><div id="oneHealthRing"><strong id="oneHealthScore">—</strong><span>Salud general</span></div><small id="oneHealthMessage">Sin evaluación</small></div></section>
+<section class="one-global-search glass-panel"><span>⌕</span><input id="oneSearchInput" placeholder="¿Qué deseas consultar? Prueba TRT, reporte o publicar..." autocomplete="off"><kbd>Ctrl K</kbd></section><div id="oneSearchResults" class="one-search-results hidden"></div>
+<section class="one-kpis"><article class="glass-panel"><small>INGRESO GENERAL</small><strong id="oneTotal">$0.00</strong><span id="oneTotalTrend">Sin comparativo</span></article><article class="glass-panel"><small>MARCA LÍDER</small><strong id="oneLeader">—</strong><span id="oneLeaderShare">Pendiente</span></article><article class="glass-panel"><small>CONCEPTO PRINCIPAL</small><strong id="oneConcept">—</strong><span id="oneConceptShare">Pendiente</span></article><article class="glass-panel"><small>ALERTAS</small><strong id="oneAlerts">0</strong><span id="oneAlertsDetail">Sin alertas críticas</span></article></section>
+<section class="one-grid"><article class="glass-panel one-panel"><div class="one-title"><div><small>TOP INSIGHTS</small><h3>Lo más importante del periodo</h3></div><button id="oneOpenAI">Abrir NEXUS AI →</button></div><div id="oneInsights"><div class="one-empty">Actualiza los datos para generar hallazgos.</div></div></article><article class="glass-panel one-panel"><div class="one-title"><div><small>ACCIONES RÁPIDAS</small><h3>Continuar trabajo</h3></div></div><div class="one-actions"><button data-one-go="reportes"><span>▤</span><div><b>Generar reporte</b><small>PDF y resumen ejecutivo</small></div></button><button data-one-go="publisher" data-min-role="GERENCIA"><span>⇧</span><div><b>Publicar periodo</b><small>Actualizar Google Sheets</small></div></button><button data-one-go="ingresos"><span>▥</span><div><b>Abrir Analytics</b><small>Marcas y gráficas</small></div></button><button data-one-go="ai"><span>✦</span><div><b>Preguntar a NEXUS</b><small>Resumen y recomendaciones</small></div></button></div></article></section>
+<section class="one-grid"><article class="glass-panel one-panel one-chart"><div class="one-title"><div><small>PANORAMA</small><h3>Participación por marca</h3></div><span id="onePeriodBadge">—</span></div><canvas id="oneBrandChart"></canvas></article><article class="glass-panel one-panel"><div class="one-title"><div><small>ACTIVIDAD</small><h3>Eventos recientes</h3></div></div><div id="oneActivity"></div></article></section>
+</section>
+<section class="view" data-view-panel="workspace">
+        <section class="workspace-hero">
+          <div>
+            <span class="pill">NEXUS ENTERPRISE WORKSPACE</span>
+            <p class="workspace-greeting-label">Tu espacio de trabajo</p>
+            <h2 id="workspaceGreeting">Bienvenido</h2>
+            <p>Accede a los módulos principales, revisa el estado de la operación y continúa desde donde lo dejaste.</p>
+          </div>
+          <div class="workspace-hero-status">
+            <div><small>SISTEMA</small><b><i class="ok"></i>Operativo</b></div>
+            <div><small>ROL</small><b id="workspaceRole">USUARIO</b></div>
+            <div><small>PERIODO</small><b id="workspacePeriod">—</b></div>
+          </div>
+        </section>
+
+        <section class="workspace-modules" id="workspaceModules">
+          <button class="workspace-tile ingresos-tile" data-workspace-go="ingresos">
+            <span class="tile-icon">▥</span>
+            <div><small>MÓDULO</small><h3>Ingresos 360</h3><p>Concentrado general, marcas y exportación.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile command-tile" data-workspace-go="command">
+            <span class="tile-icon">◈</span>
+            <div><small>CONTROL</small><h3>Command Center</h3><p>Estado operativo, alertas y actividad.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile ai-tile" data-workspace-go="ai">
+            <span class="tile-icon">✦</span>
+            <div><small>ASISTENTE</small><h3>NEXUS AI</h3><p>Pregunta, analiza y prepara acciones ejecutivas.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile forecast-tile" data-workspace-go="forecast" data-min-role="SUPERVISOR">
+            <span class="tile-icon">⌁</span>
+            <div><small>PLANEACIÓN</small><h3>Pronóstico y Metas</h3><p>Proyección mensual y avance por marca.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile intelligence-tile" data-workspace-go="inteligencia" data-min-role="SUPERVISOR">
+            <span class="tile-icon">◉</span>
+            <div><small>ANÁLISIS</small><h3>Centro de Inteligencia</h3><p>Semáforo, alertas y brief ejecutivo.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile direction-tile" data-workspace-go="direccion" data-min-role="GERENCIA">
+            <span class="tile-icon">◆</span>
+            <div><small>DIRECCIÓN</small><h3>Dirección General</h3><p>Tendencia anual, ranking y recomendaciones.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile compare-tile" data-workspace-go="comparativos" data-min-role="SUPERVISOR">
+            <span class="tile-icon">↗</span>
+            <div><small>HISTÓRICO</small><h3>Comparativos</h3><p>Mes contra mes por marca y concepto.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile reports-tile" data-workspace-go="reportes">
+            <span class="tile-icon">▤</span>
+            <div><small>SALIDA</small><h3>Reportes</h3><p>PDF ejecutivo, Excel y resumen para correo.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile publisher-tile" data-workspace-go="publisher" data-min-role="GERENCIA">
+            <span class="tile-icon">⇧</span>
+            <div><small>DATOS</small><h3>Data Publisher</h3><p>Importa, valida, publica y restaura periodos.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile users-tile admin-only" data-workspace-go="usuarios" data-min-role="ADMINISTRADOR">
+            <span class="tile-icon">👥</span>
+            <div><small>ADMINISTRACIÓN</small><h3>Usuarios</h3><p>Roles, accesos y contraseñas.</p></div>
+            <b>→</b>
+          </button>
+          <button class="workspace-tile settings-tile" data-workspace-go="configuracion" data-min-role="GERENCIA">
+            <span class="tile-icon">⚙</span>
+            <div><small>SISTEMA</small><h3>Configuración</h3><p>Estado técnico y respaldos.</p></div>
+            <b>→</b>
+          </button>
+        </section>
+
+        <section class="workspace-bottom-grid">
+          <article class="card workspace-overview-card">
+            <div class="section-head">
+              <div class="card-title"><small>VISTA RÁPIDA</small><h3>Resumen operativo</h3></div>
+              <button id="workspaceRefreshBtn" class="btn compact">↻ Actualizar</button>
+            </div>
+            <div id="workspaceOverview" class="workspace-overview">
+              <div><span>Ingreso general</span><strong id="workspaceTotal">$0.00</strong></div>
+              <div><span>Marca líder</span><strong id="workspaceLeader">—</strong></div>
+              <div><span>Salud</span><strong id="workspaceHealth">—</strong></div>
+              <div><span>Alertas</span><strong id="workspaceAlerts">0</strong></div>
+            </div>
+          </article>
+
+          <article class="card workspace-recent-card">
+            <div class="card-title"><small>CONTINUAR</small><h3>Actividad reciente</h3></div>
+            <div id="workspaceRecent"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="command">
+        <section class="command-hero">
+          <div class="command-title-block">
+            <span class="pill">NEXUS ENTERPRISE COMMAND CENTER</span>
+            <h2>Control ejecutivo en tiempo real</h2>
+            <p>Estado operativo, indicadores clave, alertas y actividad consolidada en una sola pantalla.</p>
+          </div>
+          <div class="command-actions">
+            <button id="commandRefreshBtn" class="btn primary large"><span>↻</span><div><b>Actualizar sistema</b><small>Sincronizar Google Sheets</small></div></button>
+            <button id="commandReportBtn" class="btn outline large"><span>▤</span><div><b>Generar reporte</b><small>Preparar vista ejecutiva</small></div></button>
+          </div>
+        </section>
+
+        <section class="enterprise-greeting">
+          <div>
+            <small>RESUMEN DE SESIÓN</small>
+            <h3 id="enterpriseGreeting">Buenos días</h3>
+            <p id="enterpriseRoleSummary">Tu plataforma está lista.</p>
+          </div>
+          <div class="enterprise-clock"><strong id="enterpriseClock">--:--</strong><span id="enterpriseDate">—</span></div>
+        </section>
+
+        <section class="command-status-bar">
+          <article><i class="ok"></i><div><small>API</small><b>Operativa</b></div></article>
+          <article><i class="ok"></i><div><small>GOOGLE SHEETS</small><b>Conectado</b></div></article>
+          <article><i id="commandHistoryDot"></i><div><small>HISTÓRICO</small><b id="commandHistoryState">Pendiente</b></div></article>
+          <article><i class="ok"></i><div><small>SESIÓN</small><b id="commandSessionState">Activa</b></div></article>
+          <article><i id="commandDataDot"></i><div><small>DATOS</small><b id="commandDataState">Sin actualizar</b></div></article>
+        </section>
+
+        <section class="command-kpis">
+          <article class="command-kpi primary-kpi">
+            <span>Ingreso general</span>
+            <strong id="commandTotal">$0.00</strong>
+            <small id="commandTotalDetail">Sin información cargada</small>
+            <div id="commandSparkline" class="command-sparkline"></div>
+          </article>
+          <article class="command-kpi">
+            <span>Tendencia</span>
+            <strong id="commandTrend">—</strong>
+            <small id="commandTrendDetail">Sin comparativo</small>
+          </article>
+          <article class="command-kpi">
+            <span>Marca líder</span>
+            <strong id="commandLeader">—</strong>
+            <small id="commandLeaderDetail">Pendiente</small>
+          </article>
+          <article class="command-kpi">
+            <span>Salud del negocio</span>
+            <div class="command-health-wrap">
+              <div id="commandHealthLight" class="command-health-light neutral"><i></i></div>
+              <div><strong id="commandHealth">—</strong><small id="commandHealthDetail">Sin evaluación</small></div>
+            </div>
+          </article>
+          <article class="command-kpi">
+            <span>Alertas activas</span>
+            <strong id="commandAlerts">0</strong>
+            <small id="commandAlertsDetail">Sin alertas críticas</small>
+          </article>
+          <article class="command-kpi">
+            <span>Última actualización</span>
+            <strong id="commandUpdated">—</strong>
+            <small id="commandUpdatedDetail">Pendiente</small>
+          </article>
+        </section>
+
+        <section class="command-main-grid">
+          <article class="card command-chart-card">
+            <div class="section-head">
+              <div class="card-title"><small>PANORAMA MULTIMARCA</small><h3>Ingresos por marca</h3></div>
+              <span id="commandPeriodLabel" class="period-badge">—</span>
+            </div>
+            <canvas id="commandBrandChart"></canvas>
+          </article>
+
+          <article class="card command-alert-card">
+            <div class="section-head">
+              <div class="card-title"><small>PRIORIDADES</small><h3>Alertas ejecutivas</h3></div>
+              <button id="clearCommandAlertsBtn" class="text-link">Limpiar</button>
+            </div>
+            <div id="commandAlertList" class="command-alert-list">
+              <div class="command-empty">Actualiza la información para detectar alertas.</div>
+            </div>
+          </article>
+        </section>
+
+        <section class="command-secondary-grid">
+          <article class="card command-concepts-card">
+            <div class="card-title"><small>COMPOSICIÓN</small><h3>Participación por concepto</h3></div>
+            <div id="commandConceptBars" class="command-concept-bars"></div>
+          </article>
+
+          <article class="card command-activity-card">
+            <div class="card-title"><small>ACTIVIDAD RECIENTE</small><h3>Últimos eventos del sistema</h3></div>
+            <div id="commandActivityList" class="command-activity-list"></div>
+          </article>
+
+          <article class="card command-ai-card">
+            <div class="command-ai-head"><div class="copilot-icon">✦</div><div><small>NEXUS AI</small><h3>Recomendación del momento</h3></div></div>
+            <div id="commandRecommendation" class="command-recommendation">Carga la información para generar una recomendación.</div>
+            <button id="commandOpenIntelligenceBtn" class="btn compact">Abrir Centro de Inteligencia</button>
+          </article>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="inicio">
+        <section class="enterprise-welcome">
+          <div class="welcome-copy">
+            <span class="pill">BUSINESS INTELLIGENCE PLATFORM</span>
+            <p class="welcome-overline">Buenos días,</p>
+            <h2 id="welcomeUserName">Usuario</h2>
+            <p class="welcome-text">Aquí tienes un resumen de la operación y acceso inmediato a las herramientas de Recaudación.</p>
+            <div class="welcome-actions">
+              <button id="homeLoadBtn" class="btn primary large"><span>↻</span><div><b>Actualizar indicadores</b><small>Leer las cuatro marcas</small></div></button>
+              
+            </div>
+          </div>
+          <div class="welcome-visual">
+            <div class="orb orb-a"></div><div class="orb orb-b"></div>
+            <div class="hero-stat-card">
+              <small>INGRESO GENERAL</small>
+              <strong id="heroTotal">$0.00</strong>
+              <span id="heroVariation">Sin comparativo disponible</span>
+            </div>
+            <div class="hero-mini-grid">
+              <div><small>MARCA LÍDER</small><b id="heroLeader">—</b></div>
+              <div><small>REGISTROS</small><b id="heroRows">0</b></div>
+              <div><small>ACTUALIZACIÓN</small><b id="heroUpdated">Pendiente</b></div>
+            </div>
+          </div>
+        </section>
+
+        
+        <section id="proactiveBriefing" class="proactive-briefing card">
+          <div class="briefing-header">
+            <div class="briefing-orb">✦</div>
+            <div>
+              <small>NEXUS AI · BRIEFING AUTOMÁTICO</small>
+              <h3 id="briefingGreeting">Bienvenido a NEXUS</h3>
+            </div>
+            <button id="refreshBriefingBtn" class="btn compact">↻ Actualizar</button>
+          </div>
+          <div id="briefingBody" class="briefing-body">
+            <div class="briefing-placeholder">Carga la información para recibir un análisis automático del periodo.</div>
+          </div>
+        </section>
+
+        <section class="today-grid">
+          <article class="today-card"><div class="today-icon">💰</div><div><span>Ingreso del periodo</span><strong id="homeTotal">$0.00</strong><small id="homeTotalDetail">Sin información cargada</small></div></article>
+          <article class="today-card"><div class="today-icon">🏆</div><div><span>Marca líder</span><strong id="homeLeader">—</strong><small id="homeLeaderDetail">Pendiente</small></div></article>
+          <article class="today-card"><div class="today-icon">📈</div><div><span>Variación mensual</span><strong id="homeVariation">—</strong><small id="homeVariationDetail">Sin histórico</small></div></article>
+          <article class="today-card"><div class="today-icon">🧾</div><div><span>Registros procesados</span><strong id="homeRows">0</strong><small>Operaciones consolidadas</small></div></article>
+        </section>
+
+        <section class="portal-grid">
+          <article class="card portal-apps hidden">
+            <div class="section-head">
+              <div class="card-title"><small>LANZADOR</small><h3>Módulos estratégicos</h3></div>
+            </div>
+            <div class="portal-app-grid" id="homeAppsGrid"></div>
+          </article>
+
+          <article class="card copilot-card">
+            <div class="copilot-head">
+              <div class="copilot-icon">✦</div>
+              <div><small>ASISTENTE EJECUTIVO</small><h3>NEXUS Copilot</h3></div>
+            </div>
+            <div id="copilotMessages" class="copilot-messages">
+              <div class="copilot-message system">Actualiza los indicadores y pregúntame sobre ingresos, marcas o comparativos.</div>
+            </div>
+            <form id="copilotForm" class="copilot-form">
+              <input id="copilotInput" placeholder="Ejemplo: ¿Cuál es la marca líder?" autocomplete="off">
+              <button type="submit">Enviar</button>
+            </form>
+            <div class="copilot-suggestions">
+              <button data-question="¿Cuál es la marca líder?">Marca líder</button>
+              <button data-question="¿Qué concepto genera más ingreso?">Concepto principal</button>
+              <button data-question="Dame un resumen ejecutivo">Resumen ejecutivo</button>
+              <button data-question="Compárame las cuatro marcas">Comparar marcas</button>
+              <button data-question="¿Qué porcentaje representa prepago?">Participación prepago</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="home-analytics-grid">
+          <article class="card home-chart-card">
+            <div class="card-title"><small>PANORAMA</small><h3>Participación por marca</h3></div>
+            <canvas id="homeChart"></canvas>
+          </article>
+          <article class="card activity-card">
+            <div class="card-title"><small>ACTIVIDAD</small><h3>Estado de la plataforma</h3></div>
+            <div class="activity-list">
+              <div><i class="active"></i><p><b>Google Sheets</b><small>Fuente de ingresos conectada</small></p><span>Activo</span></div>
+              <div><i class="active"></i><p><b>Control de acceso</b><small>Sesiones seguras habilitadas</small></p><span>Activo</span></div>
+              <div><i></i><p><b>Histórico mensual</b><small id="activityHistory">0 periodos guardados</small></p><span>Local</span></div>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="ingresos">
+        <section class="hero compact-hero">
+          <div><span class="pill">INGRESOS 360</span><h2>Concentrado general y análisis por marca</h2><p>Procesa las cuatro fuentes y genera una lectura ejecutiva lista para presentar.</p></div>
+          <div class="hero-actions">
+            <button id="loadSheetsBtn" class="btn primary"><span>↻</span><div><b>Actualizar Google Sheets</b><small>Leer las cuatro pestañas</small></div></button>
+            <label class="btn outline">
+<div class="smart-import-mode card">
+  <div class="smart-import-head">
+    <div>
+      <small>SMART IMPORT</small>
+      <h3>¿Cómo deseas cargar la información?</h3>
+      <p>Selecciona un archivo con cuatro pestañas o cuatro archivos independientes.</p>
+    </div>
+    <span id="smartImportStatus" class="status neutral">Sin archivos</span>
+  </div>
+
+  <div class="smart-import-tabs">
+    <button id="singleWorkbookModeBtn" class="active" type="button">
+      <span>▤</span>
+      <div><b>Un solo archivo</b><small>TRT, TRT VB, AAO y AAO VB en un mismo Excel</small></div>
+    </button>
+    <button id="fourFilesModeBtn" type="button">
+      <span>▦</span>
+      <div><b>Cuatro archivos</b><small>Un Excel independiente por cada marca</small></div>
+    </button>
+  </div>
+
+  <section id="singleWorkbookPanel" class="smart-import-panel">
+    <label class="smart-file-card primary-file">
+      <input id="fileInput" type="file" accept=".xlsx,.xls" hidden>
+      <span>▤</span>
+      <div><b>Seleccionar archivo consolidado</b><small>Debe contener las cuatro pestañas</small></div>
+    </label>
+  </section>
+
+  <section id="fourFilesPanel" class="smart-import-panel hidden">
+    <div class="four-files-grid">
+      <label class="smart-file-card" data-brand-file-card="TRT">
+        <input id="fileTRT" type="file" accept=".xlsx,.xls" hidden>
+        <span>TRT</span>
+        <div><b>Archivo TRT</b><small id="fileTRTName">Pendiente</small></div>
+      </label>
+      <label class="smart-file-card" data-brand-file-card="TRTVB">
+        <input id="fileTRTVB" type="file" accept=".xlsx,.xls" hidden>
+        <span>TV</span>
+        <div><b>Archivo TRT VB</b><small id="fileTRTVBName">Pendiente</small></div>
+      </label>
+      <label class="smart-file-card" data-brand-file-card="AAO">
+        <input id="fileAAO" type="file" accept=".xlsx,.xls" hidden>
+        <span>AAO</span>
+        <div><b>Archivo AAO</b><small id="fileAAOName">Pendiente</small></div>
+      </label>
+      <label class="smart-file-card" data-brand-file-card="AAOVB">
+        <input id="fileAAOVB" type="file" accept=".xlsx,.xls" hidden>
+        <span>AV</span>
+        <div><b>Archivo AAO VB</b><small id="fileAAOVBName">Pendiente</small></div>
+      </label>
+    </div>
+    <div class="four-files-actions">
+      <button id="processFourFilesBtn" class="btn primary" type="button" disabled>Procesar cuatro archivos</button>
+      <button id="clearFourFilesBtn" class="btn outline" type="button">Limpiar selección</button>
+    </div>
+  </section>
+</div>
+<span>＋</span><div><b>Cargar respaldo Excel</b><small>Uno o varios archivos</small></div></label>
+          </div>
+        </section>
+
+        <section class="control-panel card">
+          <div class="section-head">
+            <div><small class="kicker">PREPARACIÓN</small><h3>Periodo y fuentes</h3></div>
+            <span id="statusBadge" class="status neutral">Sin información</span>
+          </div>
+          <div class="period-grid">
+            <label>Mes<select id="month">
+              <option>ENERO</option><option>FEBRERO</option><option>MARZO</option><option>ABRIL</option><option>MAYO</option><option selected>JUNIO</option>
+              <option>JULIO</option><option>AGOSTO</option><option>SEPTIEMBRE</option><option>OCTUBRE</option><option>NOVIEMBRE</option><option>DICIEMBRE</option>
+            </select></label>
+            <label>Año<input id="year" type="number" value="2026" min="2020" max="2100"></label>
+            <button id="saveSnapshotBtn" class="btn compact" disabled>Guardar en histórico</button>
+            <button id="clearHistoryBtn" class="btn compact ghost">Administrar histórico</button>
+          </div>
+          <div class="brand-source-grid" id="brandSources">
+            <article data-brand="TRT"><i></i><div><b>TRT</b><small>Pendiente</small></div><span>—</span></article>
+            <article data-brand="TRTVB"><i></i><div><b>TRTVB</b><small>Pendiente</small></div><span>—</span></article>
+            <article data-brand="AAO"><i></i><div><b>AAO</b><small>Pendiente</small></div><span>—</span></article>
+            <article data-brand="AAOVB"><i></i><div><b>AAOVB</b><small>Pendiente</small></div><span>—</span></article>
+          </div>
+          <div id="messageBox" class="message">Actualiza Google Sheets o carga el respaldo Excel.</div>
+          <div id="loadProgressWrap" class="load-progress-wrap hidden">
+            <div class="load-progress-meta"><span id="loadProgressText">Preparando...</span><b id="loadProgressPct">0%</b></div>
+            <div class="load-progress-track"><i id="loadProgressBar"></i></div>
+          </div>
+          <details><summary>Configuración avanzada de columnas</summary>
+            <div class="advanced-grid">
+              <label>Canje<input id="canjeCol" value="Vta Man"></label>
+              <label>Abordo<input id="abordoCol" value="Vta Abor"></label>
+              <label>Prepago<input id="prepagoCol" value="Vta Prepago"></label>
+            </div>
+          </details>
+        </section>
+
+        <section id="dashboard" class="hidden">
+          <div class="dashboard-head">
+            <div><small class="kicker">PANORAMA GENERAL</small><h2 id="reportTitle">INGRESOS GENERALES</h2><p id="generatedAt"></p></div>
+            <div class="action-row"><button id="exportBtn" class="btn compact">↓ Excel</button><button id="printBtn" class="btn compact">▣ PDF / Imprimir</button></div>
+          </div>
+          
+          <div class="executive-kpis executive-kpis-v19">
+            <article class="kpi-total-card">
+              <span>Total general</span>
+              <strong id="totalKpi">$0.00</strong>
+              <small id="totalRows">0 registros</small>
+              <em id="totalDelta" class="kpi-delta neutral-delta">Sin comparativo</em><div id="totalSparkline" class="sparkline"></div>
+            </article>
+
+            <article class="kpi-brand-card">
+              <span>Participación por marca</span>
+              <div id="brandParticipationList" class="brand-participation-list">
+                <div class="brand-participation-empty">Sin información</div>
+              </div>
+            </article>
+
+            <article class="kpi-concepts-card">
+              <span>Composición por concepto</span>
+              <div id="conceptCompositionList" class="concept-composition-list">
+                <div class="brand-participation-empty">Sin información</div>
+              </div>
+            </article>
+
+            <article class="kpi-variation-card">
+              <span>Variación mensual</span>
+              <strong id="variationKpi">Sin histórico</strong>
+              <small id="variationDetail">Guarda otro mes para comparar</small>
+              <em id="variationTrend" class="kpi-delta neutral-delta">Sin tendencia</em>
+            </article>
+
+            <article class="kpi-health-card">
+              <span>Salud del negocio</span>
+              <div class="health-score-wrap">
+                <div id="healthTrafficLight" class="mini-traffic neutral"><i></i></div>
+                <div>
+                  <strong id="healthScoreKpi">—</strong>
+                  <small id="healthScoreDetail">Sin evaluación</small>
+                </div>
+              </div>
+              <em id="healthScoreLabel" class="kpi-delta neutral-delta">Pendiente</em>
+            </article>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric"><span>Canje</span><strong id="canjeKpi"></strong><small id="canjePct"></small></article>
+            <article class="metric"><span>Abordo</span><strong id="abordoKpi"></strong><small id="abordoPct"></small></article>
+            <article class="metric"><span>Prepago</span><strong id="prepagoKpi"></strong><small id="prepagoPct"></small></article>
+            <article class="metric"><span>Ticket promedio</span><strong id="avgTicketKpi"></strong><small>Ingreso por registro</small></article>
+          </div>
+          <nav class="tabs" id="tabs"><button class="active" data-tab="general">General</button><button data-tab="historico">Histórico</button><button data-tab="TRT">TRT</button><button data-tab="TRTVB">TRTVB</button><button data-tab="AAO">AAO</button><button data-tab="AAOVB">AAOVB</button></nav>
+          <section class="tab-panel active" data-panel="general">
+            <div class="chart-grid">
+              <article class="card chart-card"><div class="card-title"><small>COMPARATIVO</small><h3>Ingresos por marca y concepto</h3></div><canvas id="brandChart"></canvas></article>
+              <article class="card chart-card"><div class="card-title"><small>PARTICIPACIÓN</small><h3>Aportación al total</h3></div><canvas id="shareChart"></canvas></article>
+            </div>
+            <div class="content-grid">
+              <article class="card ranking-card"><div class="card-title"><small>RANKING</small><h3>Posición por recaudación</h3></div><div id="ranking"></div></article>
+              <article class="card insight-card"><div class="card-title"><small>ASISTENTE EJECUTIVO</small><h3>¿Qué pasó en el periodo?</h3></div><div id="insights"></div></article>
+            </div>
+            <article class="card table-card"><div class="card-title"><small>CONCENTRADO</small><h3>Desglose general</h3></div><div class="table-wrap"><table><thead><tr><th>Marca</th><th>Canje</th><th>Abordo</th><th>Prepago</th><th>Total</th><th>Registros</th><th>Participación</th></tr></thead><tbody id="summaryBody"></tbody><tfoot id="summaryFoot"></tfoot></table></div></article>
+          </section>
+          <section class="tab-panel" data-panel="historico">
+            <div class="chart-grid"><article class="card chart-card wide"><div class="card-title"><small>TENDENCIA</small><h3>Histórico mensual guardado</h3></div><canvas id="historyChart"></canvas></article><article class="card history-list-card"><div class="card-title"><small>PERIODOS</small><h3>Meses disponibles</h3></div><div id="historyList"></div></article></div>
+          </section>
+          <div id="brandPanels"></div>
+        </section>
+      </section>
+
+      
+      
+      <section class="view" data-view-panel="direccion">
+        <div class="director-hero">
+          <div>
+            <span class="pill">NEXUS EXECUTIVE BOARD</span>
+            <h2>Panel de Dirección General</h2>
+            <p>Una vista estratégica para supervisar desempeño, evolución anual, concentración y señales prioritarias.</p>
+          </div>
+          <div class="director-period">
+            <small>PERIODO ACTUAL</small>
+            <strong id="directorPeriod">—</strong>
+            <span id="directorGenerated">Pendiente</span>
+          </div>
+        </div>
+
+        <section id="directorEmpty" class="card empty-block">
+          Actualiza la información para habilitar el panel de Dirección General.
+        </section>
+
+        <section id="directorContent" class="hidden">
+          <div class="director-kpis">
+            <article><span>Ingreso acumulado</span><strong id="directorTotal">$0.00</strong><small id="directorTotalDetail">Periodo actual</small></article>
+            <article><span>Variación</span><strong id="directorVariation">—</strong><small id="directorVariationDetail">Sin comparativo</small></article>
+            <article><span>Marca estratégica</span><strong id="directorLeader">—</strong><small id="directorLeaderDetail">—</small></article>
+            <article><span>Índice NEXUS</span><strong id="directorScore">—</strong><small id="directorScoreDetail">Pendiente</small></article>
+          </div>
+
+          <div class="director-grid">
+            <article class="card director-chart-card large">
+              <div class="card-title"><small>TENDENCIA ANUAL</small><h3>Evolución mensual del ingreso</h3></div>
+              <canvas id="directorAnnualChart"></canvas>
+            </article>
+            <article class="card director-chart-card">
+              <div class="card-title"><small>PORTAFOLIO</small><h3>Participación por marca</h3></div>
+              <canvas id="directorPortfolioChart"></canvas>
+            </article>
+          </div>
+
+          <div class="director-grid second">
+            <article class="card director-ranking-card">
+              <div class="card-title"><small>RANKING EJECUTIVO</small><h3>Posición estratégica</h3></div>
+              <div id="directorRanking"></div>
+            </article>
+            <article class="card director-recommendations-card">
+              <div class="card-title"><small>RECOMENDACIONES</small><h3>Acciones sugeridas</h3></div>
+              <div id="directorRecommendations"></div>
+            </article>
+          </div>
+
+          <article class="card director-summary-card">
+            <div class="section-head">
+              <div class="card-title"><small>RESUMEN DE DIRECCIÓN</small><h3>Conclusión ejecutiva</h3></div>
+              <button id="copyDirectorSummaryBtn" class="btn compact">Copiar resumen</button>
+            </div>
+            <div id="directorSummary"></div>
+          </article>
+        </section>
+      </section>
+
+      
+      
+      <section class="view" data-view-panel="forecast">
+        <section class="forecast-hero">
+          <div>
+            <span class="pill">NEXUS ONE FORECAST ENGINE</span>
+            <h2>Pronóstico y metas ejecutivas</h2>
+            <p>Proyección calculada con el histórico guardado y seguimiento de objetivos por marca.</p>
+          </div>
+          <div class="forecast-confidence">
+            <small>CONFIANZA ESTIMADA</small>
+            <strong id="forecastConfidence">—</strong>
+            <span id="forecastConfidenceDetail">Histórico insuficiente</span>
+          </div>
+        </section>
+
+        <section id="forecastEmpty" class="card empty-block">Guarda al menos dos periodos en el histórico para calcular una proyección.</section>
+
+        <section id="forecastContent" class="hidden">
+          <div class="forecast-kpis">
+            <article><span>Pronóstico siguiente periodo</span><strong id="forecastNext">$0.00</strong><small id="forecastNextDetail">—</small></article>
+            <article><span>Tendencia promedio</span><strong id="forecastTrend">—</strong><small>Promedio de variaciones</small></article>
+            <article><span>Mejor escenario</span><strong id="forecastBest">$0.00</strong><small>Rango superior estimado</small></article>
+            <article><span>Escenario conservador</span><strong id="forecastLow">$0.00</strong><small>Rango inferior estimado</small></article>
+          </div>
+
+          <div class="forecast-grid">
+            <article class="card forecast-chart-card">
+              <div class="card-title"><small>PROYECCIÓN</small><h3>Histórico y siguiente periodo</h3></div>
+              <canvas id="forecastChart"></canvas>
+            </article>
+            <article class="card forecast-explanation-card">
+              <div class="card-title"><small>LECTURA</small><h3>Interpretación automática</h3></div>
+              <div id="forecastExplanation"></div>
+            </article>
+          </div>
+
+          <article class="card goals-card">
+            <div class="section-head">
+              <div class="card-title"><small>METAS POR MARCA</small><h3>Avance del periodo</h3></div>
+              <button id="saveGoalsBtn" class="btn compact">Guardar metas</button>
+            </div>
+            <div id="goalRows" class="goal-rows"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="ai">
+        <section class="ai-hero">
+          <div>
+            <span class="pill">NEXUS AI EXECUTIVE</span>
+            <h2>¿Qué ocurrió y qué debemos hacer?</h2>
+            <p>Consulta tus datos en lenguaje natural y genera explicaciones, alertas, resúmenes y acciones recomendadas.</p>
+          </div>
+          <div class="ai-hero-actions">
+            <button id="aiRefreshBtn" class="btn primary">↻ Actualizar análisis</button>
+            <button id="aiPrepareReportBtn" class="btn outline">▤ Preparar reporte</button>
+          </div>
+        </section>
+
+        <section class="ai-proactive-grid">
+          <article class="card ai-proactive-main">
+            <div class="ai-proactive-head">
+              <div class="assistant-avatar large">✦</div>
+              <div><small>BRIEFING AUTOMÁTICO</small><h3 id="aiBriefingTitle">Buenos días</h3></div>
+            </div>
+            <div id="aiBriefingCards" class="ai-briefing-cards">
+              <div class="ai-placeholder">Actualiza la información para generar el briefing ejecutivo.</div>
+            </div>
+          </article>
+          <article class="card ai-priority-card">
+            <div class="card-title"><small>PRIORIDAD DEL MOMENTO</small><h3>Recomendación principal</h3></div>
+            <div id="aiPriority" class="ai-priority-content">Sin información disponible.</div>
+            <button id="aiExplainPriorityBtn" class="btn compact">Explicar recomendación</button>
+          </article>
+        </section>
+
+        <section class="ai-chat-layout">
+          <article class="card ai-chat-card">
+            <header class="ai-chat-header">
+              <div><small>NEXUS AI</small><h3>Conversación ejecutiva</h3></div>
+              <button id="aiClearChatBtn" class="text-link">Limpiar conversación</button>
+            </header>
+            <div id="aiChatMessages" class="ai-chat-messages">
+              <div class="ai-chat-message system">Hola. Puedes preguntarme por totales, marcas, conceptos, variaciones, alertas o recomendaciones.</div>
+            </div>
+            <div class="ai-question-grid">
+              <button data-ai-question="¿Qué ocurrió este mes?">¿Qué ocurrió este mes?</button>
+              <button data-ai-question="¿Cuál fue la mejor marca?">Mejor marca</button>
+              <button data-ai-question="¿Qué marca requiere atención?">Marca con atención</button>
+              <button data-ai-question="¿Por qué cambió el total?">Explicar variación</button>
+              <button data-ai-question="Dame recomendaciones">Recomendaciones</button>
+              <button data-ai-question="Prepara un correo para Dirección">Correo para Dirección</button>
+            </div>
+            <form id="aiChatForm" class="ai-chat-form">
+              <input id="aiChatInput" placeholder="Escribe una pregunta sobre los datos..." autocomplete="off">
+              <button type="submit">Enviar</button>
+            </form>
+          </article>
+
+          <article class="card ai-actions-card">
+            <div class="card-title"><small>ACCIONES EJECUTIVAS</small><h3>Preparar entregables</h3></div>
+            <div class="ai-action-list">
+              <button id="aiGenerateSummaryBtn"><span>▤</span><div><b>Resumen ejecutivo</b><small>Texto listo para compartir</small></div></button>
+              <button id="aiGenerateEmailBtn"><span>✉</span><div><b>Correo para Dirección</b><small>Asunto y cuerpo preparados</small></div></button>
+              <button id="aiGenerateReportBtn"><span>▣</span><div><b>Reporte premium</b><small>Abrir vista PDF corporativa</small></div></button>
+              <button id="aiOpenDirectionBtn"><span>◆</span><div><b>Panel de Dirección</b><small>Abrir análisis estratégico</small></div></button>
+            </div>
+            <div id="aiGeneratedOutput" class="ai-generated-output">Selecciona una acción para preparar el contenido.</div>
+            <button id="aiCopyOutputBtn" class="btn compact" disabled>Copiar contenido</button>
+          </article>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="inteligencia">
+        <div class="page-intro intelligence-intro">
+          <span class="pill">NEXUS INTELLIGENCE</span>
+          <h2>Centro de Inteligencia</h2>
+          <p>Interpretación automática del periodo, semáforo ejecutivo, oportunidades y alertas basadas en el histórico disponible.</p>
+        </div>
+
+        <section id="intelligenceEmpty" class="card empty-block">
+          Actualiza la información desde Google Sheets para generar el análisis ejecutivo.
+        </section>
+
+        <section id="intelligenceContent" class="hidden">
+          <div class="intelligence-status-grid">
+            <article class="intelligence-status-card">
+              <div id="generalLight" class="traffic-light neutral-light"><span></span></div>
+              <div><small>DESEMPEÑO GENERAL</small><strong id="generalStatus">Sin histórico</strong><p id="generalStatusDetail">Guarda al menos un periodo anterior.</p></div>
+            </article>
+            <article class="intelligence-status-card">
+              <div class="intelligence-icon">🏆</div>
+              <div><small>FORTALEZA PRINCIPAL</small><strong id="mainStrength">—</strong><p id="mainStrengthDetail">—</p></div>
+            </article>
+            <article class="intelligence-status-card">
+              <div class="intelligence-icon">⚠</div>
+              <div><small>PUNTO DE ATENCIÓN</small><strong id="attentionPoint">—</strong><p id="attentionDetail">—</p></div>
+            </article>
+            <article class="intelligence-status-card">
+              <div class="intelligence-icon">◎</div>
+              <div><small>CONCENTRACIÓN</small><strong id="concentrationStatus">—</strong><p id="concentrationDetail">—</p></div>
+            </article>
+          </div>
+
+          <div class="intelligence-main-grid">
+            <article class="card intelligence-narrative">
+              <div class="card-title"><small>RESUMEN AUTOMÁTICO</small><h3>Lectura para dirección</h3></div>
+              <div id="executiveNarrative"></div>
+            </article>
+            <article class="card intelligence-score-card">
+              <div class="card-title"><small>ÍNDICE EJECUTIVO</small><h3>Evaluación del periodo</h3></div>
+              <div class="score-ring" id="scoreRing"><div><strong id="executiveScore">0</strong><span>/100</span></div></div>
+              <p id="scoreDescription">Pendiente de información.</p>
+            </article>
+          </div>
+
+          <div class="chart-grid intelligence-charts">
+            <article class="card chart-card">
+              <div class="card-title"><small>SEMÁFORO POR MARCA</small><h3>Variación frente al periodo anterior</h3></div>
+              <canvas id="intelligenceGrowthChart"></canvas>
+            </article>
+            <article class="card chart-card">
+              <div class="card-title"><small>COMPOSICIÓN</small><h3>Dependencia por concepto</h3></div>
+              <canvas id="intelligenceConceptChart"></canvas>
+            </article>
+          </div>
+
+          <div class="intelligence-lists-grid">
+            <article class="card intelligence-list-card">
+              <div class="card-title"><small>OPORTUNIDADES</small><h3>Aspectos favorables</h3></div>
+              <div id="opportunityList"></div>
+            </article>
+            <article class="card intelligence-list-card alert-list-card">
+              <div class="card-title"><small>ALERTAS</small><h3>Indicadores que requieren atención</h3></div>
+              <div id="alertList"></div>
+            </article>
+          </div>
+
+          <article class="card management-brief-card">
+            <div class="section-head">
+              <div class="card-title"><small>BRIEF EJECUTIVO</small><h3>Texto listo para compartir</h3></div>
+              <button id="copyIntelligenceBriefBtn" class="btn compact">Copiar brief</button>
+            </div>
+            <div id="intelligenceBrief"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="comparativos">
+        <div class="page-intro"><span class="pill">COMPARATIVOS</span><h2>Mes contra mes</h2><p>Selecciona dos periodos guardados para identificar crecimiento, caída y cambios por marca.</p></div>
+        <section class="card compare-controls">
+          <label>Periodo base<select id="compareA"></select></label>
+          <div class="versus">VS</div>
+          <label>Periodo comparado<select id="compareB"></select></label>
+          <button id="runCompareBtn" class="btn primary compact">Comparar periodos</button>
+        </section>
+        <section id="compareResults" class="hidden">
+          <div class="compare-kpis" id="compareKpis"></div>
+          <div class="chart-grid">
+            <article class="card chart-card"><div class="card-title"><small>MARCA</small><h3>Diferencia por marca</h3></div><canvas id="compareBrandChart"></canvas></article>
+            <article class="card chart-card"><div class="card-title"><small>CONCEPTO</small><h3>Diferencia por concepto</h3></div><canvas id="compareConceptChart"></canvas></article>
+          </div>
+          <article class="card insight-card"><div class="card-title"><small>CONCLUSIÓN</small><h3>Lectura comparativa</h3></div><div id="compareInsights"></div></article>
+        </section>
+        <div id="compareEmpty" class="card empty-block">Guarda por lo menos dos meses en el histórico para utilizar esta sección.</div>
+      </section>
+
+      <section class="view" data-view-panel="reportes">
+        <div class="page-intro"><span class="pill">REPORTES</span><h2>Salida para gerencia</h2><p>Prepara la información en formatos listos para compartir.</p></div>
+        <div class="report-grid">
+          <article class="card report-option"><span>01</span><h3>Reporte ejecutivo PDF</h3><p>Portada visual, indicadores, gráficas y análisis automático mediante la vista de impresión.</p><button id="reportPrintBtn" class="btn primary">Generar PDF / Imprimir</button></article>
+          <article class="card report-option"><span>02</span><h3>Libro Excel consolidado</h3><p>Incluye resumen general, detalle por marca e histórico mensual disponible.</p><button id="reportExcelBtn" class="btn primary">Descargar Excel</button></article>
+          <article class="card report-option"><span>03</span><h3>Resumen para correo</h3><p>Genera un texto ejecutivo para copiar en correo o Teams.</p><button id="copySummaryBtn" class="btn primary">Copiar resumen</button></article>
+        </div>
+        <article class="card report-cover">
+          <div class="report-cover-brand">
+            <div class="report-cover-logo nexus-mark signature-mark">
+
+<svg class="signature-logo" viewBox="0 0 72 72" aria-hidden="true">
+  <defs>
+    <linearGradient id="sigGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8a6cff"/>
+      <stop offset="45%" stop-color="#2f74ff"/>
+      <stop offset="100%" stop-color="#43e3ff"/>
+    </linearGradient>
+  </defs>
+  <path d="M36 4 62 19v34L36 68 10 53V19Z" fill="url(#sigGrad)"/>
+  <path d="M22 48V24h8l12 16V24h8v24h-8L30 32v16Z" fill="#fff"/>
+  <path d="M48 19h10v10M40 36l18-17" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+</div>
+            <div><small>NEXUS · INFORME EJECUTIVO</small><h2 id="reportCoverTitle">Reporte de ingresos</h2></div>
+          </div>
+          <div class="report-verification">
+            <div class="verification-code" id="reportVerificationCode">NX-000000</div>
+            <div><small>CÓDIGO DE REPORTE</small><b id="reportNumber">NX-000000</b><span>Documento generado por NEXUS Enterprise</span></div>
+          </div>
+          <div class="report-cover-meta">
+            <div><small>PERIODO</small><b id="reportCoverPeriod">—</b></div>
+            <div><small>GENERADO POR</small><b id="reportCoverUser">—</b></div>
+            <div><small>FECHA</small><b id="reportCoverDate">—</b></div>
+          </div>
+        </article>
+        <article class="card preview-report"><div class="card-title"><small>VISTA PREVIA</small><h3>Resumen para gerencia</h3></div><div id="managementPreview" class="empty-state">Carga la información para preparar el reporte.</div></article>
+        <div class="report-analysis-grid">
+          <article class="card"><div class="card-title"><small>CONCLUSIONES</small><h3>Hallazgos principales</h3></div><div id="premiumReportConclusions"></div></article>
+          <article class="card"><div class="card-title"><small>RECOMENDACIONES</small><h3>Acciones sugeridas</h3></div><div id="premiumReportRecommendations"></div></article>
+        </div>
+      </section>
+
+      
+      <section class="view" data-view-panel="usuarios">
+        <div class="page-intro">
+          <span class="pill">ADMINISTRACIÓN</span>
+          <h2>Usuarios y accesos</h2>
+          <p>Crea usuarios, cambia roles, activa o desactiva cuentas y restablece contraseñas.</p>
+        </div>
+
+        <div class="user-admin-grid">
+          <article class="card user-form-card">
+            <div class="card-title"><small>NUEVO USUARIO</small><h3>Registrar acceso</h3></div>
+            <form id="createUserForm" class="admin-form">
+              <label>Nombre completo<input id="newUserName" required placeholder="Nombre del colaborador"></label>
+              <label>Usuario<input id="newUsername" required placeholder="Usuario de acceso"></label>
+              <label>Contraseña temporal<input id="newUserPassword" type="password" required minlength="4" placeholder="Contraseña temporal"></label>
+              <label>Rol
+                <select id="newUserRole">
+                  <option value="USUARIO">Usuario</option>
+                  <option value="SUPERVISOR">Supervisor</option>
+                  <option value="GERENCIA">Gerencia</option>
+                  <option value="ADMINISTRADOR">Administrador</option>
+                </select>
+              </label>
+              <button class="btn primary" type="submit">Crear usuario</button>
+            </form>
+          </article>
+
+          <article class="card user-list-card">
+            <div class="section-head">
+              <div class="card-title"><small>DIRECTORIO</small><h3>Usuarios registrados</h3></div>
+              <button id="reloadUsersBtn" class="btn compact">↻ Actualizar</button>
+            </div>
+            <div id="usersAdminMessage" class="message">Carga la lista para administrar usuarios.</div>
+            <div class="table-wrap">
+              <table class="users-table">
+                <thead><tr><th>Nombre</th><th>Usuario</th><th>Rol</th><th>Estado</th><th>Último acceso</th><th>Acciones</th></tr></thead>
+                <tbody id="usersAdminBody"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      
+      <section class="view" data-view-panel="publisher">
+        <div class="page-intro">
+          <span class="pill">NEXUS DATA PUBLISHER</span>
+          <h2>Publicación segura de periodos</h2>
+          <p>Importa un archivo Excel, valida las cuatro marcas, crea un respaldo automático y sustituye la información oficial de Google Sheets.</p>
+        </div>
+
+        <section class="publisher-grid">
+          <article class="card publisher-upload-card">
+            <div class="card-title"><small>PASO 1</small><h3>Cargar archivo</h3></div>
+            <label class="publisher-dropzone" id="publisherDropzone">
+              <input id="publisherFileInput" type="file" accept=".xlsx,.xls" hidden>
+              <div class="publisher-drop-icon">⇧</div>
+              <h3>Selecciona o arrastra el Excel</h3>
+              <p>Debe contener TRT, TRT VB, AAO y AAO VB.</p>
+              <span>Formatos admitidos: XLSX y XLS</span>
+            </label>
+            <div id="publisherFileInfo" class="publisher-file-info hidden">
+              <div><small>ARCHIVO</small><b id="publisherFileName">—</b></div>
+              <div><small>TAMAÑO</small><b id="publisherFileSize">—</b></div>
+              <div><small>PERIODO</small><b id="publisherDetectedPeriod">Pendiente</b></div>
+            </div>
+            <div class="publisher-period-fields">
+              <label>Nombre del periodo<input id="publisherPeriodName" placeholder="Ej. JUNIO - JULIO 2026"></label>
+              <label>Observaciones<textarea id="publisherNotes" rows="3" placeholder="Comentarios opcionales"></textarea></label>
+            </div>
+          </article>
+
+          <article class="card publisher-validation-card">
+            <div class="section-head">
+              <div class="card-title"><small>PASO 2</small><h3>Validación</h3></div>
+              <span id="publisherValidationBadge" class="status neutral">Sin archivo</span>
+            </div>
+            <div id="publisherBrandValidation" class="publisher-brand-validation">
+              <article data-pub-brand="TRT"><i></i><div><b>TRT</b><small>Pendiente</small></div><span>—</span></article>
+              <article data-pub-brand="TRTVB"><i></i><div><b>TRTVB</b><small>Pendiente</small></div><span>—</span></article>
+              <article data-pub-brand="AAO"><i></i><div><b>AAO</b><small>Pendiente</small></div><span>—</span></article>
+              <article data-pub-brand="AAOVB"><i></i><div><b>AAOVB</b><small>Pendiente</small></div><span>—</span></article>
+            </div>
+            <div id="publisherValidationMessage" class="message">Carga un archivo para iniciar la validación.</div>
+            <div class="publisher-preview-kpis">
+              <div><span>Registros</span><strong id="publisherTotalRows">0</strong></div>
+              <div><span>Total general</span><strong id="publisherTotalAmount">$0.00</strong></div>
+              <div><span>Canje</span><strong id="publisherCanje">$0.00</strong></div>
+              <div><span>Abordo</span><strong id="publisherAbordo">$0.00</strong></div>
+              <div><span>Prepago</span><strong id="publisherPrepago">$0.00</strong></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="card publisher-preview-card">
+          <div class="section-head">
+            <div class="card-title"><small>PASO 3</small><h3>Vista previa por marca</h3></div>
+            <button id="publisherClearBtn" class="btn compact ghost">Limpiar archivo</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Marca</th><th>Registros</th><th>Canje</th><th>Abordo</th><th>Prepago</th><th>Total</th></tr></thead>
+              <tbody id="publisherPreviewBody">
+                <tr><td colspan="6" class="publisher-empty-cell">Sin información cargada.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="publisher-actions-card card">
+          <div>
+            <small>PASO 4</small>
+            <h3>Publicar periodo oficial</h3>
+            <p>Antes de sustituir la información, NEXUS creará un respaldo automático de las cuatro pestañas.</p>
+          </div>
+          <div class="publisher-action-buttons">
+            <button id="publisherPublishBtn" class="btn primary" disabled>Publicar en Google Sheets</button>
+            <button id="publisherRestoreBtn" class="btn outline">Restaurar último respaldo</button>
+          </div>
+          <div id="publisherProgressWrap" class="load-progress-wrap hidden">
+            <div class="load-progress-meta"><span id="publisherProgressText">Preparando...</span><b id="publisherProgressPct">0%</b></div>
+            <div class="load-progress-track"><i id="publisherProgressBar"></i></div>
+          </div>
+        </section>
+
+        <section class="card publisher-history-card">
+          <div class="section-head">
+            <div class="card-title"><small>AUDITORÍA</small><h3>Publicaciones recientes</h3></div>
+            <button id="publisherReloadAuditBtn" class="btn compact">↻ Actualizar</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Fecha</th><th>Usuario</th><th>Archivo</th><th>Periodo</th><th>Registros</th><th>Estado</th></tr></thead>
+              <tbody id="publisherAuditBody"><tr><td colspan="6" class="publisher-empty-cell">Sin publicaciones registradas.</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" data-view-panel="configuracion">
+        <div class="page-intro"><span class="pill">CONFIGURACIÓN</span><h2>Estado de la plataforma</h2><p>Información técnica y preferencias locales.</p></div>
+        <div class="settings-grid">
+          <article class="card setting-card admin-only"><h3>Control de acceso</h3><p>Los usuarios se administran desde la pestaña USUARIOS de Google Sheets.</p><div class="access-note"><b>Columnas admitidas</b><code>CONTRASEÑA · USUARIO · NOMBRE · ROL · ACTIVO</code></div></article>
+          <article class="card setting-card"><h3>Google Sheets</h3><p>ID configurado</p><code id="sheetIdPreview"></code></article>
+          <article class="card setting-card"><h3>Histórico local</h3><p id="historyCount">0 periodos almacenados</p><button id="openHistoryAdminBtn" class="btn compact">Administrar</button></article>
+          <article class="card setting-card"><h3>Apariencia</h3><p>Selecciona el estilo visual de NEXUS.</p>
+      <select id="themeSelector">
+        <option value="light">Claro</option>
+        <option value="dark">Oscuro</option>
+        <option value="auto">Automático</option>
+      </select>
+    </article>
+          <article class="card setting-card"><h3>Respaldo</h3><p>Exporta el histórico local a un archivo JSON.</p><button id="exportHistoryBtn" class="btn compact">Exportar histórico</button></article>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div id="historyModal" class="modal hidden"><div class="modal-card"><div class="section-head"><div><small class="kicker">HISTÓRICO LOCAL</small><h3>Administrar periodos</h3></div><button id="closeModalBtn" class="icon-btn dark">×</button></div><div id="historyAdmin"></div></div></div>
+
+
+
+<div id="publisherConfirmModal" class="modal hidden">
+  <div class="modal-card publisher-confirm-modal">
+    <div class="section-head">
+      <div><small class="kicker">CONFIRMACIÓN</small><h3>Publicar nuevo periodo</h3></div>
+      <button id="publisherCloseConfirmBtn" class="icon-btn dark">×</button>
+    </div>
+    <div class="publisher-confirm-warning">
+      <span>⚠</span>
+      <div>
+        <b>La información actual será sustituida.</b>
+        <p>NEXUS creará un respaldo automático antes de escribir el nuevo archivo.</p>
+      </div>
+    </div>
+    <div class="publisher-confirm-summary">
+      <div><small>ARCHIVO</small><b id="confirmPublisherFile">—</b></div>
+      <div><small>PERIODO</small><b id="confirmPublisherPeriod">—</b></div>
+      <div><small>REGISTROS</small><b id="confirmPublisherRows">0</b></div>
+      <div><small>TOTAL</small><b id="confirmPublisherTotal">$0.00</b></div>
+    </div>
+    <label class="publisher-confirm-check"><input id="publisherConfirmCheck" type="checkbox"> Confirmo que revisé los totales y deseo publicar este periodo.</label>
+    <button id="publisherConfirmPublishBtn" class="btn primary" disabled>Confirmar y publicar</button>
+  </div>
+</div>
+
+<div id="profileModal" class="modal hidden">
+  <div class="modal-card profile-modal-card">
+    <div class="section-head">
+      <div><small class="kicker">MI CUENTA</small><h3>Perfil del usuario</h3></div>
+      <button id="closeProfileModalBtn" class="icon-btn dark">×</button>
+    </div>
+    <div class="profile-summary">
+      <div id="profileInitial" class="profile-avatar">U</div>
+      <div><h3 id="profileName">Usuario</h3><p id="profileUsername">—</p><span id="profileRole" class="state-pill active">CONSULTA</span></div>
+    </div>
+    <div id="profilePermissions" class="profile-permissions"></div>
+    <div class="profile-details">
+      <div><small>ÚLTIMO ACCESO</small><b id="profileLastAccess">Sesión actual</b></div>
+      <div><small>ESTADO DE SESIÓN</small><b>Activa</b></div>
+    </div>
+    <form id="selfPasswordForm" class="admin-form">
+      <div class="card-title"><small>SEGURIDAD</small><h3>Cambiar mi contraseña</h3></div>
+      <label>Contraseña actual<input id="selfCurrentPassword" type="password" required></label>
+      <label>Nueva contraseña<input id="selfNewPassword" type="password" minlength="4" required></label>
+      <button type="submit" class="btn primary">Actualizar contraseña</button>
+    </form>
+  </div>
+</div>
+
+<div id="resetPasswordModal" class="modal hidden">
+  <div class="modal-card small-modal">
+    <div class="section-head">
+      <div><small class="kicker">SEGURIDAD</small><h3>Restablecer contraseña</h3></div>
+      <button id="closeResetModalBtn" class="icon-btn dark">×</button>
+    </div>
+    <p id="resetUserLabel" class="muted"></p>
+    <form id="resetPasswordForm" class="admin-form">
+      <input id="resetUsername" type="hidden">
+      <label>Nueva contraseña<input id="resetNewPassword" type="password" required minlength="4" placeholder="Nueva contraseña"></label>
+      <button class="btn primary" type="submit">Guardar nueva contraseña</button>
+    </form>
+  </div>
+</div>
+
+
+<div id="assistantWidget" class="assistant-widget">
+  <button id="assistantToggle" class="assistant-fab" title="Abrir NEXUS Assistant">
+    <span>✦</span><i id="assistantBadge">1</i>
+  </button>
+  <section id="assistantPanel" class="assistant-panel hidden">
+    <header>
+      <div class="assistant-avatar">✦</div>
+      <div><small>NEXUS ASSISTANT</small><h3>Asistente ejecutivo</h3></div>
+      <button id="assistantClose">×</button>
+    </header>
+    <div id="assistantConversation" class="assistant-conversation">
+      <div class="assistant-message assistant-system">Hola. Puedo ayudarte a interpretar ingresos, generar resúmenes y abrir módulos.</div>
+    </div>
+    <div class="assistant-actions">
+      <button data-assistant-action="summary">Resumen</button>
+      <button data-assistant-action="alerts">Alertas</button>
+      <button data-assistant-action="report">Preparar reporte</button>
+      <button data-assistant-action="direction">Abrir Dirección</button>
+    </div>
+    <form id="assistantForm" class="assistant-input-row">
+      <input id="assistantInput" placeholder="Escribe una pregunta..." autocomplete="off">
+      <button type="submit">Enviar</button>
+    </form>
+  </section>
+</div>
+
+<footer class="enterprise-footer">
+  <span>NEXUS ONE</span>
+  <small>Build 3000.0713 · Mobility ADO</small>
+</footer>
+<div id="onePalette" class="one-palette hidden"><div class="one-dialog glass-panel"><div class="one-palette-input"><span>⌕</span><input id="onePaletteInput" placeholder="Buscar módulos, marcas o acciones..."><kbd>Esc</kbd></div><div id="onePaletteResults"></div></div></div>
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
