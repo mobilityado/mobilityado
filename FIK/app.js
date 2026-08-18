@@ -66,7 +66,30 @@ async function calculate(value){
     state.minPP=data.ingresoMinimoPP;
     const minimo=data.ingresoMinimoPP==null?'No disponible':money(data.ingresoMinimoPP);
     const status=data.alcanzoPP?'✅ <strong>Sí alcanzaste factor PP.</strong>':'ℹ️ <strong>En este rango todavía no alcanzas factor PP.</strong>';
-    addMessage(`Recuerda que el ingreso mínimo estimado para comenzar a obtener PP en esta corrida es <strong>${minimo}</strong>.<br><br>${status}<br><br>Si el ingreso que me enviaste es correcto y ya le restaste el IVA, tus factores son:<div class="factor-grid"><div class="factor"><span>Factor PP</span><b>${escapeHtml(data.factor.ppTexto)}</b></div><div class="factor"><span>Factor PK</span><b>${escapeHtml(data.factor.pkTexto)}</b></div></div><br>Para estimar tu sueldo, multiplica el <strong>PP</strong> y el <strong>PK</strong> por los kilómetros recorridos en tu corrida. Recuerda que todavía faltan los impuestos y los descuentos de cartera que pudieras tener.`);
+    const rolActual=String(data.empleado?.rol||state.empleado?.rol||'').trim().toUpperCase();
+    const esAdmin=rolActual==='ADMIN';
+    let sueldoHtml = `<br>Para estimar tu sueldo, multiplica el <strong>PP</strong> y el <strong>PK</strong> por los kilómetros recorridos en tu corrida. Recuerda que todavía faltan los impuestos y los descuentos de cartera que pudieras tener.`;
+    if(esAdmin){
+      let c=data.calculoSueldo;
+      // Respaldo: si la API devuelve KM pero no el objeto calculoSueldo, hacemos el cálculo aquí.
+      if((!c||!c.disponible) && Number.isFinite(Number(data.factor?.km))){
+        const km=Number(data.factor.km);
+        const pagoPP=Number(data.factor.pp||0)*km;
+        const pagoPK=Number(data.factor.pk||0)*km;
+        c={disponible:true,km,pagoPP,pagoPK,sueldoAntesImpuestos:pagoPP+pagoPK};
+      }
+      if(c?.disponible){
+        const kmTxt=Number(c.km).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+        sueldoHtml = `<br><strong>🧮 Cálculo de sueldo para administrador</strong><br><br>
+          El sueldo <strong>PP × KM</strong> es <strong>${money(c.pagoPP)}</strong> (${escapeHtml(data.factor.ppTexto)} × ${kmTxt} km).<br>
+          El sueldo <strong>PK × KM</strong> es <strong>${money(c.pagoPK)}</strong> (${escapeHtml(data.factor.pkTexto)} × ${kmTxt} km).<br><br>
+          <strong>💰 Sueldo total: ${money(c.sueldoAntesImpuestos)}</strong><br>
+          <small>PP + PK antes de impuestos y de los descuentos de cartera que pudiera tener el colaborador.</small>`;
+      }else{
+        sueldoHtml = `<br>⚠️ <strong>Cálculo de sueldo para administrador:</strong> ${escapeHtml(c?.mensaje||'No fue posible obtener el kilometraje KM de esta corrida.')}`;
+      }
+    }
+    addMessage(`Recuerda que el ingreso mínimo estimado para comenzar a obtener PP en esta corrida es <strong>${minimo}</strong>.<br><br>${status}<br><br>Si el ingreso que me enviaste es correcto y ya le restaste el IVA, tus factores son:<div class="factor-grid"><div class="factor"><span>Factor PP</span><b>${escapeHtml(data.factor.ppTexto)}</b></div><div class="factor"><span>Factor PK</span><b>${escapeHtml(data.factor.pkTexto)}</b></div></div>${sueldoHtml}`);
     state.step='resultado';setInput('Elige una opción');input.disabled=true;sendBtn.disabled=true;
     setActions([
       {label:'Consultar otra corrida',onClick:backToRuns},

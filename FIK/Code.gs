@@ -121,7 +121,8 @@ function calcularFactores_(claveEntrada, marcaEntrada, corridaEntrada, ingresoEn
     pk: buscarColumna_(encabezados, ['PK', 'PK1']),
     pp: buscarColumna_(encabezados, ['PP', 'PP1']),
     ingreso: buscarColumna_(encabezados, ['INGRESO']),
-    ingresoMinimo: buscarColumna_(encabezados, ['INGRESOMINIMO'])
+    ingresoMinimo: buscarColumna_(encabezados, ['INGRESOMINIMO']),
+    km: buscarColumna_(encabezados, ['KM', 'KILOMETROS', 'KILOMETRAJE'])
   };
   if (idx.pk < 0 || idx.pp < 0 || idx.ingreso < 0) {
     return { ok: false, mensaje: 'No pude identificar las columnas PK, PP e INGRESO en esta pestaña.' };
@@ -133,7 +134,8 @@ function calcularFactores_(claveEntrada, marcaEntrada, corridaEntrada, ingresoEn
     const pk = numero_(valores[i][idx.pk]);
     const pp = numero_(valores[i][idx.pp]);
     if (!isFinite(limite) || !isFinite(pk) || !isFinite(pp)) continue;
-    filas.push({ fila: i + 1, limite, pk, pp, pkTexto: mostrados[i][idx.pk], ppTexto: mostrados[i][idx.pp] });
+    const km = idx.km >= 0 ? numero_(valores[i][idx.km]) : NaN;
+    filas.push({ fila: i + 1, limite, pk, pp, km, pkTexto: mostrados[i][idx.pk], ppTexto: mostrados[i][idx.pp] });
   }
   filas.sort((a, b) => a.limite - b.limite);
   if (!filas.length) return { ok: false, mensaje: 'No encontré rangos válidos en la tabla.' };
@@ -177,9 +179,32 @@ function calcularFactores_(claveEntrada, marcaEntrada, corridaEntrada, ingresoEn
       pp: ppResultado,
       pkTexto: formatoFactor_(factor.pkTexto, factor.pk),
       ppTexto: ppTextoResultado,
-      rangoDesde: factor.limite
+      rangoDesde: factor.limite,
+      km: factor.km
     }
   };
+
+  // El cálculo de sueldo se entrega únicamente a administradores.
+  // Fórmula: (PP × KM) + (PK × KM) = sueldo estimado antes de impuestos/descuentos.
+  if (empleado.empleado.rol === 'ADMIN') {
+    const km = factor.km;
+    if (isFinite(km) && km >= 0) {
+      const pagoPP = ppResultado * km;
+      const pagoPK = factor.pk * km;
+      resultado.calculoSueldo = {
+        disponible: true,
+        km,
+        pagoPP,
+        pagoPK,
+        sueldoAntesImpuestos: pagoPP + pagoPK
+      };
+    } else {
+      resultado.calculoSueldo = {
+        disponible: false,
+        mensaje: 'No encontré un kilometraje válido en la columna KM para este rango.'
+      };
+    }
+  }
 
   registrarEvento_('CONSULTA', empleado.empleado, {
     marca: resultado.marca.nombre,
