@@ -12,8 +12,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+  <!-- Botón flotante para regresar al portal principal -->
+  <style id="portal-back-button-style">
+    .portal-back-button{position:fixed;top:18px;right:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border-radius:12px;text-decoration:none;font-family:Inter,Segoe UI,Arial,sans-serif;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(135deg,#4c1d95,#7c3aed);border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 28px rgba(45,20,82,.28);transition:transform .18s ease,box-shadow .18s ease;backdrop-filter:blur(8px)}
+    .portal-back-button:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(45,20,82,.34)}
+    .portal-back-button:active{transform:translateY(0)}
+    .portal-back-button:focus-visible{outline:3px solid rgba(124,58,237,.28);outline-offset:3px}
+    .portal-back-button .portal-home-icon{font-size:18px;line-height:1}
+    @media(max-width:600px){.portal-back-button{top:10px;right:10px;padding:9px 11px;border-radius:11px}.portal-back-button .portal-label{display:none}}
+    @media print{.portal-back-button{display:none!important}}
+  </style>
 </head>
 <body>
+  <!-- Regreso al portal principal -->
+  <a class="portal-back-button" href="../" aria-label="Volver al portal principal" title="Volver al portal">
+    <span class="portal-home-icon" aria-hidden="true">⌂</span><span class="portal-label">Volver al portal</span>
+  </a>
+
 <div id="loginScreen" class="login-screen">
   <div class="login-card">
     <div class="login-logo">C.IA</div>
