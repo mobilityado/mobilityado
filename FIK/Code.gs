@@ -128,14 +128,27 @@ function calcularFactores_(claveEntrada, marcaEntrada, corridaEntrada, ingresoEn
     return { ok: false, mensaje: 'No pude identificar las columnas PK, PP e INGRESO en esta pestaña.' };
   }
 
+  // KM corresponde a toda la corrida, no a cada rango de PP/PK. Algunas tablas
+  // lo tienen capturado una sola vez debajo del encabezado KM, por lo que no debemos
+  // buscarlo necesariamente en la misma fila del rango seleccionado.
+  let kmCorrida = NaN;
+  if (idx.km >= 0) {
+    for (let i = 1; i < valores.length; i++) {
+      const candidatoKm = numero_(valores[i][idx.km]);
+      if (isFinite(candidatoKm) && candidatoKm > 0) {
+        kmCorrida = candidatoKm;
+        break;
+      }
+    }
+  }
+
   const filas = [];
   for (let i = 1; i < valores.length; i++) {
     const limite = numero_(valores[i][idx.ingreso]);
     const pk = numero_(valores[i][idx.pk]);
     const pp = numero_(valores[i][idx.pp]);
     if (!isFinite(limite) || !isFinite(pk) || !isFinite(pp)) continue;
-    const km = idx.km >= 0 ? numero_(valores[i][idx.km]) : NaN;
-    filas.push({ fila: i + 1, limite, pk, pp, km, pkTexto: mostrados[i][idx.pk], ppTexto: mostrados[i][idx.pp] });
+    filas.push({ fila: i + 1, limite, pk, pp, pkTexto: mostrados[i][idx.pk], ppTexto: mostrados[i][idx.pp] });
   }
   filas.sort((a, b) => a.limite - b.limite);
   if (!filas.length) return { ok: false, mensaje: 'No encontré rangos válidos en la tabla.' };
@@ -180,14 +193,14 @@ function calcularFactores_(claveEntrada, marcaEntrada, corridaEntrada, ingresoEn
       pkTexto: formatoFactor_(factor.pkTexto, factor.pk),
       ppTexto: ppTextoResultado,
       rangoDesde: factor.limite,
-      km: factor.km
+      km: kmCorrida
     }
   };
 
   // El cálculo de sueldo se entrega únicamente a administradores.
   // Fórmula: (PP × KM) + (PK × KM) = sueldo estimado antes de impuestos/descuentos.
   if (empleado.empleado.rol === 'ADMIN') {
-    const km = factor.km;
+    const km = kmCorrida;
     if (isFinite(km) && km >= 0) {
       const pagoPP = ppResultado * km;
       const pagoPK = factor.pk * km;
@@ -201,7 +214,7 @@ function calcularFactores_(claveEntrada, marcaEntrada, corridaEntrada, ingresoEn
     } else {
       resultado.calculoSueldo = {
         disponible: false,
-        mensaje: 'No encontré un kilometraje válido en la columna KM para este rango.'
+        mensaje: 'No encontré un kilometraje válido debajo del encabezado KM en esta corrida.'
       };
     }
   }
