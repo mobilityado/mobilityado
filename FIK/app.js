@@ -89,7 +89,11 @@ async function calculate(value){
         sueldoHtml = `<br>⚠️ <strong>Cálculo de sueldo para administrador:</strong> ${escapeHtml(c?.mensaje||'No fue posible obtener el kilometraje KM de esta corrida.')}`;
       }
     }
-    addMessage(`Recuerda que el ingreso mínimo estimado para comenzar a obtener PP en esta corrida es <strong>${minimo}</strong>.<br><br>${status}<br><br>Si el ingreso que me enviaste es correcto y ya le restaste el IVA, tus factores son:<div class="factor-grid"><div class="factor"><span>Factor PP</span><b>${escapeHtml(data.factor.ppTexto)}</b></div><div class="factor"><span>Factor PK</span><b>${escapeHtml(data.factor.pkTexto)}</b></div></div>${sueldoHtml}`);
+    const kmCorrida = Number(data.factor?.km);
+    const kmMensaje = Number.isFinite(kmCorrida)
+      ? ` para una vuelta de <strong>${kmCorrida.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})} kilómetros</strong>`
+      : '';
+    addMessage(`Recuerda que el ingreso mínimo estimado${kmMensaje} para comenzar a obtener el PP en esta corrida es de <strong>${minimo}</strong>.<br><br>${status}<br><br>Si el ingreso que me enviaste es correcto y ya le restaste el IVA, tus factores son:<div class="factor-grid"><div class="factor"><span>Factor PP</span><b>${escapeHtml(data.factor.ppTexto)}</b></div><div class="factor"><span>Factor PK</span><b>${escapeHtml(data.factor.pkTexto)}</b></div></div>${sueldoHtml}`);
     state.step='resultado';setInput('Elige una opción');input.disabled=true;sendBtn.disabled=true;
     setActions([
       {label:'Consultar otra corrida',onClick:backToRuns},
