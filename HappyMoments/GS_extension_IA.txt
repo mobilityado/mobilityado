@@ -1,0 +1,171 @@
+/*
+ * HAPPY MOMENTS — EXTENSIÓN IA PARA GENERAR FELICITACIONES
+ *
+ * 1) En doPost(e), inmediatamente después de:
+ *      const data = JSON.parse(e.postData.contents);
+ *    agrega esta condición ANTES de las demás operaciones:
+ *
+ *      if (data.tipoOperacion === 'generarFelicitacion') {
+ *        return generarFelicitacionIA(data);
+ *      }
+ *
+ * 2) Pega las funciones de este archivo al FINAL de tu proyecto Apps Script.
+ *
+ * 3) En Apps Script > Configuración del proyecto > Propiedades de la secuencia
+ *    de comandos, agrega:
+ *      Nombre: GEMINI_API_KEY
+ *      Valor:  (tu clave privada de Gemini API)
+ *
+ * La clave queda en el servidor, nunca en index.html.
+ */
+
+const HM_GEMINI_MODEL = 'gemini-3.8-flash';
+
+function generarFelicitacionIA(data) {
+  try {
+    const apiKey = PropertiesService.getScriptProperties()
+      .getProperty('GEMINI_API_KEY');
+
+    if (!apiKey) {
+      return respuestaJSON({
+        success: false,
+        error: 'Falta configurar GEMINI_API_KEY en las propiedades del proyecto Apps Script.'
+      });
+    }
+
+    const prompt = String(data.prompt || '').trim().slice(0, 1200);
+    const categoria = String(data.categoria || 'Otra ocasión').trim().slice(0, 80);
+    const tono = String(data.tono || 'Variado').trim().slice(0, 80);
+
+    if (prompt.length < 8) {
+      return respuestaJSON({
+        success: false,
+        error: 'Escribe un poco más de información para crear la felicitación.'
+      });
+    }
+
+    const instrucciones = [
+      'Eres el asistente creativo de Happy Moments, una aplicación para crear tarjetas y felicitaciones en español.',
+      'Redacta exactamente tres propuestas distintas y listas para pegar en una tarjeta.',
+      'Usa español natural, cálido, correcto y sin frases repetitivas.',
+      'Adapta el mensaje al destinatario, ocasión y detalles que indique la persona.',
+      'No inventes nombres, parentescos, cargos, logros ni datos que no se hayan proporcionado.',
+      'No incluyas explicaciones sobre tu proceso. Devuelve únicamente JSON válido.',
+      'Si el usuario pide incluir el marcador {Nombre}, consérvalo exactamente; de lo contrario no lo agregues por tu cuenta.',
+      'Cada propuesta debe tener un título breve y un texto de felicitación de extensión moderada.',
+      'La primera propuesta debe ser la más equilibrada; las otras dos deben ofrecer enfoques diferentes.'
+    ].join(' ');
+
+    const solicitud = [
+      'Ocasión: ' + categoria,
+      'Estilo deseado: ' + tono,
+      'Petición del usuario: ' + prompt,
+      'Devuelve JSON con esta forma: {"propuestas":[{"titulo":"...","texto":"..."},{"titulo":"...","texto":"..."},{"titulo":"...","texto":"..."}]}'
+    ].join('\n');
+
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/' +
+      HM_GEMINI_MODEL + ':generateContent';
+
+    const payload = {
+      systemInstruction: {
+        parts: [{ text: instrucciones }]
+      },
+      contents: [{
+        role: 'user',
+        parts: [{ text: solicitud }]
+      }],
+      generationConfig: {
+        temperature: 0.85,
+        maxOutputTokens: 1400,
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: 'OBJECT',
+          properties: {
+            propuestas: {
+              type: 'ARRAY',
+              minItems: 3,
+              maxItems: 3,
+              items: {
+                type: 'OBJECT',
+                properties: {
+                  titulo: { type: 'STRING' },
+                  texto: { type: 'STRING' }
+                },
+                required: ['titulo', 'texto']
+              }
+            }
+          },
+          required: ['propuestas']
+        }
+      }
+    };
+
+    const response = UrlFetchApp.fetch(url, {
+      method: 'post',
+      contentType: 'application/json',
+      headers: { 'x-goog-api-key': apiKey },
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    });
+
+    const status = response.getResponseCode();
+    const body = response.getContentText();
+
+    if (status < 200 || status >= 300) {
+      console.error('Gemini API HTTP ' + status + ': ' + body);
+      return respuestaJSON({
+        success: false,
+        error: status === 429
+          ? 'El servicio de IA alcanzó su límite temporal. Espera un momento e inténtalo de nuevo.'
+          : 'El servicio de IA no pudo completar la solicitud (HTTP ' + status + '). Revisa la clave y la configuración del modelo.'
+      });
+    }
+
+    const result = JSON.parse(body);
+    const rawText = result &&
+      result.candidates &&
+      result.candidates[0] &&
+      result.candidates[0].content &&
+      result.candidates[0].content.parts
+        ? result.candidates[0].content.parts.map(function(p) {
+            return p.text || '';
+          }).join('')
+        : '';
+
+    if (!rawText) {
+      return respuestaJSON({
+        success: false,
+        error: 'La IA no devolvió texto. Intenta nuevamente.'
+      });
+    }
+
+    const parsed = JSON.parse(rawText);
+    const propuestas = Array.isArray(parsed.propuestas)
+      ? parsed.propuestas.slice(0, 3).map(function(p) {
+          return {
+            titulo: String(p.titulo || 'Felicitación').slice(0, 80),
+            texto: String(p.texto || '').trim().slice(0, 1800)
+          };
+        }).filter(function(p) { return p.texto; })
+      : [];
+
+    if (!propuestas.length) {
+      return respuestaJSON({
+        success: false,
+        error: 'La respuesta de IA no tuvo el formato esperado. Intenta de nuevo.'
+      });
+    }
+
+    return respuestaJSON({
+      success: true,
+      propuestas: propuestas
+    });
+
+  } catch (error) {
+    console.error('Error generarFelicitacionIA: ' + error);
+    return respuestaJSON({
+      success: false,
+      error: 'Ocurrió un error al generar la felicitación: ' + error.message
+    });
+  }
+}

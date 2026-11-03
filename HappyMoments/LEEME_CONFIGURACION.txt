@@ -1,0 +1,38 @@
+HAPPY MOMENTS — ASISTENTE DE FELICITACIONES
+
+CONTENIDO
+- index.html: interfaz Happy Moments con botón flotante y panel de IA.
+- assets/copilot-icon.png: icono usado como acceso visual del asistente.
+- GS_extension_IA.txt: extensión que debes agregar a tu Google Apps Script.
+
+IMPORTANTE SOBRE EL ICONO
+Se conserva el icono de Copilot solicitado, pero el panel se identifica claramente como
+"Asistente de felicitaciones · Happy Moments". Esta versión NO se conecta a Microsoft
+Copilot ni utiliza la cuenta empresarial Microsoft. El motor de generación configurado
+es Gemini API.
+
+CONFIGURACIÓN DE GOOGLE APPS SCRIPT
+1. Abre el proyecto Apps Script que atiende a la URL SCRIPT_URL de index.html.
+2. En doPost(e), justo después de JSON.parse(e.postData.contents), agrega:
+
+   if (data.tipoOperacion === 'generarFelicitacion') {
+     return generarFelicitacionIA(data);
+   }
+
+   Coloca esa condición antes de las demás ramas.
+
+3. Copia las funciones del archivo GS_extension_IA.txt al final del archivo .gs.
+4. Crea una clave de Gemini API en Google AI Studio.
+5. En Apps Script abre Configuración del proyecto > Propiedades de la secuencia de comandos.
+6. Agrega GEMINI_API_KEY con el valor de tu clave. No la escribas en index.html ni la compartas.
+7. Guarda y vuelve a implementar la aplicación web como una nueva versión. Mantén los permisos
+   de acceso que ya utiliza tu aplicación.
+8. Prueba el botón flotante, genera tres propuestas y usa una en Alta Tarjetas.
+
+NOTAS
+- El asistente escribe propuestas, pero no guarda automáticamente: el usuario elige "Usar en
+  plantilla" y después pulsa "Guardar tarjeta".
+- La generación requiere conexión a internet y una clave API válida.
+- Revisa el uso y límites de tu proyecto de Gemini API antes de habilitarlo para todos los usuarios.
+- Si ya tienes autenticación de usuarios en otra capa de la aplicación, conserva esa protección
+  también para la operación generarFelicitacion.

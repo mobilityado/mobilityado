@@ -743,6 +743,58 @@ body.login-open {
   pointer-events:none;
 }
 
+
+/* ===== Asistente IA Happy Moments ===== */
+.hm-ai-launcher{
+  position:fixed;right:24px;bottom:24px;z-index:9998;
+  width:68px;height:68px;border:3px solid #fff;border-radius:50%;
+  background:#fff;box-shadow:0 10px 32px rgba(31,12,65,.28);
+  display:grid;place-items:center;padding:5px;transition:transform .2s,box-shadow .2s
+}
+.hm-ai-launcher:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 36px rgba(31,12,65,.34)}
+.hm-ai-launcher img{width:100%;height:100%;object-fit:contain;border-radius:50%}
+.hm-ai-launcher .hm-ai-dot{position:absolute;right:1px;bottom:1px;width:15px;height:15px;border:2px solid #fff;border-radius:50%;background:#20b76b}
+.hm-ai-panel{
+  display:none;position:fixed;right:24px;bottom:104px;z-index:9999;
+  width:min(440px,calc(100vw - 28px));height:min(690px,calc(100vh - 130px));
+  background:#fff;border:1px solid #e8def3;border-radius:22px;
+  box-shadow:0 20px 70px rgba(31,12,65,.28);overflow:hidden;flex-direction:column
+}
+.hm-ai-panel.open{display:flex;animation:hmAiIn .18s ease-out}
+@keyframes hmAiIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.hm-ai-head{
+  display:flex;align-items:center;gap:11px;padding:14px 16px;color:#fff;
+  background:linear-gradient(120deg,#260052,#5630a0 60%,#e52b82)
+}
+.hm-ai-head img{width:40px;height:40px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}
+.hm-ai-head strong{display:block;font-size:15px}
+.hm-ai-head small{display:block;font-size:11px;opacity:.86;margin-top:3px}
+.hm-ai-close{margin-left:auto;background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:10px;width:36px;height:36px;font-size:22px}
+.hm-ai-body{padding:16px;overflow:auto;flex:1;background:linear-gradient(180deg,#fcfaff,#fff)}
+.hm-ai-intro{font-size:13px;line-height:1.5;color:#655a75;margin:0 0 13px}
+.hm-ai-label{display:block;font-size:12px;font-weight:800;color:#49316c;margin:12px 0 6px}
+.hm-ai-field{width:100%;border:1px solid #ded5eb;border-radius:12px;padding:11px 12px;background:#fff;color:#302044;outline:none}
+.hm-ai-field:focus{border-color:#8b5bd0;box-shadow:0 0 0 3px rgba(109,40,217,.1)}
+textarea.hm-ai-field{min-height:92px;resize:vertical}
+.hm-ai-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.hm-ai-generate{width:100%;border:0;border-radius:12px;padding:12px 14px;margin-top:13px;
+  color:#fff;font-weight:800;background:linear-gradient(120deg,#6134bd,#e52b82);box-shadow:0 7px 18px rgba(109,40,217,.2)}
+.hm-ai-generate:disabled{opacity:.6;cursor:wait}
+.hm-ai-results{display:grid;gap:11px;margin-top:16px}
+.hm-ai-result{border:1px solid #e7def0;border-radius:14px;padding:13px;background:#fff;box-shadow:0 5px 15px rgba(35,15,70,.04)}
+.hm-ai-result h4{margin:0 0 8px;font-size:13px;color:#6932a4}
+.hm-ai-result p{white-space:pre-wrap;line-height:1.55;font-size:13px;color:#38294c;margin:0}
+.hm-ai-result-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.hm-ai-result-actions button{border:0;border-radius:9px;padding:8px 10px;font-size:11px;font-weight:800}
+.hm-ai-copy{background:#f0eafa;color:#59328d}
+.hm-ai-use{background:#e5f7ed;color:#137b43}
+.hm-ai-status{font-size:12px;color:#6f657b;margin-top:10px;min-height:18px}
+.hm-ai-note{font-size:10px;color:#887f94;margin-top:13px;line-height:1.4}
+@media(max-width:520px){
+ .hm-ai-launcher{right:15px;bottom:15px;width:60px;height:60px}
+ .hm-ai-panel{right:8px;bottom:84px;width:calc(100vw - 16px);height:min(680px,calc(100vh - 100px));border-radius:18px}
+}
+
 </style>
 <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 
@@ -1835,6 +1887,162 @@ function enviarAhora(telefono,nombre,marca){
 }
 
 </script>
+
+<!-- Asistente IA flotante (usa el icono de Copilot como acceso visual; motor IA configurado por Happy Moments) -->
+<button class="hm-ai-launcher" id="hmAiLauncher" type="button"
+  aria-label="Abrir asistente de felicitaciones" title="Asistente IA de Happy Moments"
+  onclick="hmAiToggle()">
+  <img src="assets/copilot-icon.png" alt="">
+  <span class="hm-ai-dot"></span>
+</button>
+
+<aside class="hm-ai-panel" id="hmAiPanel" aria-label="Asistente de felicitaciones" aria-hidden="true">
+  <header class="hm-ai-head">
+    <img src="assets/copilot-icon.png" alt="">
+    <div>
+      <strong>Asistente de felicitaciones</strong>
+      <small>Happy Moments · Inteligencia artificial</small>
+    </div>
+    <button class="hm-ai-close" type="button" onclick="hmAiToggle()" aria-label="Cerrar">×</button>
+  </header>
+  <div class="hm-ai-body">
+    <p class="hm-ai-intro">Cuéntame para quién es la felicitación, qué celebramos y qué tono deseas. Te prepararé tres propuestas para que elijas y las pases a tu tarjeta.</p>
+    <label class="hm-ai-label" for="hmAiPrompt">¿Qué felicitación necesitas?</label>
+    <textarea class="hm-ai-field" id="hmAiPrompt" maxlength="1200"
+      placeholder="Ej. Necesito una felicitación de cumpleaños para Laura, compañera de trabajo. Que sea cálida, elegante y no demasiado larga."></textarea>
+    <div class="hm-ai-controls">
+      <div>
+        <label class="hm-ai-label" for="hmAiCategory">Tipo de ocasión</label>
+        <select class="hm-ai-field" id="hmAiCategory">
+          <option>Cumpleaños</option><option>Aniversario</option><option>Reconocimiento</option>
+          <option>Día de las Madres</option><option>Día del Padre</option><option>Día del Maestro</option>
+          <option>Navidad</option><option>Año Nuevo</option><option>Agradecimiento</option>
+          <option>Jubilación</option><option>Despedida</option><option>Otra ocasión</option>
+        </select>
+      </div>
+      <div>
+        <label class="hm-ai-label" for="hmAiTone">Estilo</label>
+        <select class="hm-ai-field" id="hmAiTone">
+          <option>Variado</option><option>Emotivo</option><option>Elegante</option>
+          <option>Divertido</option><option>Formal</option><option>Cercano y familiar</option>
+          <option>Inspirador</option>
+        </select>
+      </div>
+    </div>
+    <button class="hm-ai-generate" id="hmAiGenerate" type="button" onclick="hmAiGenerate()">✨ Generar 3 propuestas</button>
+    <div class="hm-ai-status" id="hmAiStatus" role="status" aria-live="polite"></div>
+    <div class="hm-ai-results" id="hmAiResults"></div>
+    <div class="hm-ai-note">El icono es un acceso visual del asistente de Happy Moments. La generación se realiza mediante el servicio de IA Microsoft Copilot.</div>
+  </div>
+</aside>
+
+<script>
+/* ===== Asistente IA Happy Moments ===== */
+function hmAiToggle(){
+  const panel=document.getElementById("hmAiPanel");
+  const open=!panel.classList.contains("open");
+  panel.classList.toggle("open",open);
+  panel.setAttribute("aria-hidden",String(!open));
+  if(open) setTimeout(()=>document.getElementById("hmAiPrompt").focus(),80);
+}
+
+function hmAiSetStatus(message,isError){
+  const el=document.getElementById("hmAiStatus");
+  el.textContent=message||"";
+  el.style.color=isError?"#c62845":"#6f657b";
+}
+
+async function hmAiGenerate(){
+  const prompt=document.getElementById("hmAiPrompt").value.trim();
+  const category=document.getElementById("hmAiCategory").value;
+  const tone=document.getElementById("hmAiTone").value;
+  const btn=document.getElementById("hmAiGenerate");
+  const results=document.getElementById("hmAiResults");
+
+  if(prompt.length<8){
+    hmAiSetStatus("Cuéntame un poco más sobre la felicitación que necesitas.",true);
+    document.getElementById("hmAiPrompt").focus();
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent="✨ Preparando propuestas...";
+  results.innerHTML="";
+  hmAiSetStatus("La IA está redactando tus felicitaciones. Un momento...");
+
+  try{
+    const response=await fetch(SCRIPT_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({
+        tipoOperacion:"generarFelicitacion",
+        prompt:prompt,
+        categoria:category,
+        tono:tone,
+        cantidad:3
+      })
+    });
+
+    const data=await response.json();
+    if(!response.ok || !data.success){
+      throw new Error(data.error||"No fue posible generar las propuestas.");
+    }
+
+    const propuestas=Array.isArray(data.propuestas)?data.propuestas:[];
+    if(!propuestas.length) throw new Error("La IA no devolvió propuestas. Intenta nuevamente.");
+
+    propuestas.forEach((item,index)=>{
+      const titulo=String(item.titulo||("Propuesta "+(index+1)));
+      const texto=String(item.texto||"").trim();
+      if(!texto) return;
+
+      const card=document.createElement("article");
+      card.className="hm-ai-result";
+      const h=document.createElement("h4");
+      h.textContent=titulo;
+      const p=document.createElement("p");
+      p.textContent=texto;
+      const actions=document.createElement("div");
+      actions.className="hm-ai-result-actions";
+
+      const copy=document.createElement("button");
+      copy.className="hm-ai-copy";
+      copy.type="button";
+      copy.textContent="📋 Copiar";
+      copy.onclick=async()=>{
+        try{await navigator.clipboard.writeText(texto);hmAiSetStatus("Texto copiado.");}
+        catch(e){hmAiSetStatus("No se pudo copiar automáticamente. Selecciona el texto para copiarlo.",true);}
+      };
+
+      const use=document.createElement("button");
+      use.className="hm-ai-use";
+      use.type="button";
+      use.textContent="💌 Usar en plantilla";
+      use.onclick=()=>{
+        document.getElementById("textoPlantilla").value=texto;
+        hmAiToggle();
+        if(typeof activarTab==="function") activarTab("plantilla");
+        window.scrollTo({top:0,behavior:"smooth"});
+        const field=document.getElementById("textoPlantilla");
+        field.focus();
+        field.dispatchEvent(new Event("input",{bubbles:true}));
+      };
+
+      actions.append(copy,use);
+      card.append(h,p,actions);
+      results.appendChild(card);
+    });
+
+    hmAiSetStatus("Listo. Elige una propuesta, cópiala o pásala directamente a tu plantilla.");
+  }catch(error){
+    hmAiSetStatus(error.message||"Ocurrió un error al conectar con el asistente.",true);
+  }finally{
+    btn.disabled=false;
+    btn.textContent="✨ Generar 3 propuestas";
+  }
+}
+</script>
+
 <div class="build-badge">GALERÍA v4</div>
 
   <!-- Regreso al portal. ../ funciona tanto con el dominio personalizado como con GitHub Pages. -->
