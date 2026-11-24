@@ -213,6 +213,13 @@ footer{text-align:center;color:#687386;font-size:12px;padding:18px}
  .card{aspect-ratio:.9;}
 }
 
+
+/* v9: cuatro cartas por fila en todos los tamaños; 12 cartas = 3 filas completas */
+.grid{grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:8px;}
+.card{aspect-ratio:.82;}
+@media (min-width:901px){.panel{min-width:0}.grid{gap:9px}.card{aspect-ratio:.82;}}
+@media (min-width:601px) and (max-width:900px){.grid{grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:8px}.card{aspect-ratio:.82;}}
+@media (max-width:600px){.grid{grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:5px}.card{aspect-ratio:.82;}}
 </style>
 </head>
 <body>
